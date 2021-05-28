@@ -1478,7 +1478,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 <div class="d-article">
 <h1 id="overview">Overview</h1>
-<p>Statistics on <a href="https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data">merchandise trade data for various regions and markets</a> are compiled by Enterprise Singapore, and provided by Department of Statistics, Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:</p>
+<p>Statistics on <a href="https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data">merchandise trade data for various regions and markets</a> are compiled by Enterprise Singapore, and provided by Department of Statistics (DOS), Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:</p>
 <ol type="1">
 <li>The Original Visualization</li>
 <li>Critique to Identify Areas for Improvement</li>
@@ -1510,6 +1510,35 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h2 id="sketch-of-proposed-design">3. Sketch of Proposed Design</h2>
 <p><img src="images/sketch.png" /> <em>Sketched on Microsoft OneNote for Windows 10</em></p>
 <h2 id="step-by-step-guide-creating-the-proposed-visualization-in-tableau">4. Step-by-Step Guide: Creating the Proposed Visualization in Tableau</h2>
+<h3 id="data-preparation">4.1 Data Preparation</h3>
+<p>The respective Imports and Exports data are extracted from the <a href="https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data">DOS</a> website, as <em>OutputFile.xlsx</em>.</p>
+<p>Exploring the data of the file in Microsoft Excel, we can see three tabs – <em>Content</em>, <em>T1</em> and <em>T2</em>. From the description, <em>T1</em> is for <em>Imports</em>, and <em>T2</em> is for <em>Exports</em> data.</p>
+<p><img src="images/img01.jpg" style="width:35.0%" /></p>
+<p>We then import the data into Tableau for processing. We do this by dragging the <em>OutputFile.xlsx</em> file into the Tableau window.</p>
+<p><img src="images/img02.jpg" /></p>
+<p>Once the data is imported, we load the individual tabs for data viewing. Here we load <em>T1</em> (Imports) data by dragging <em>T1</em> into the field.</p>
+<p><img src="images/img03.jpg" /></p>
+<p>For easier reference, we rename the data table to ‘Imports’.</p>
+<p>Right-click <em>T1</em> &gt; Rename</p>
+<p><img src="images/img04.jpg" /> We note that there is unnecessary description information in the data table. We can get Tableau to clean this up by checking the <em>Data Interpreter</em> box. Tableau is able to scan through and distinguish the content. This way, only the table containing the data we need remains.</p>
+<p><img src="images/img05.jpg" /></p>
+<p>In the current data structure, each <em>Month-Year</em> is a column but we need this as a Dimension. So we do a pivot on the dataset to convert it to stacked format.</p>
+<p>Highlight all the data columns except the <em>Country</em> column &gt; Right-Click on any highlighted column &gt; Pivot</p>
+<p><img src="images/img06.jpg" /></p>
+<p>In the stacked format, rename the columns for easier reference.</p>
+<p><img src="images/img07.jpg" /> Next we repeat the above steps for <em>T2</em> (Exports) dataset.</p>
+<p>Drag <em>T2</em> into the field.</p>
+<p><img src="images/img08.jpg" /></p>
+<p>We need to tell Tableau how <em>T2</em> (Exports) is related to <em>Imports</em>. In this case, they are related by their <em>Year Month</em> and <em>Country</em>. As Tableau does not allow the same name for different columns, just rename the columns in the Exports dataset as <em>Year Month 2</em> and <em>Country 2</em> after doing the pivoting.</p>
+<p><img src="images/img09.jpg" /></p>
+<p><img src="images/img10.jpg" /> For both tables, we should check that variables are recognized in the correct format.</p>
+<ul>
+<li><em>Year Month</em> -&gt; <em>Date</em></li>
+<li><em>Import / Export</em> -&gt; <em># (Number)</em></li>
+<li><em>Country</em> -&gt; <em>Abc (String)</em></li>
+</ul>
+<p>Only ‘Year Month’ is not in the correct format yet. Change that to ‘Date’.</p>
+<h3 id="visualization-chart-preparation">4.2 Visualization Chart Preparation</h3>
 <h2 id="the-final-visualization">5. The Final Visualization</h2>
 <h2 id="major-insights-revealed-by-the-final-visualization">6. 3 Major Insights Revealed by the Final Visualization</h2>
 <h2 id="references">7. References</h2>

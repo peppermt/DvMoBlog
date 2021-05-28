@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # Overview
 
-Statistics on [merchandise trade data for various regions and markets](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data) are compiled by Enterprise Singapore, and provided by Department of Statistics, Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:
+Statistics on [merchandise trade data for various regions and markets](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data) are compiled by Enterprise Singapore, and provided by Department of Statistics (DOS), Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:
 
   1. The Original Visualization
   2. Critique to Identify Areas for Improvement
@@ -59,7 +59,66 @@ Statistics on [merchandise trade data for various regions and markets](https://w
 
 ## 4. Step-by-Step Guide: Creating the Proposed Visualization in Tableau
 
+### 4.1 Data Preparation
 
+The respective Imports and Exports data are extracted from the [DOS](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data) website, as _OutputFile.xlsx_.
+
+Exploring the data of the file in Microsoft Excel, we can see three tabs – _Content_, _T1_ and _T2_. From the description, _T1_ is for _Imports_, and _T2_ is for _Exports_ data. 
+
+![](images/img01.jpg){width=35%}
+
+We then import the data into Tableau for processing. We do this by dragging the _OutputFile.xlsx_ file into the Tableau window.
+
+![](images/img02.jpg)
+
+Once the data is imported, we load the individual tabs for data viewing. Here we load _T1_ (Imports) data by dragging _T1_ into the field.
+
+![](images/img03.jpg)
+
+For easier reference, we rename the data table to ‘Imports’. 
+
+Right-click _T1_ > Rename
+
+![](images/img04.jpg)
+We note that there is unnecessary description information in the data table. We can get Tableau to clean this up by checking the _Data Interpreter_ box. Tableau is able to scan through and distinguish the content. This way, only the table containing the data we need remains.
+
+![](images/img05.jpg)
+
+In the current data structure, each _Month-Year_ is a column but we need this as a Dimension. So we do a pivot on the dataset to convert it to stacked format.
+
+Highlight all the data columns except the _Country_ column > Right-Click on any highlighted column > Pivot
+
+![](images/img06.jpg)
+
+In the stacked format, rename the columns for easier reference. 
+
+![](images/img07.jpg)
+Next we repeat the above steps for _T2_ (Exports) dataset.
+
+Drag _T2_ into the field. 
+
+![](images/img08.jpg)
+
+We need to tell Tableau how _T2_ (Exports) is related to _Imports_. In this case, they are related by their _Year Month_ and _Country_. As Tableau does not allow the same name for different columns, just rename the columns in the Exports dataset as _Year Month 2_ and _Country 2_ after doing the pivoting.
+
+![](images/img09.jpg)
+
+![](images/img10.jpg)
+For both tables, we should check that variables are recognized in the correct format.
+
+* _Year Month_ -> _Date_
+* _Import / Export_ -> _# (Number)_
+* _Country_ -> _Abc (String)_
+
+Only _Year Month_ is not in the correct format yet. Change that to _Date_ format.
+
+![](images/img11.jpg)
+
+
+
+
+
+### 4.2 Visualization Chart Preparation
 
 ## 5. The Final Visualization
 
