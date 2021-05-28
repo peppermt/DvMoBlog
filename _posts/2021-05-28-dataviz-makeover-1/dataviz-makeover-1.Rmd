@@ -18,17 +18,58 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # Overview
 
-Statistics on [merchandise trade data] (https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data) for various regions and markets  are compiled by Enterprise Singapore, and provided by Department of Statistics, Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:
+Statistics on [merchandise trade data for various regions and markets](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data) are compiled by Enterprise Singapore, and provided by Department of Statistics, Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:
 
   1. The Original Visualization
-  2. Critique of the Visualization to Identify Areas for Improvement
-  3. Sketch of Proposed Design and Comments
+  2. Critique to Identify Areas for Improvement
+  3. Sketch of Proposed Design & Comments
   4. Step-by-Step Guide to Creating the Proposed Visualization in Tableau
   5. The Final Visualization
   6. 3 Major Insights Revealed by the Final Visualization Prepared
   7. References
 
-# The Original Visualization
+## 1. The Original Visualization
+
+![](images\originalviz.jpg)
+
+## 2. Critique to Identify Areas for Improvement
+
+### 2.1 Clarity
+
+* There are no captions or commentaries. It is not clear what message is to be conveyed with the charts.
+* Title does not match what is illustrated in the charts. Title says 2019 – 2020, but according to the x-axes of the charts, the periods illustrated are mostly 2019 – 2021, and only 2020 for Japan. It is not clear what the scope of the visualization is. 
+* The X-axis titles are inconsistent with label markings and graphs presented. Which month and which period does “Month of Period” refer to? The variation of the line graphs show that the data presented has a higher resolution than “Year” but it is not clear what resolution it is exactly. There are also no tick marks on the axis nor gridlines in the chart area, the reader is unable to reference which data points correspond to which and what time units. 
+* The Y-axes have no units. It is not clear what the unit of measurement is. It is also not clear what ‘M’ in the axis labels stand for. The scale between the primary and secondary Y-axis for is different within the chart of each country, this would mislead the reader in terms of interpretation of how the import and export volumes compare with each other. The different scales between the charts of each country would mislead the reader as well – for e.g. direct glance of the charts of Mainland China and Japan shows as if both countries have similar import/export volume, when their quantities are actually different. Comparison of import and export volumes across countries is rather painful.
+
+
+### 2.2 Aesthetics
+
+* Title is too small and does not stand out. The font size is even smaller than the individual chart titles. The alignment is off-centre as well.
+* Display of country charts is not in any order of trade volume. The reader must decipher the measures on his/her own from the charts before the order can be determined. 
+* The dimensions of each country chart are inconsistent and misaligned. E.g. The width of Hong Kong’s chart is narrower than that of Malaysia’s. This makes the overall outlook messy. 
+* The type of chart (area chart) applied here is unsuitable as we can hardly differentiate between the chart for import and export. The area overlaps also masked the actual charts and inadvertently created a third shade of colour which made the charts even difficult to interpret. 
+* The colours chosen for the area charts are unfriendly to those who are colour-blind - protanopes and deuteranopes will not be able to differentiate between the two shades.
+* Abbreviation is used for United States. When it is used as a location or noun, it should be spelt out in full.
+
+
+## 3. Sketch of Proposed Design
+
+![](images/sketch.png)
+*Sketched on Microsoft OneNote for Windows 10*
+
+## 4. Step-by-Step Guide: Creating the Proposed Visualization in Tableau
+
+
+
+## 5. The Final Visualization
+
+
+
+## 6. 3 Major Insights Revealed by the Final Visualization
+
+
+
+## 7. References
 
 
 

@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["dataviz-makeover-1_files/anchor-4.2.2/anchor.min.js","dataviz-makeover-1_files/bowser-1.9.3/bowser.min.js","dataviz-makeover-1_files/distill-2.2.21/template.v2.js","dataviz-makeover-1_files/jquery-1.11.3/jquery.min.js","dataviz-makeover-1_files/popper-2.6.0/popper.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-bundle.umd.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-light-border.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.umd.min.js","dataviz-makeover-1_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["dataviz-makeover-1_files/anchor-4.2.2/anchor.min.js","dataviz-makeover-1_files/bowser-1.9.3/bowser.min.js","dataviz-makeover-1_files/distill-2.2.21/template.v2.js","dataviz-makeover-1_files/jquery-1.11.3/jquery.min.js","dataviz-makeover-1_files/popper-2.6.0/popper.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-bundle.umd.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-light-border.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.umd.min.js","dataviz-makeover-1_files/webcomponents-2.0.0/webcomponents.js","images/img01.jpg","images/img02.jpg","images/img03.jpg","images/img04.jpg","images/img05.jpg","images/img06.jpg","images/img07.jpg","images/img08.jpg","images/img09.jpg","images/img10.jpg","images/img11.jpg","images/img12.jpg","images/img13.jpg","images/img14.jpg","images/img15.jpg","images/img16.jpg","images/img17.jpg","images/img18.jpg","images/img19.jpg","images/img20.jpg","images/img21.jpg","images/img22.jpg","images/img23.jpg","images/img24.jpg","images/img25.jpg","images/img26.jpg","images/img27.jpg","images/img28.jpg","images/img29.jpg","images/img30.jpg","images/img31.jpg","images/img32.jpg","images/img33.jpg","images/img34.jpg","images/originalviz.jpg","images/sketch.png","images/TradeDB.jpg"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1478,17 +1478,41 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 <div class="d-article">
 <h1 id="overview">Overview</h1>
-<p>Statistics on [merchandise trade data] (<a href="https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data" class="uri">https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data</a>) for various regions and markets are compiled by Enterprise Singapore, and provided by Department of Statistics, Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:</p>
+<p>Statistics on <a href="https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data">merchandise trade data for various regions and markets</a> are compiled by Enterprise Singapore, and provided by Department of Statistics, Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:</p>
 <ol type="1">
 <li>The Original Visualization</li>
-<li>Critique of the Visualization to Identify Areas for Improvement</li>
-<li>Sketch of Proposed Design and Comments</li>
+<li>Critique to Identify Areas for Improvement</li>
+<li>Sketch of Proposed Design &amp; Comments</li>
 <li>Step-by-Step Guide to Creating the Proposed Visualization in Tableau</li>
 <li>The Final Visualization</li>
 <li>3 Major Insights Revealed by the Final Visualization Prepared</li>
 <li>References</li>
 </ol>
-<h1 id="the-original-visualization">The Original Visualization</h1>
+<h2 id="the-original-visualization">1. The Original Visualization</h2>
+<p><img src="images/originalviz.jpg" /></p>
+<h2 id="critique-to-identify-areas-for-improvement">2. Critique to Identify Areas for Improvement</h2>
+<h3 id="clarity">2.1 Clarity</h3>
+<ul>
+<li>There are no captions or commentaries. It is not clear what message is to be conveyed with the charts.</li>
+<li>Title does not match what is illustrated in the charts. Title says 2019 – 2020, but according to the x-axes of the charts, the periods illustrated are mostly 2019 – 2021, and only 2020 for Japan. It is not clear what the scope of the visualization is.</li>
+<li>The X-axis titles are inconsistent with label markings and graphs presented. Which month and which period does “Month of Period” refer to? The variation of the line graphs show that the data presented has a higher resolution than “Year” but it is not clear what resolution it is exactly. There are also no tick marks on the axis nor gridlines in the chart area, the reader is unable to reference which data points correspond to which and what time units.</li>
+<li>The Y-axes have no units. It is not clear what the unit of measurement is. It is also not clear what ‘M’ in the axis labels stand for. The scale between the primary and secondary Y-axis for is different within the chart of each country, this would mislead the reader in terms of interpretation of how the import and export volumes compare with each other. The different scales between the charts of each country would mislead the reader as well – for e.g. direct glance of the charts of Mainland China and Japan shows as if both countries have similar import/export volume, when their quantities are actually different. Comparison of import and export volumes across countries is rather painful.</li>
+</ul>
+<h3 id="aesthetics">2.2 Aesthetics</h3>
+<ul>
+<li>Title is too small and does not stand out. The font size is even smaller than the individual chart titles. The alignment is off-centre as well.</li>
+<li>Display of country charts is not in any order of trade volume. The reader must decipher the measures on his/her own from the charts before the order can be determined.</li>
+<li>The dimensions of each country chart are inconsistent and misaligned. E.g. The width of Hong Kong’s chart is narrower than that of Malaysia’s. This makes the overall outlook messy.</li>
+<li>The type of chart (area chart) applied here is unsuitable as we can hardly differentiate between the chart for import and export. The area overlaps also masked the actual charts and inadvertently created a third shade of colour which made the charts even difficult to interpret.</li>
+<li>The colours chosen for the area charts are unfriendly to those who are colour-blind - protanopes and deuteranopes will not be able to differentiate between the two shades.</li>
+<li>Abbreviation is used for United States. When it is used as a location or noun, it should be spelt out in full.</li>
+</ul>
+<h2 id="sketch-of-proposed-design">3. Sketch of Proposed Design</h2>
+<p><img src="images/sketch.png" /> <em>Sketched on Microsoft OneNote for Windows 10</em></p>
+<h2 id="step-by-step-guide-creating-the-proposed-visualization-in-tableau">4. Step-by-Step Guide: Creating the Proposed Visualization in Tableau</h2>
+<h2 id="the-final-visualization">5. The Final Visualization</h2>
+<h2 id="major-insights-revealed-by-the-final-visualization">6. 3 Major Insights Revealed by the Final Visualization</h2>
+<h2 id="references">7. References</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
