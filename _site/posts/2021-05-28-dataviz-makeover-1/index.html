@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["dataviz-makeover-1_files/anchor-4.2.2/anchor.min.js","dataviz-makeover-1_files/bowser-1.9.3/bowser.min.js","dataviz-makeover-1_files/distill-2.2.21/template.v2.js","dataviz-makeover-1_files/jquery-1.11.3/jquery.min.js","dataviz-makeover-1_files/popper-2.6.0/popper.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-bundle.umd.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-light-border.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.umd.min.js","dataviz-makeover-1_files/webcomponents-2.0.0/webcomponents.js","images/img01.jpg","images/img02.jpg","images/img03.jpg","images/img04.jpg","images/img05.jpg","images/img06.jpg","images/img07.jpg","images/img08.jpg","images/img09.jpg","images/img10.jpg","images/img11.jpg","images/img12.jpg","images/img13.jpg","images/img14.jpg","images/img15.jpg","images/img16.jpg","images/img17.jpg","images/img18.jpg","images/img18a.jpg","images/img18b.jpg","images/img18c.jpg","images/img19.jpg","images/img20.jpg","images/img21.jpg","images/img22.jpg","images/img23.jpg","images/img23a.jpg","images/img24.jpg","images/img25.jpg","images/img25a.jpg","images/img26.jpg","images/img26a.jpg","images/img27.jpg","images/img28.jpg","images/img29.jpg","images/img29a.jpg","images/img30.jpg","images/img31.jpg","images/img32.jpg","images/img33.jpg","images/img34.jpg","images/originalviz.jpg","images/sketch.png","images/TradeDB.jpg","images/TradeDBB.jpg"]}
+  {"type":"character","attributes":{},"value":["dataviz-makeover-1_files/anchor-4.2.2/anchor.min.js","dataviz-makeover-1_files/bowser-1.9.3/bowser.min.js","dataviz-makeover-1_files/distill-2.2.21/template.v2.js","dataviz-makeover-1_files/jquery-1.11.3/jquery.min.js","dataviz-makeover-1_files/popper-2.6.0/popper.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-bundle.umd.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-light-border.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.umd.min.js","dataviz-makeover-1_files/webcomponents-2.0.0/webcomponents.js","images/img01.jpg","images/img02.jpg","images/img03.jpg","images/img04.jpg","images/img05.jpg","images/img06.jpg","images/img07.jpg","images/img08.jpg","images/img09.jpg","images/img10.jpg","images/img11.jpg","images/img12.jpg","images/img13.jpg","images/img14.jpg","images/img15.jpg","images/img16.jpg","images/img17.jpg","images/img18.jpg","images/img18a.jpg","images/img18b.jpg","images/img18c.jpg","images/img19.jpg","images/img20.jpg","images/img21.jpg","images/img22.jpg","images/img23.jpg","images/img23a.jpg","images/img24.jpg","images/img25.jpg","images/img25a.jpg","images/img26.jpg","images/img26a.jpg","images/img27.jpg","images/img28.jpg","images/img29.jpg","images/img29a.jpg","images/img30.jpg","images/img31.jpg","images/img32.jpg","images/img33.jpg","images/img33a.jpg","images/img34.jpg","images/originalviz.jpg","images/sketch.png","images/TradeDB.jpg","images/TradeDBB.jpg","images/TradeDBBB.jpg"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2222,9 +2222,20 @@ A <strong><em>Trade Deficit</em></strong> occurs when there is a negative trade 
 <p>Drag the same to the <em>Label</em> Marks so that labels can appear for each bar.</p>
 <p><img src="images/img27.jpg" /></p>
 <p>Right-click on the <em>Color</em> bar to edit the colors assigned.</p>
-<p>Since we want to differentiate between positive and negative trade balance, we assign one color to values &gt; 0, another to &lt; 0. So we set <em>Center: 0</em>. In this case, blue is positive, red is negative.</p>
+<p>Since we want to differentiate between positive and negative trade balance, to distinguish between trade surplus and trade deficit status, we assign one color to values &gt; 0, another to &lt; 0. So we set <em>Center: 0</em>. In this case, blue is positive, red is negative.</p>
 <p><img src="images/img28.jpg" /></p>
+<p>Labels are formatted to be shown in units of Billions (B), to be consistent with the axis. Given the scale magnitude, its not necessary for labels to be precise to the last dollar. With these labels, the Y-axis can also be removed.</p>
+<p><img src="images/img29a.jpg" /></p>
 <h3 id="creation-of-dashboard">4.2.3 Creation of Dashboard</h3>
+<p>Now that we have created all the charts required, we shall proceed to create the dashboard.</p>
+<p>Create a new Dashboard, rename it to <em>Trade Dashboard</em>.</p>
+<p><img src="images/img31.jpg" /> Add title: <em>Trade Statistics of Top 6 Trading Countries</em></p>
+<p>Subsequently, we list out the 6 countries. The text color of each country should follow the corresponding colour of its line in the Import/Export line charts. This will double up as a legend for the line charts. A dark background is chosen for the colours to stand out more.</p>
+<p>Adjust the font size to use inking to highlight the main title, and the subtitles.</p>
+<p><img src="images/img32.jpg" /></p>
+<p>We then plan the layout of the Dashboard. In this case, we need to allocate space for the <em>Imports</em> and <em>Exports</em> line charts, and the <em>Balance of Trade</em> bar chart with the commentary at the bottom. Text object is used for the commentary section.</p>
+<p>Finally, drag the individual sheets to the spaces allocated. Formatting of the individual charts like font sizes, title alignment etc. are done in the respective worksheets.</p>
+<p><img src="images/img33a.jpg" /> And your dashboard is complete!</p>
 <h2 id="the-final-visualization">5. The Final Visualization</h2>
 <h2 id="major-insights-revealed-by-the-final-visualization">6. 3 Major Insights Revealed by the Final Visualization</h2>
 <h2 id="references">7. References</h2>

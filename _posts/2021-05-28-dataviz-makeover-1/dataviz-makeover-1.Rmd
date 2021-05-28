@@ -236,13 +236,35 @@ Drag the same to the _Label_ Marks so that labels can appear for each bar.
 
 Right-click on the _Color_ bar to edit the colors assigned.
 
-Since we want to differentiate between positive and negative trade balance, we assign one color to values > 0, another to < 0. So we set _Center: 0_. In this case, blue is positive, red is negative. 
+Since we want to differentiate between positive and negative trade balance, to distinguish between trade surplus and trade deficit status, we assign one color to values > 0, another to < 0. So we set _Center: 0_. In this case, blue is positive, red is negative. 
 
 ![](images/img28.jpg)
 
+Labels are formatted to be shown in units of Billions (B), to be consistent with the axis. Given the scale magnitude, its not necessary for labels to be precise to the last dollar. With these labels, the Y-axis can also be removed. 
+
+![](images/img29a.jpg)
 
 ### 4.2.3 Creation of Dashboard
 
+Now that we have created all the charts required, we shall proceed to create the dashboard.
+
+Create a new Dashboard, rename it to _Trade Dashboard_.
+
+![](images/img31.jpg)
+Add title: _Trade Statistics of Top 6 Trading Countries_
+
+Subsequently, we list out the 6 countries. The text color of each country should follow the corresponding colour of its line in the Import/Export line charts. This will double up as a legend for the line charts. A dark background is chosen for the colours to stand out more.
+
+Adjust the font size to use inking to highlight the main title, and the subtitles.
+
+![](images/img32.jpg)
+
+We then plan the layout of the Dashboard. In this case, we need to allocate space for the _Imports_ and _Exports_ line charts, and the _Balance of Trade_ bar chart with the commentary at the bottom. Text object is used for the commentary section.
+
+Finally, drag the individual sheets to the spaces allocated. Formatting of the individual charts like font sizes, title alignment etc. are done in the respective worksheets.
+
+![](images/img33a.jpg)
+And your dashboard is complete!
 
 
 ## 5. The Final Visualization
