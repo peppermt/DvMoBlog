@@ -18,8 +18,8 @@
   },
   {
     "path": "posts/2021-05-28-dataviz-makeover-1/",
-    "title": "DataViz MakeOver 1",
-    "description": "A short description of the post.",
+    "title": "DataViz MakeOver #1",
+    "description": "Giving a trade statistic visualization chart a facelift in Tableau.",
     "author": [
       {
         "name": "Rhoda Tong",
@@ -28,9 +28,9 @@
     ],
     "date": "2021-05-28",
     "categories": [],
-    "contents": "\r\nDistill is a publication format for scientific and technical writing, native to the web.\r\nLearn more about using Distill at https://rstudio.github.io/distill.\r\n\r\n\r\n\r\n",
+    "contents": "\r\nOverview\r\nStatistics on [merchandise trade data] (https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data) for various regions and markets are compiled by Enterprise Singapore, and provided by Department of Statistics, Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:\r\nThe Original Visualization\r\nCritique of the Visualization to Identify Areas for Improvement\r\nSketch of Proposed Design and Comments\r\nStep-by-Step Guide to Creating the Proposed Visualization in Tableau\r\nThe Final Visualization\r\n3 Major Insights Revealed by the Final Visualization Prepared\r\nReferences\r\nThe Original Visualization\r\n\r\n\r\n\r\n",
     "preview": {},
-    "last_modified": "2021-05-28T12:03:46+08:00",
+    "last_modified": "2021-05-28T15:24:01+08:00",
     "input_file": "dataviz-makeover-1.utf8.md"
   }
 ]
