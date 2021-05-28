@@ -124,16 +124,126 @@ Now you will have the country labels on their own.
 
 ![](images/img13.jpg){width=70%}
 
-Since the units are now excluded, they have been included back under the respective _Import_ and _Export_ data columns as Import($'000) and . 
-
 According to the Task, we only need to illustrate data for the period 2019-2020 and for 6 countries : Japan, Hong Kong, Taiwan, United States, Malaysia and Mainland China. This data is filtered out using _Filters_.
 
 ![](images/img14.jpg)
 
+Filters are created for _Country_, _Country 2_, _Year Month_ and _Year Month 2_ as shown.
 
+![](images/img15.jpg)
+![](images/img16.jpg)
+The final filters list is as shown.
 
+![](images/img17.jpg){width=65%}
 
 ### 4.2 Visualization Chart Preparation
+
+Next, we proceed to add _Worksheets_ to create our visualization charts. We would need to create 3 charts before compiling all of them into one Dashboard:
+
+* Imports Line Chart
+* Exports Line Chart
+* Balance of Trade Bar Chart
+
+### 4.2.1 Creation of Imports/Exports Line Chart
+
+The steps listed below are for the creation of the _Imports_ line chart. Similar steps are to be repeated for the _Exports_ line chart.
+
+Create a new worksheet, rename it to _Imports_.
+
+Drag _Year Month_ to Columns, and _Import ($’000)_ to Rows.
+
+Click the + on _Year Month_ twice to express the data in higher resolution of _Year_ and _Month_. Note that _Quarter_ appears first but we can drag and pull it out of the field to remove it.
+
+Drag _Country_ to the _Color Marks_ so that the line charts for the different countries will be differentiated by color.
+
+![](images/img18a.jpg)
+
+Notice that the _Import_ (and _Export_) values are expressed in Millions and the data header says (Thousand Dollars). This means we are expected to do a conversion of the values from Millions to Billions. This is not intuitive. We shall convert the values so that it is displayed in Billions directly.
+
+We do this by creating a _Calculated Field_.
+
+Right-Click on the _Imports($’000)_ measure > Create > Calculated Field
+
+![](images/img18b.jpg)
+
+Key in the formula for the calculated field, which is essentially multiplying the current value by 1000.
+
+Replace the _Imports($’000)_ with the newly created _Imports_ measure in the Rows field
+
+![](images/img18c.jpg)
+Colors assigned automatically by Tableau to each _Country_ are edited for easier visual reference.
+
+Click the little down arrow in the Colors Legend field > Edit Colors
+
+![](images/img19.jpg)
+
+To avoid having green and red in the same display, manually change Taiwan’s assigned Green to purple
+
+![](images/img20.jpg)
+The months in the x-axis label are spelt out in full. This takes up unnecessary space. These can be shortened into their abbreviated forms and still be comprehensible.
+
+Right click anywhere on the x-axis > Format > Header > Default > Dates > Abbreviation
+
+![](images/img21.jpg){width=60%}
+
+X-axis title can be removed as the _Year_ and _Month_ labels are self-explanatory
+
+Text is formatted to be in **Bold** for them to be clearer. Text sizes are also sized accordingly to fit into the dashboard.
+
+For easier tracking of the values for each month, vertical gridlines are also added to the line chart.
+
+![](images/img24.jpg){width=40%}
+
+Tentative output of the Imports line chart is as below.
+
+![](images/img23a.jpg)
+
+### 4.2.2 Creation of Balance of Trade Bar Chart
+
+The Balance of Trade is the difference between a country’s exports and imports. It is an important component in determining the current account of a country^1^. 
+
+Balance of Trade (over a given time period) is calculated by:
+
+
+<center> _Value of Exports – Value of Imports  _ </center>
+  
+  
+A **_Trade Surplus_** occurs when there is a positive trade balance, when Exports > Imports.  
+A **_Trade Deficit_** occurs when there is a negative trade balance, when Exports < Imports.
+
+Create a new worksheet, rename it to _Bal of Trade_ for easy reference
+To compute the _Balance of Trade_, we create a new _Calculated Field_.
+
+Click on Analysis > Create Calculated Field 
+
+Name the newly-created field _Balance of Trade ($)_.
+
+Since Balance of Trade = Value of Exports – Value of Imports, we drag the _Export_ and _Import_ variables accordingly into the equation for computation.
+
+![](images/img25a.jpg)
+
+Drag _Year Month_ to _Columns_, and _Balance of Trade ($)_ to _Rows_.
+
+Since we would be grouping the charts by Countries for easier comparison, we drag _Country_ to Columns as well, and place it before _Year Month_.
+
+![](images/img26a.jpg)
+
+Drag _Balance of Trade ($)_ to the Color Marks so that the magnitude of bar charts will be differentiated by color.
+
+Drag the same to the _Label_ Marks so that labels can appear for each bar.
+
+![](images/img27.jpg)
+
+Right-click on the _Color_ bar to edit the colors assigned.
+
+Since we want to differentiate between positive and negative trade balance, we assign one color to values > 0, another to < 0. So we set _Center: 0_. In this case, blue is positive, red is negative. 
+
+![](images/img28.jpg)
+
+
+### 4.2.3 Creation of Dashboard
+
+
 
 ## 5. The Final Visualization
 

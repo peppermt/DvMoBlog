@@ -2164,10 +2164,67 @@ document.addEventListener('DOMContentLoaded', function() {
 <p><img src="images/img12.jpg" style="width:40.0%" /></p>
 <p>Now you will have the country labels on their own.</p>
 <p><img src="images/img13.jpg" style="width:70.0%" /></p>
-<p>Since the units are now excluded, they have been included back under the respective <em>Import</em> and <em>Export</em> data columns as Import($’000) and .</p>
 <p>According to the Task, we only need to illustrate data for the period 2019-2020 and for 6 countries : Japan, Hong Kong, Taiwan, United States, Malaysia and Mainland China. This data is filtered out using <em>Filters</em>.</p>
 <p><img src="images/img14.jpg" /></p>
+<p>Filters are created for <em>Country</em>, <em>Country 2</em>, <em>Year Month</em> and <em>Year Month 2</em> as shown.</p>
+<p><img src="images/img15.jpg" /> <img src="images/img16.jpg" /> The final filters list is as shown.</p>
+<p><img src="images/img17.jpg" style="width:65.0%" /></p>
 <h3 id="visualization-chart-preparation">4.2 Visualization Chart Preparation</h3>
+<p>Next, we proceed to add <em>Worksheets</em> to create our visualization charts. We would need to create 3 charts before compiling all of them into one Dashboard:</p>
+<ul>
+<li>Imports Line Chart</li>
+<li>Exports Line Chart</li>
+<li>Balance of Trade Bar Chart</li>
+</ul>
+<h3 id="creation-of-importsexports-line-chart">4.2.1 Creation of Imports/Exports Line Chart</h3>
+<p>The steps listed below are for the creation of the <em>Imports</em> line chart. Similar steps are to be repeated for the <em>Exports</em> line chart.</p>
+<p>Create a new worksheet, rename it to <em>Imports</em>.</p>
+<p>Drag <em>Year Month</em> to Columns, and <em>Import ($’000)</em> to Rows.</p>
+<p>Click the + on <em>Year Month</em> twice to express the data in higher resolution of <em>Year</em> and <em>Month</em>. Note that <em>Quarter</em> appears first but we can drag and pull it out of the field to remove it.</p>
+<p>Drag <em>Country</em> to the <em>Color Marks</em> so that the line charts for the different countries will be differentiated by color.</p>
+<p><img src="images/img18a.jpg" /></p>
+<p>Notice that the <em>Import</em> (and <em>Export</em>) values are expressed in Millions and the data header says (Thousand Dollars). This means we are expected to do a conversion of the values from Millions to Billions. This is not intuitive. We shall convert the values so that it is displayed in Billions directly.</p>
+<p>We do this by creating a <em>Calculated Field</em>.</p>
+<p>Right-Click on the <em>Imports($’000)</em> measure &gt; Create &gt; Calculated Field</p>
+<p><img src="images/img18b.jpg" /></p>
+<p>Key in the formula for the calculated field, which is essentially multiplying the current value by 1000.</p>
+<p>Replace the <em>Imports($’000)</em> with the newly created <em>Imports</em> measure in the Rows field</p>
+<p><img src="images/img18c.jpg" /> Colors assigned automatically by Tableau to each <em>Country</em> are edited for easier visual reference.</p>
+<p>Click the little down arrow in the Colors Legend field &gt; Edit Colors</p>
+<p><img src="images/img19.jpg" /></p>
+<p>To avoid having green and red in the same display, manually change Taiwan’s assigned Green to purple</p>
+<p><img src="images/img20.jpg" /> The months in the x-axis label are spelt out in full. This takes up unnecessary space. These can be shortened into their abbreviated forms and still be comprehensible.</p>
+<p>Right click anywhere on the x-axis &gt; Format &gt; Header &gt; Default &gt; Dates &gt; Abbreviation</p>
+<p><img src="images/img21.jpg" style="width:60.0%" /></p>
+<p>X-axis title can be removed as the <em>Year</em> and <em>Month</em> labels are self-explanatory</p>
+<p>Text is formatted to be in <strong>Bold</strong> for them to be clearer. Text sizes are also sized accordingly to fit into the dashboard.</p>
+<p>For easier tracking of the values for each month, vertical gridlines are also added to the line chart.</p>
+<p><img src="images/img24.jpg" style="width:40.0%" /></p>
+<p>Tentative output of the Imports line chart is as below.</p>
+<p><img src="images/img23a.jpg" /></p>
+<h3 id="creation-of-balance-of-trade-bar-chart">4.2.2 Creation of Balance of Trade Bar Chart</h3>
+<p>The Balance of Trade is the difference between a country’s exports and imports. It is an important component in determining the current account of a country<sup>1</sup>.</p>
+<p>Balance of Trade (over a given time period) is calculated by:</p>
+<center>
+<em>Value of Exports – Value of Imports </em>
+</center>
+<p>A <strong><em>Trade Surplus</em></strong> occurs when there is a positive trade balance, when Exports &gt; Imports.<br />
+A <strong><em>Trade Deficit</em></strong> occurs when there is a negative trade balance, when Exports &lt; Imports.</p>
+<p>Create a new worksheet, rename it to <em>Bal of Trade</em> for easy reference To compute the <em>Balance of Trade</em>, we create a new <em>Calculated Field</em>.</p>
+<p>Click on Analysis &gt; Create Calculated Field</p>
+<p>Name the newly-created field <em>Balance of Trade ($)</em>.</p>
+<p>Since Balance of Trade = Value of Exports – Value of Imports, we drag the <em>Export</em> and <em>Import</em> variables accordingly into the equation for computation.</p>
+<p><img src="images/img25a.jpg" /></p>
+<p>Drag <em>Year Month</em> to <em>Columns</em>, and <em>Balance of Trade ($)</em> to <em>Rows</em>.</p>
+<p>Since we would be grouping the charts by Countries for easier comparison, we drag <em>Country</em> to Columns as well, and place it before <em>Year Month</em>.</p>
+<p><img src="images/img26a.jpg" /></p>
+<p>Drag <em>Balance of Trade ($)</em> to the Color Marks so that the magnitude of bar charts will be differentiated by color.</p>
+<p>Drag the same to the <em>Label</em> Marks so that labels can appear for each bar.</p>
+<p><img src="images/img27.jpg" /></p>
+<p>Right-click on the <em>Color</em> bar to edit the colors assigned.</p>
+<p>Since we want to differentiate between positive and negative trade balance, we assign one color to values &gt; 0, another to &lt; 0. So we set <em>Center: 0</em>. In this case, blue is positive, red is negative.</p>
+<p><img src="images/img28.jpg" /></p>
+<h3 id="creation-of-dashboard">4.2.3 Creation of Dashboard</h3>
 <h2 id="the-final-visualization">5. The Final Visualization</h2>
 <h2 id="major-insights-revealed-by-the-final-visualization">6. 3 Major Insights Revealed by the Final Visualization</h2>
 <h2 id="references">7. References</h2>
