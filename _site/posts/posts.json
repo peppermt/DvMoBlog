@@ -23,14 +23,14 @@
     "author": [
       {
         "name": "Rhoda Tong",
-        "url": "https://example.com/norajones"
+        "url": "https://example.com/notapp"
       }
     ],
     "date": "2021-05-28",
     "categories": [],
     "contents": "\r\nDistill is a publication format for scientific and technical writing, native to the web.\r\nLearn more about using Distill at https://rstudio.github.io/distill.\r\n\r\n\r\n\r\n",
     "preview": {},
-    "last_modified": "2021-05-28T11:58:13+08:00",
+    "last_modified": "2021-05-28T12:03:46+08:00",
     "input_file": "dataviz-makeover-1.utf8.md"
   }
 ]
