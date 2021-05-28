@@ -101,9 +101,9 @@ Drag _T2_ into the field.
 
 We need to tell Tableau how _T2_ (Exports) is related to _Imports_. In this case, they are related by their _Year Month_ and _Country_. As Tableau does not allow the same name for different columns, just rename the columns in the Exports dataset as _Year Month 2_ and _Country 2_ after doing the pivoting.
 
-![](images/img09.jpg)
+![](images/img09.jpg){width=80%}
 
-![](images/img10.jpg)
+![](images/img10.jpg){width=80%}
 For both tables, we should check that variables are recognized in the correct format.
 
 * _Year Month_ -> _Date_
@@ -114,6 +114,21 @@ Only _Year Month_ is not in the correct format yet. Change that to _Date_ format
 
 ![](images/img11.jpg)
 
+Note that the _Country_ names are illustrated together with the units _(Thousand dollars)_. These units will also appear in the visualization chart labels. We can amend this by doing a _Custom Split_ on the _Country_ column. 
+
+Use the separator ‘(‘ , and split off the first 1 column.
+
+![](images/img12.jpg){width=40%}
+
+Now you will have the country labels on their own.
+
+![](images/img13.jpg){width=70%}
+
+Since the units are now excluded, they have been included back under the respective _Import_ and _Export_ data columns as Import($'000) and . 
+
+According to the Task, we only need to illustrate data for the period 2019-2020 and for 6 countries : Japan, Hong Kong, Taiwan, United States, Malaysia and Mainland China. This data is filtered out using _Filters_.
+
+![](images/img14.jpg)
 
 
 

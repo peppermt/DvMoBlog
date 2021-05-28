@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["dataviz-makeover-1_files/anchor-4.2.2/anchor.min.js","dataviz-makeover-1_files/bowser-1.9.3/bowser.min.js","dataviz-makeover-1_files/distill-2.2.21/template.v2.js","dataviz-makeover-1_files/jquery-1.11.3/jquery.min.js","dataviz-makeover-1_files/popper-2.6.0/popper.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-bundle.umd.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-light-border.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.umd.min.js","dataviz-makeover-1_files/webcomponents-2.0.0/webcomponents.js","images/img01.jpg","images/img02.jpg","images/img03.jpg","images/img04.jpg","images/img05.jpg","images/img06.jpg","images/img07.jpg","images/img08.jpg","images/img09.jpg","images/img10.jpg","images/img11.jpg","images/img12.jpg","images/img13.jpg","images/img14.jpg","images/img15.jpg","images/img16.jpg","images/img17.jpg","images/img18.jpg","images/img19.jpg","images/img20.jpg","images/img21.jpg","images/img22.jpg","images/img23.jpg","images/img24.jpg","images/img25.jpg","images/img26.jpg","images/img27.jpg","images/img28.jpg","images/img29.jpg","images/img30.jpg","images/img31.jpg","images/img32.jpg","images/img33.jpg","images/img34.jpg","images/originalviz.jpg","images/sketch.png","images/TradeDB.jpg"]}
+  {"type":"character","attributes":{},"value":["dataviz-makeover-1_files/anchor-4.2.2/anchor.min.js","dataviz-makeover-1_files/bowser-1.9.3/bowser.min.js","dataviz-makeover-1_files/distill-2.2.21/template.v2.js","dataviz-makeover-1_files/jquery-1.11.3/jquery.min.js","dataviz-makeover-1_files/popper-2.6.0/popper.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-bundle.umd.min.js","dataviz-makeover-1_files/tippy-6.2.7/tippy-light-border.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.css","dataviz-makeover-1_files/tippy-6.2.7/tippy.umd.min.js","dataviz-makeover-1_files/webcomponents-2.0.0/webcomponents.js","images/img01.jpg","images/img02.jpg","images/img03.jpg","images/img04.jpg","images/img05.jpg","images/img06.jpg","images/img07.jpg","images/img08.jpg","images/img09.jpg","images/img10.jpg","images/img11.jpg","images/img12.jpg","images/img13.jpg","images/img14.jpg","images/img15.jpg","images/img16.jpg","images/img17.jpg","images/img18.jpg","images/img18a.jpg","images/img18b.jpg","images/img18c.jpg","images/img19.jpg","images/img20.jpg","images/img21.jpg","images/img22.jpg","images/img23.jpg","images/img23a.jpg","images/img24.jpg","images/img25.jpg","images/img25a.jpg","images/img26.jpg","images/img26a.jpg","images/img27.jpg","images/img28.jpg","images/img29.jpg","images/img29a.jpg","images/img30.jpg","images/img31.jpg","images/img32.jpg","images/img33.jpg","images/img34.jpg","images/originalviz.jpg","images/sketch.png","images/TradeDB.jpg","images/TradeDBB.jpg"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1530,14 +1530,23 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>Drag <em>T2</em> into the field.</p>
 <p><img src="images/img08.jpg" /></p>
 <p>We need to tell Tableau how <em>T2</em> (Exports) is related to <em>Imports</em>. In this case, they are related by their <em>Year Month</em> and <em>Country</em>. As Tableau does not allow the same name for different columns, just rename the columns in the Exports dataset as <em>Year Month 2</em> and <em>Country 2</em> after doing the pivoting.</p>
-<p><img src="images/img09.jpg" /></p>
-<p><img src="images/img10.jpg" /> For both tables, we should check that variables are recognized in the correct format.</p>
+<p><img src="images/img09.jpg" style="width:80.0%" /></p>
+<p><img src="images/img10.jpg" style="width:80.0%" /> For both tables, we should check that variables are recognized in the correct format.</p>
 <ul>
 <li><em>Year Month</em> -&gt; <em>Date</em></li>
 <li><em>Import / Export</em> -&gt; <em># (Number)</em></li>
 <li><em>Country</em> -&gt; <em>Abc (String)</em></li>
 </ul>
-<p>Only ‘Year Month’ is not in the correct format yet. Change that to ‘Date’.</p>
+<p>Only <em>Year Month</em> is not in the correct format yet. Change that to <em>Date</em> format.</p>
+<p><img src="images/img11.jpg" /></p>
+<p>Note that the <em>Country</em> names are illustrated together with the units <em>(Thousand dollars)</em>. These units will also appear in the visualization chart labels. We can amend this by doing a <em>Custom Split</em> on the <em>Country</em> column.</p>
+<p>Use the separator ‘(‘ , and split off the first 1 column.</p>
+<p><img src="images/img12.jpg" style="width:40.0%" /></p>
+<p>Now you will have the country labels on their own.</p>
+<p><img src="images/img13.jpg" style="width:70.0%" /></p>
+<p>Since the units are now excluded, they have been included back under the respective <em>Import</em> and <em>Export</em> data columns as Import($’000) and .</p>
+<p>According to the Task, we only need to illustrate data for the period 2019-2020 and for 6 countries : Japan, Hong Kong, Taiwan, United States, Malaysia and Mainland China. This data is filtered out using <em>Filters</em>.</p>
+<p><img src="images/img14.jpg" /></p>
 <h3 id="visualization-chart-preparation">4.2 Visualization Chart Preparation</h3>
 <h2 id="the-final-visualization">5. The Final Visualization</h2>
 <h2 id="major-insights-revealed-by-the-final-visualization">6. 3 Major Insights Revealed by the Final Visualization</h2>
