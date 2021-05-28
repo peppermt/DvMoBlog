@@ -162,7 +162,7 @@ Notice that the _Import_ (and _Export_) values are expressed in Millions and the
 
 We do this by creating a _Calculated Field_.
 
-Right-Click on the _Imports($’000)_ measure > Create > Calculated Field
+Right-Click on the _Imports(\$’000)_ measure > Create > Calculated Field
 
 ![](images/img18b.jpg)
 
@@ -218,7 +218,7 @@ Click on Analysis > Create Calculated Field
 
 Name the newly-created field _Balance of Trade ($)_.
 
-Since Balance of Trade = Value of Exports – Value of Imports, we drag the _Export_ and _Import_ variables accordingly into the equation for computation.
+Since Balance of Trade = Value of Exports – Value of Imports, we drag the _Export(\$)_ and _Import(\$)_ variables accordingly into the equation for computation.
 
 ![](images/img25a.jpg)
 
@@ -269,13 +269,48 @@ And your dashboard is complete!
 
 ## 5. The Final Visualization
 
+![](images/TradeDBBB.jpg)
+
+### 5.1 Advantages of Proposed Design
+
+* The title tells us the scope of the display: Trade statistics, top 6 trading countries listed, and for the year 2019 to 2020. This is consistent with the charts displayed in the dashboard.
+
+* Separate Line Chart for Import and Export to allow easy comparison across each country, over the month and year, for the same metric. Trends can be picked up easily.
+
+* As both 2019 and 2020 values for the same metric are plotted on the same axis, charts can be compared easily across the two years. Values are expressed in the charts as their exact values (Billions) which is more straightforward instead of having to convert “Thousand Millions”. Gridlines are added to the line charts to allow easy tracing of values.
+
+* Same colors have been applied for each country in both line charts to allow convenient comparison. For example, we can see that _Mainland China_ (orange line) is the top Exporter and Importer, while _Hong Kong_ (red line) is the second top Exporter and the lowest Importer. The original color assigned automatically to _Taiwan_ was green. This was deliberately changed to purple so as to avoid having a combination of red and green in the same display, to facilitate reading by people who are colour-blind.
+
+* We also avoided the need for a legend as the color codes have been embedded within the title, killing two birds with one stone.
+
+* The _Balance of Trade_ computation gives further insights to the raw import/export values of the countries. This chart is placed below the line charts as it signifies development of the data from top to bottom : from raw values to a useful ratio.
+
+* A commentary is also included to summarize the trade balance in each country, whether they experienced a trade surplus or deficit in 2019 and 2020.
+
+* The height of the bars in the _Balance of Trade_ bar chart directly gives us a sense of the magnitude of the trade balance, and the colors tell us whether it is a trade surplus (blue) or deficit (red), with varying intensities as well.
+
+* Note that the order of the country list is in alphabetical order and consistent throughout the display, giving a sense of uniformity.  
 
 
 ## 6. 3 Major Insights Revealed by the Final Visualization
 
+1. There was a turnaround in the trade deficit status of United States between 2019 and 2020. 
+In January 2020, United States and China signed the Phase One Trade Deal, which eased the tensions from the long-standing trade duel between the two superpowers. This move will boost China’s purchases of US products, and also reduce US tariffs on goods imported from China. As seen from the Imports and Exports line charts, we saw an overall increase in Exports for US in 2020, coupled with a corresponding dip in Imports however. This thus resulted in the turnaround in US’s trade balance position to a surplus of \$5.67 billion from a trade deficit position of \$14.4 billion in the previous year. For China, while the pickup in Exports was not as strong as US’s at the start of 2020, the spike came in July 2020 and the high value sustained. We could see that this increase was substantial as it created a higher trade surplus of $5.48 billion for China as compared to the previous year. 
+ 
+2. Malaysia saw a dip in its exports in Jan 2020 due to the Covid-19 pandemic. It continued to deteriorate and hit a low of \$2.9 billion in Apr 2020, when the movement control order (MCO) was imposed. We could see that this has manifested in a 10 times increase in trade deficit from \$0.73 billion in 2019 to $11.65 billion in 2020. The impact of the pandemic on Malaysia’s economy and trade balance is significant.
+  
+3. Other insights include general observations of trends and behaviour specific to each country:
+
+    * Hong Kong has a relatively high and consistent trade surplus. By virtue of its strategic geographical location, and infrastructure, it has secured its position as one of Mainland China’s largest trading partners, playing an important entrepot role between the Mainland and the rest of the world^2^. It has 99% of shipments coming from re-exports^3^. 
+    * Taiwan has a relatively high and consistent trade deficit in 2019 and 2020.
+    * The Export values of Japan and Taiwan are similar and seem to follow the same trend.
 
 
 ## 7. References
 
+1. Balance of Trade [(site)](https://corporatefinanceinstitute.com/resources/knowledge/economics/balance-of-trade-bot/)
 
+2. Hong Kong and Mainland of China: Some Important Facts [(site)](https://www.tid.gov.hk/english/aboutus/publications/factsheet/china.html)
+
+3. Hong Kong Exports [(site)](https://tradingeconomics.com/hong-kong/exports)
 

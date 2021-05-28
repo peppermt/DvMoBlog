@@ -1593,7 +1593,7 @@ A <strong><em>Trade Deficit</em></strong> occurs when there is a negative trade 
 <p>Create a new worksheet, rename it to <em>Bal of Trade</em> for easy reference To compute the <em>Balance of Trade</em>, we create a new <em>Calculated Field</em>.</p>
 <p>Click on Analysis &gt; Create Calculated Field</p>
 <p>Name the newly-created field <em>Balance of Trade ($)</em>.</p>
-<p>Since Balance of Trade = Value of Exports – Value of Imports, we drag the <em>Export</em> and <em>Import</em> variables accordingly into the equation for computation.</p>
+<p>Since Balance of Trade = Value of Exports – Value of Imports, we drag the <em>Export($)</em> and <em>Import($)</em> variables accordingly into the equation for computation.</p>
 <p><img src="images/img25a.jpg" /></p>
 <p>Drag <em>Year Month</em> to <em>Columns</em>, and <em>Balance of Trade ($)</em> to <em>Rows</em>.</p>
 <p>Since we would be grouping the charts by Countries for easier comparison, we drag <em>Country</em> to Columns as well, and place it before <em>Year Month</em>.</p>
@@ -1617,8 +1617,36 @@ A <strong><em>Trade Deficit</em></strong> occurs when there is a negative trade 
 <p>Finally, drag the individual sheets to the spaces allocated. Formatting of the individual charts like font sizes, title alignment etc. are done in the respective worksheets.</p>
 <p><img src="images/img33a.jpg" /> And your dashboard is complete!</p>
 <h2 id="the-final-visualization">5. The Final Visualization</h2>
+<p><img src="images/TradeDBBB.jpg" /></p>
+<h3 id="advantages-of-proposed-design">5.1 Advantages of Proposed Design</h3>
+<ul>
+<li><p>The title tells us the scope of the display: Trade statistics, top 6 trading countries listed, and for the year 2019 to 2020. This is consistent with the charts displayed in the dashboard.</p></li>
+<li><p>Separate Line Chart for Import and Export to allow easy comparison across each country, over the month and year, for the same metric. Trends can be picked up easily.</p></li>
+<li><p>As both 2019 and 2020 values for the same metric are plotted on the same axis, charts can be compared easily across the two years. Values are expressed in the charts as their exact values (Billions) which is more straightforward instead of having to convert “Thousand Millions”. Gridlines are added to the line charts to allow easy tracing of values.</p></li>
+<li><p>Same colors have been applied for each country in both line charts to allow convenient comparison. For example, we can see that <em>Mainland China</em> (orange line) is the top Exporter and Importer, while <em>Hong Kong</em> (red line) is the second top Exporter and the lowest Importer. The original color assigned automatically to <em>Taiwan</em> was green. This was deliberately changed to purple so as to avoid having a combination of red and green in the same display, to facilitate reading by people who are colour-blind.</p></li>
+<li><p>We also avoided the need for a legend as the color codes have been embedded within the title, killing two birds with one stone.</p></li>
+<li><p>The <em>Balance of Trade</em> computation gives further insights to the raw import/export values of the countries. This chart is placed below the line charts as it signifies development of the data from top to bottom : from raw values to a useful ratio.</p></li>
+<li><p>A commentary is also included to summarize the trade balance in each country, whether they experienced a trade surplus or deficit in 2019 and 2020.</p></li>
+<li><p>The height of the bars in the <em>Balance of Trade</em> bar chart directly gives us a sense of the magnitude of the trade balance, and the colors tell us whether it is a trade surplus (blue) or deficit (red), with varying intensities as well.</p></li>
+<li><p>Note that the order of the country list is in alphabetical order and consistent throughout the display, giving a sense of uniformity.</p></li>
+</ul>
 <h2 id="major-insights-revealed-by-the-final-visualization">6. 3 Major Insights Revealed by the Final Visualization</h2>
+<ol type="1">
+<li><p>There was a turnaround in the trade deficit status of United States between 2019 and 2020. In January 2020, United States and China signed the Phase One Trade Deal, which eased the tensions from the long-standing trade duel between the two superpowers. This move will boost China’s purchases of US products, and also reduce US tariffs on goods imported from China. As seen from the Imports and Exports line charts, we saw an overall increase in Exports for US in 2020, coupled with a corresponding dip in Imports however. This thus resulted in the turnaround in US’s trade balance position to a surplus of $5.67 billion from a trade deficit position of $14.4 billion in the previous year. For China, while the pickup in Exports was not as strong as US’s at the start of 2020, the spike came in July 2020 and the high value sustained. We could see that this increase was substantial as it created a higher trade surplus of $5.48 billion for China as compared to the previous year.</p></li>
+<li><p>Malaysia saw a dip in its exports in Jan 2020 due to the Covid-19 pandemic. It continued to deteriorate and hit a low of $2.9 billion in Apr 2020, when the movement control order (MCO) was imposed. We could see that this has manifested in a 10 times increase in trade deficit from $0.73 billion in 2019 to $11.65 billion in 2020. The impact of the pandemic on Malaysia’s economy and trade balance is significant.</p></li>
+<li><p>Other insights include general observations of trends and behaviour specific to each country:</p>
+<ul>
+<li>Hong Kong has a relatively high and consistent trade surplus. By virtue of its strategic geographical location, and infrastructure, it has secured its position as one of Mainland China’s largest trading partners, playing an important entrepot role between the Mainland and the rest of the world<sup>2</sup>. It has 99% of shipments coming from re-exports<sup>3</sup>.</li>
+<li>Taiwan has a relatively high and consistent trade deficit in 2019 and 2020.</li>
+<li>The Export values of Japan and Taiwan are similar and seem to follow the same trend.</li>
+</ul></li>
+</ol>
 <h2 id="references">7. References</h2>
+<ol type="1">
+<li><p>Balance of Trade <a href="https://corporatefinanceinstitute.com/resources/knowledge/economics/balance-of-trade-bot/">(site)</a></p></li>
+<li><p>Hong Kong and Mainland of China: Some Important Facts <a href="https://www.tid.gov.hk/english/aboutus/publications/factsheet/china.html">(site)</a></p></li>
+<li><p>Hong Kong Exports <a href="https://tradingeconomics.com/hong-kong/exports">(site)</a></p></li>
+</ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
