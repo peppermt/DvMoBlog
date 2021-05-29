@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = FALSE)
 Statistics on [merchandise trade data for various regions and markets](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data) are compiled by Enterprise Singapore, and provided by Department of Statistics (DOS), Singapore. From this dataset, a chart depicting the import and export volumes for the top 6 trading countries for the year 2019 – 2020 was generated. We have attempted a ‘makeover’ on this chart using Tableau to improve on its clarity. This post would illustrate the makeover process and cover the following sections:
 
   1. The Original Visualization
-  2. Critique to Identify Areas for Improvement
+  2. Critiques to Identify Areas for Improvement
   3. Sketch of Proposed Design & Comments
   4. Step-by-Step Guide to Creating the Proposed Visualization in Tableau
   5. The Final Visualization
@@ -32,7 +32,7 @@ Statistics on [merchandise trade data for various regions and markets](https://w
 
 ![](images\originalviz.jpg)
 
-## 2. Critique to Identify Areas for Improvement
+## 2. Critiques to Identify Areas for Improvement
 
 ### 2.1 Clarity
 
