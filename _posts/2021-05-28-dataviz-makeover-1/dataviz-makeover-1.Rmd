@@ -9,6 +9,7 @@ date: 05-28-2021
 output:
   distill::distill_article:
     self_contained: false
+preview: images/TradeDBBBB.jpg
 ---
 
 
