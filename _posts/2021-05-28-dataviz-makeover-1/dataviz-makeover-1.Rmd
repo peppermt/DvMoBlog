@@ -39,7 +39,7 @@ Statistics on [merchandise trade data for various regions and markets](https://w
 * There are no captions or commentaries. It is not clear what message is to be conveyed with the charts.
 * Title does not match what is illustrated in the charts. Title says 2019 – 2020, but according to the x-axes of the charts, the periods illustrated are mostly 2019 – 2021, and only 2020 for Japan. It is not clear what the scope of the visualization is. 
 * The X-axis titles are inconsistent with label markings and graphs presented. Which month and which period does “Month of Period” refer to? The variation of the line graphs show that the data presented has a higher resolution than “Year” but it is not clear what resolution it is exactly. There are also no tick marks on the axis nor gridlines in the chart area, the reader is unable to reference which data points correspond to which and what time units. 
-* The Y-axes have no units. It is not clear what the unit of measurement is. It is also not clear what ‘M’ in the axis labels stand for. The scale between the primary and secondary Y-axis for is different within the chart of each country, this would mislead the reader in terms of interpretation of how the import and export volumes compare with each other. The different scales between the charts of each country would mislead the reader as well – for e.g. direct glance of the charts of Mainland China and Japan shows as if both countries have similar import/export volume, when their quantities are actually different. Comparison of import and export volumes across countries is rather painful.
+* The Y-axes have no units. It is not clear what the unit of measurement is. It is also not clear what ‘M’ in the axis labels stand for. The scale between the primary and secondary Y-axis for is different within the chart of each country, this would mislead the reader in terms of interpretation of how the import and export volumes compare with each other. The different scales between the charts of each country would mislead the reader as well – for e.g. direct glance of the charts of Mainland China and Japan shows as if both countries have similar import/export volume, when their quantities are actually very different. Comparison of import and export volumes across countries is rather painful.
 
 
 ### 2.2 Aesthetics
@@ -47,14 +47,14 @@ Statistics on [merchandise trade data for various regions and markets](https://w
 * Title is too small and does not stand out. The font size is even smaller than the individual chart titles. The alignment is off-centre as well.
 * Display of country charts is not in any order of trade volume. The reader must decipher the measures on his/her own from the charts before the order can be determined. 
 * The dimensions of each country chart are inconsistent and misaligned. E.g. The width of Hong Kong’s chart is narrower than that of Malaysia’s. This makes the overall outlook messy. 
-* The type of chart (area chart) applied here is unsuitable as we can hardly differentiate between the chart for import and export. The area overlaps also masked the actual charts and inadvertently created a third shade of colour which made the charts even difficult to interpret. 
+* The type of chart (area chart) applied here is unsuitable as we can hardly differentiate between the chart for import and export. The area overlaps also masked the actual charts and inadvertently created a third shade of colour which made the charts even more difficult to interpret. 
 * The colours chosen for the area charts are unfriendly to those who are colour-blind - protanopes and deuteranopes will not be able to differentiate between the two shades.
 * Abbreviation is used for United States. When it is used as a location or noun, it should be spelt out in full.
 
 
 ## 3. Sketch of Proposed Design
 
-![](images/sketch.png)
+![](images/sketchA.png)
 *Sketched on Microsoft OneNote for Windows 10*
 
 ## 4. Step-by-Step Guide: Creating the Proposed Visualization in Tableau
@@ -84,7 +84,7 @@ We note that there is unnecessary description information in the data table. We 
 
 ![](images/img05.jpg)
 
-In the current data structure, each _Month-Year_ is a column but we need this as a Dimension. So we do a pivot on the dataset to convert it to stacked format.
+In the current data structure, each _Month-Year_ is a column but we need this as a Dimension. So we do a pivot on the dataset to convert the data to stacked format.
 
 Highlight all the data columns except the _Country_ column > Right-Click on any highlighted column > Pivot
 
@@ -104,6 +104,7 @@ We need to tell Tableau how _T2_ (Exports) is related to _Imports_. In this case
 ![](images/img09.jpg){width=80%}
 
 ![](images/img10.jpg){width=80%}
+
 For both tables, we should check that variables are recognized in the correct format.
 
 * _Year Month_ -> _Date_
@@ -168,18 +169,21 @@ Right-Click on the _Imports(\$’000)_ measure > Create > Calculated Field
 
 Key in the formula for the calculated field, which is essentially multiplying the current value by 1000.
 
-Replace the _Imports($’000)_ with the newly created _Imports_ measure in the Rows field
+Replace the _Imports($’000)_ with the newly created _Imports(\$)_ measure in the Rows field
 
-![](images/img18c.jpg)
+![](images/img18c.jpg){width=70%}
+
 Colors assigned automatically by Tableau to each _Country_ are edited for easier visual reference.
 
 Click the little down arrow in the Colors Legend field > Edit Colors
 
 ![](images/img19.jpg)
 
-To avoid having green and red in the same display, manually change Taiwan’s assigned Green to purple
+To avoid having green and red in the same display, manually change Taiwan’s assigned Green to Purple.
 
-![](images/img20.jpg)
+Click _Taiwan_ > Click the _Purple_ box
+
+![](images/img20a.jpg)
 The months in the x-axis label are spelt out in full. This takes up unnecessary space. These can be shortened into their abbreviated forms and still be comprehensible.
 
 Right click anywhere on the x-axis > Format > Header > Default > Dates > Abbreviation
@@ -188,13 +192,15 @@ Right click anywhere on the x-axis > Format > Header > Default > Dates > Abbrevi
 
 X-axis title can be removed as the _Year_ and _Month_ labels are self-explanatory
 
-Text is formatted to be in **Bold** for them to be clearer. Text sizes are also sized accordingly to fit into the dashboard.
+Text is formatted to be in **Bold** for them to be clearer. Text sizes are also sized accordingly to fit into the dashboard. They should be sized big enough to be clear, yet small enough such that more labels can be contained within the space.
 
-For easier tracking of the values for each month, vertical gridlines are also added to the line chart.
+For easier tracking of the values for each month, vertical gridlines are also added to the line chart. Light grey gridlines are chosen so as not to clutter the outlook of the chart and overpower the line graphs themselves.
 
 ![](images/img24.jpg){width=40%}
 
-Tentative output of the Imports line chart is as below.
+Tentative output of the _Imports(\$)_ line chart is as below.
+
+The same steps above are to be carried out to create the _Exports(\$)_ line chart from the _Exports_ data.  
 
 ![](images/img23a.jpg)
 
