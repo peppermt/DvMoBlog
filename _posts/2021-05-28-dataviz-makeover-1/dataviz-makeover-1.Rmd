@@ -295,7 +295,7 @@ This dashboard is posted on Tableau Public [here](https://public.tableau.com/app
 
 ### 5.1 Advantages of Proposed Design
 
-* The title tells us the scope of the display: Trade statistics, top 6 trading countries listed, and for the year 2019 to 2020. This is consistent with the charts displayed in the dashboard.
+* The title tells us the scope of the display: Trade statistics, top 6 trading countries listed, and for the years 2019 to 2020. This is consistent with the charts displayed in the dashboard.
 
 * Separate Line Chart for Import and Export to allow easy comparison across each country, over the month and year, for the same metric. Trends can be picked up easily.
 
