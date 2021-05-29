@@ -213,11 +213,12 @@ Balance of Trade (over a given time period) is calculated by:
 
 <center> _Value of Exports – Value of Imports  _ </center>
   
-  
+<br>
 A **_Trade Surplus_** occurs when there is a positive trade balance, when Exports > Imports.  
 A **_Trade Deficit_** occurs when there is a negative trade balance, when Exports < Imports.
 
-Create a new worksheet, rename it to _Bal of Trade_ for easy reference
+Create a new worksheet, rename it to _Bal of Trade_ for easy reference.
+
 To compute the _Balance of Trade_, we create a new _Calculated Field_.
 
 Click on Analysis > Create Calculated Field 
@@ -230,7 +231,7 @@ Since Balance of Trade = Value of Exports – Value of Imports, we drag the _Exp
 
 Drag _Year Month_ to _Columns_, and _Balance of Trade ($)_ to _Rows_.
 
-Since we would be grouping the charts by Countries for easier comparison, we drag _Country_ to Columns as well, and place it before _Year Month_.
+Since we would be grouping the charts by Countries for easier comparison, we drag _Country_ to Columns as well, and place it before _Year Month_, so that the first grouping will be by _Country_, then for each _Year Month_ within each _Country_.
 
 ![](images/img26a.jpg)
 
@@ -246,7 +247,7 @@ Since we want to differentiate between positive and negative trade balance, to d
 
 ![](images/img28.jpg)
 
-Labels are formatted to be shown in units of Billions (B), to be consistent with the axis. Given the scale magnitude, its not necessary for labels to be precise to the last dollar. With these labels, the Y-axis can also be removed. 
+Labels are formatted to be shown in units of Billions (B), to be consistent with the axis. Given the scale magnitude, its not necessary for labels to be precise to the last dollar. With these labels, the Y-axis can also be removed as it is not required. 
 
 ![](images/img29a.jpg)
 

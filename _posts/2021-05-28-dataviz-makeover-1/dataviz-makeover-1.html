@@ -1592,15 +1592,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <center>
 <em>Value of Exports – Value of Imports </em>
 </center>
-<p>A <strong><em>Trade Surplus</em></strong> occurs when there is a positive trade balance, when Exports &gt; Imports.<br />
+<p><br> A <strong><em>Trade Surplus</em></strong> occurs when there is a positive trade balance, when Exports &gt; Imports.<br />
 A <strong><em>Trade Deficit</em></strong> occurs when there is a negative trade balance, when Exports &lt; Imports.</p>
-<p>Create a new worksheet, rename it to <em>Bal of Trade</em> for easy reference To compute the <em>Balance of Trade</em>, we create a new <em>Calculated Field</em>.</p>
+<p>Create a new worksheet, rename it to <em>Bal of Trade</em> for easy reference.</p>
+<p>To compute the <em>Balance of Trade</em>, we create a new <em>Calculated Field</em>.</p>
 <p>Click on Analysis &gt; Create Calculated Field</p>
 <p>Name the newly-created field <em>Balance of Trade ($)</em>.</p>
 <p>Since Balance of Trade = Value of Exports – Value of Imports, we drag the <em>Export($)</em> and <em>Import($)</em> variables accordingly into the equation for computation.</p>
 <p><img src="images/img25a.jpg" /></p>
 <p>Drag <em>Year Month</em> to <em>Columns</em>, and <em>Balance of Trade ($)</em> to <em>Rows</em>.</p>
-<p>Since we would be grouping the charts by Countries for easier comparison, we drag <em>Country</em> to Columns as well, and place it before <em>Year Month</em>.</p>
+<p>Since we would be grouping the charts by Countries for easier comparison, we drag <em>Country</em> to Columns as well, and place it before <em>Year Month</em>, so that the first grouping will be by <em>Country</em>, then for each <em>Year Month</em> within each <em>Country</em>.</p>
 <p><img src="images/img26a.jpg" /></p>
 <p>Drag <em>Balance of Trade ($)</em> to the Color Marks so that the magnitude of bar charts will be differentiated by color.</p>
 <p>Drag the same to the <em>Label</em> Marks so that labels can appear for each bar.</p>
@@ -1608,7 +1609,7 @@ A <strong><em>Trade Deficit</em></strong> occurs when there is a negative trade 
 <p>Right-click on the <em>Color</em> bar to edit the colors assigned.</p>
 <p>Since we want to differentiate between positive and negative trade balance, to distinguish between trade surplus and trade deficit status, we assign one color to values &gt; 0, another to &lt; 0. So we set <em>Center: 0</em>. In this case, blue is positive, red is negative.</p>
 <p><img src="images/img28.jpg" /></p>
-<p>Labels are formatted to be shown in units of Billions (B), to be consistent with the axis. Given the scale magnitude, its not necessary for labels to be precise to the last dollar. With these labels, the Y-axis can also be removed.</p>
+<p>Labels are formatted to be shown in units of Billions (B), to be consistent with the axis. Given the scale magnitude, its not necessary for labels to be precise to the last dollar. With these labels, the Y-axis can also be removed as it is not required.</p>
 <p><img src="images/img29a.jpg" /></p>
 <h3 id="creation-of-dashboard">4.2.3 Creation of Dashboard</h3>
 <p>Now that we have created all the charts required, we shall proceed to create the dashboard.</p>
