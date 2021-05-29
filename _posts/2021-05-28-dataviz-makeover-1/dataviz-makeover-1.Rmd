@@ -267,17 +267,29 @@ Adjust the font size and use bold face accordingly to use inking to highlight th
 
 ![](images/img32.jpg)
 
+The Dashboard layout size is retained as _Fixed Size_ instead of _Automatic_, which would misalign the intended layout of our charts when it is displayed in Tableau Public. A _Fixed Size_ layout will retain the layout of the charts. The _Desktop Browser (1000x800)_ is used as it is more universal and would fit most laptop/desktop screens without distorting the layout.  
+
+![](images/img35.jpg){width=60%}
+
 We then plan the layout of the Dashboard. In this case, we need to allocate space for the _Imports_ and _Exports_ line charts, and the _Balance of Trade_ bar chart with the commentary at the bottom. Text object is used for the commentary section.
 
 Finally, drag the individual sheets to the spaces allocated. Formatting of the individual charts like font sizes, title alignment etc. are done in the respective worksheets.
 
 ![](images/img33a.jpg)
+
+For the Commentary, use a _Text_ object.
+
+What we want to stand out here is the main point for each country, so we can apply inking here.
+We give each country a bold font, bigger font size, and font color according to their trade balance status. We also highlight other special points in the commentary by applying a bold font.
+
+![](images\img36.jpg){width=70%}
+
 And your dashboard is complete!
 
 
 ## 5. The Final Visualization
 
-![](images/TradeDBBB.jpg)
+![](images/TradeDBBBB.jpg)
 
 ### 5.1 Advantages of Proposed Design
 
