@@ -4,7 +4,7 @@ description: |
   Giving a trade statistic visualization chart a facelift in Tableau.  
 author:
   - name: Rhoda Tong
-    url: https://example.com/notapp
+    url: https://public.tableau.com/app/profile/mt.tong/viz/TradeStatisticsofTop6TradingCountries2019-2020/TradeDashboard
 date: 05-28-2021
 output:
   distill::distill_article:
