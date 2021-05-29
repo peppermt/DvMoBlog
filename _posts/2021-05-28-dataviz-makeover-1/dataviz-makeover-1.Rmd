@@ -291,6 +291,8 @@ And your dashboard is complete!
 
 ![](images/TradeDBBBB.jpg)
 
+This dashboard is posted on Tableau Public [here](https://public.tableau.com/app/profile/mt.tong/viz/TradeStatisticsofTop6TradingCountries2019-2020/TradeDashboard).
+
 ### 5.1 Advantages of Proposed Design
 
 * The title tells us the scope of the display: Trade statistics, top 6 trading countries listed, and for the year 2019 to 2020. This is consistent with the charts displayed in the dashboard.
