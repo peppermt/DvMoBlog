@@ -258,11 +258,12 @@ Now that we have created all the charts required, we shall proceed to create the
 Create a new Dashboard, rename it to _Trade Dashboard_.
 
 ![](images/img31.jpg)
+
 Add title: _Trade Statistics of Top 6 Trading Countries_
 
 Subsequently, we list out the 6 countries. The text color of each country should follow the corresponding colour of its line in the Import/Export line charts. This will double up as a legend for the line charts. A dark background is chosen for the colours to stand out more.
 
-Adjust the font size to use inking to highlight the main title, and the subtitles.
+Adjust the font size and use bold face accordingly to use inking to highlight the main title, and the subtitles.
 
 ![](images/img32.jpg)
 
@@ -284,15 +285,15 @@ And your dashboard is complete!
 
 * Separate Line Chart for Import and Export to allow easy comparison across each country, over the month and year, for the same metric. Trends can be picked up easily.
 
-* As both 2019 and 2020 values for the same metric are plotted on the same axis, charts can be compared easily across the two years. Values are expressed in the charts as their exact values (Billions) which is more straightforward instead of having to convert “Thousand Millions”. Gridlines are added to the line charts to allow easy tracing of values.
+* As both 2019 and 2020 values for the same metric are plotted on the same axis, charts can be compared easily across the two years. Values are expressed in the charts as their exact values (Billions) which is more straightforward instead of having to convert “Thousand Millions”. Gridlines are added in subtle grey to the line charts to allow easy tracing of values yet not cover the main charts.
 
 * Same colors have been applied for each country in both line charts to allow convenient comparison. For example, we can see that _Mainland China_ (orange line) is the top Exporter and Importer, while _Hong Kong_ (red line) is the second top Exporter and the lowest Importer. The original color assigned automatically to _Taiwan_ was green. This was deliberately changed to purple so as to avoid having a combination of red and green in the same display, to facilitate reading by people who are colour-blind.
 
 * We also avoided the need for a legend as the color codes have been embedded within the title, killing two birds with one stone.
 
-* The _Balance of Trade_ computation gives further insights to the raw import/export values of the countries. This chart is placed below the line charts as it signifies development of the data from top to bottom : from raw values to a useful ratio.
+* The _Balance of Trade_ computation gives further insights to the raw import/export values of the countries. This chart is placed below the line charts as it signifies development of the data from top to bottom --> from raw values to a useful ratio.
 
-* A commentary is also included to summarize the trade balance in each country, whether they experienced a trade surplus or deficit in 2019 and 2020.
+* A commentary is also included to summarize the trade balance in each country, whether they experienced a trade surplus or deficit in 2019 and 2020. The text color of each country directly indicates their trade balance status - blue for trade surplus, red for trade deficit. This is so that readers can differentiate the status of each country at one glance.
 
 * The height of the bars in the _Balance of Trade_ bar chart directly gives us a sense of the magnitude of the trade balance, and the colors tell us whether it is a trade surplus (blue) or deficit (red), with varying intensities as well.
 
