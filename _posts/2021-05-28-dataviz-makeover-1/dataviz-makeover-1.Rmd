@@ -271,7 +271,7 @@ Add title: _Trade Statistics of Top 6 Trading Countries_
 
 Subsequently, we list out the 6 countries. The text color of each country should follow the corresponding colour of its line in the Import/Export line charts. This will double up as a legend for the line charts. A dark background is chosen for the colours to stand out more.
 
-Adjust the font size and use bold face accordingly to use inking to highlight the main title, and the subtitles.
+Adjust the font size and use bold fonts accordingly to use inking to highlight the main title, and the subtitles.
 
 ![](images/img32.jpg)
 
