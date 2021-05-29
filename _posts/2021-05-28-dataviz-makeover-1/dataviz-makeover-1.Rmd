@@ -129,13 +129,20 @@ According to the Task, we only need to illustrate data for the period 2019-2020 
 
 ![](images/img14.jpg)
 
-Filters are created for _Country_, _Country 2_, _Year Month_ and _Year Month 2_ as shown.
+Filters are created for _Country - Split 1_, _Country 2 - Split 1_, _Year Month_ and _Year Month 2_ as shown.
 
 ![](images/img15.jpg)
 ![](images/img16.jpg)
 The final filters list is as shown.
 
 ![](images/img17.jpg){width=65%}
+
+We then rename _Country-Split 1_ and _Country-Split 2_ to _Country_ and _Country 2_ by doing the following renaming in sequence. We need to do this as the original longer _Country_ variables is currently taking up the variable name.
+
+* _Country_ -> _Country Long_
+* _Country 2_ -> _Country 2 Long_
+* _Country-Split 1_ -> _Country_
+* _Country-Split 2_ -> _Country 2_
 
 ### 4.2 Visualization Chart Preparation
 
