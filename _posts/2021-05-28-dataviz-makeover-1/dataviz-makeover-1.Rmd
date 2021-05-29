@@ -158,7 +158,7 @@ The steps listed below are for the creation of the _Imports_ line chart. Similar
 
 Create a new worksheet, rename it to _Imports_.
 
-Drag _Year Month_ to Columns, and _Import ($’000)_ to Rows.
+Drag _Year Month_ to Columns, and _Imports($’000)_ to Rows.
 
 Click the + on _Year Month_ twice to express the data in higher resolution of _Year_ and _Month_. Note that _Quarter_ appears first but we can drag and pull it out of the field to remove it.
 
@@ -186,7 +186,7 @@ Click the little down arrow in the Colors Legend field > Edit Colors
 
 ![](images/img19.jpg)
 
-To avoid having green and red in the same display, manually change Taiwan’s assigned Green to Purple.
+The Jewel Bright color palette is used here as the colors are vibrant and distinct. Tableau will automatically assign the colors to each country. To avoid having green and red in the same display, manually change Taiwan’s assigned Green to Purple.
 
 Click _Taiwan_ > Click the _Purple_ box
 
@@ -242,7 +242,7 @@ Since we would be grouping the charts by Countries for easier comparison, we dra
 
 ![](images/img26a.jpg)
 
-Drag _Balance of Trade ($)_ to the Color Marks so that the magnitude of bar charts will be differentiated by color.
+Drag _Balance of Trade ($)_ to the _Color_ Marks so that the magnitude of bar charts will be differentiated by color.
 
 Drag the same to the _Label_ Marks so that labels can appear for each bar.
 
@@ -252,9 +252,10 @@ Right-click on the _Color_ bar to edit the colors assigned.
 
 Since we want to differentiate between positive and negative trade balance, to distinguish between trade surplus and trade deficit status, we assign one color to values > 0, another to < 0. So we set _Center: 0_. In this case, blue is positive, red is negative. 
 
-![](images/img28.jpg)
+![](images/img28.jpg){width=70%}
 
-Labels are formatted to be shown in units of Billions (B), to be consistent with the axis. Given the scale magnitude, its not necessary for labels to be precise to the last dollar. With these labels, the Y-axis can also be removed as it is not required. 
+Labels are formatted to be shown in units of Billions (B), to be consistent with the axis. Given the scale magnitude, its not necessary for labels to be precise to the last dollar. With these labels, the Y-axis can also be removed as it is not required.
+
 
 ![](images/img29a.jpg)
 
@@ -276,7 +277,7 @@ Adjust the font size and use bold face accordingly to use inking to highlight th
 
 The Dashboard layout size is retained as _Fixed Size_ instead of _Automatic_, which would misalign the intended layout of our charts when it is displayed in Tableau Public. A _Fixed Size_ layout will retain the layout of the charts. The _Desktop Browser (1000x800)_ is used as it is more universal and would fit most laptop/desktop screens without distorting the layout.  
 
-![](images/img35.jpg){width=60%}
+![](images/img35.jpg){width=30%}
 
 We then plan the layout of the Dashboard. In this case, we need to allocate space for the _Imports_ and _Exports_ line charts, and the _Balance of Trade_ bar chart with the commentary at the bottom. Text object is used for the commentary section.
 
@@ -314,7 +315,7 @@ This dashboard is posted on Tableau Public [here](https://public.tableau.com/app
 
 * The _Balance of Trade_ computation gives further insights to the raw import/export values of the countries. This chart is placed below the line charts as it signifies development of the data from top to bottom --> from raw values to a useful ratio.
 
-* A commentary is also included to summarize the trade balance in each country, whether they experienced a trade surplus or deficit in 2019 and 2020. The text color of each country directly indicates their trade balance status - blue for trade surplus, red for trade deficit. This is so that readers can differentiate the status of each country at one glance.
+* A commentary is also included to summarize the trade balance in each country, whether they experienced a trade surplus or deficit in 2019 and 2020. The text color of each country directly indicates their trade balance status - blue for trade surplus, red for trade deficit. This is so that readers can differentiate the status of each country at one glance. Noteworthy points are also expressed in bold to be highlighted.
 
 * The height of the bars in the _Balance of Trade_ bar chart directly gives us a sense of the magnitude of the trade balance, and the colors tell us whether it is a trade surplus (blue) or deficit (red), with varying intensities as well.
 
