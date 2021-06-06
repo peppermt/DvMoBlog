@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-06-06-dataviz-makeover-2/",
+    "title": "DataViz MakeOver #2",
+    "description": "A short description of the post.",
+    "author": [
+      {
+        "name": "Rhoda Tong",
+        "url": "https://public.tableau.com/app/profile/mt.tong/viz/TradeStatisticsofTop6TradingCountries2019-2020/TradeDashboard"
+      }
+    ],
+    "date": "2021-06-06",
+    "categories": [],
+    "contents": "\r\nDistill is a publication format for scientific and technical writing, native to the web.\r\nLearn more about using Distill at https://rstudio.github.io/distill.\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2021-06-06T20:05:53+08:00",
+    "input_file": "dataviz-makeover-2.utf8.md"
+  },
+  {
     "path": "posts/2021-05-28-dataviz-makeover-1/",
     "title": "DataViz MakeOver #1",
     "description": "Giving a trade statistic visualization chart a facelift in Tableau.",
