@@ -1,10 +1,10 @@
 ---
 title: "DataViz MakeOver #2"
 description: |
-  A short description of the post.
+  Giving a trade statistic visualization interactive chart a facelift in Tableau.
 author:
   - name: Rhoda Tong
-    url: https://public.tableau.com/app/profile/mt.tong/viz/TradeStatisticsofTop6TradingCountries2019-2020/TradeDashboard
+    url: https://public.tableau.com/app/profile/mt.tong/viz/DataVizMakeover2_16240837165630/TradeDB
 date: 06-06-2021
 output:
   distill::distill_article:
@@ -70,11 +70,6 @@ One of the main points covered by the bubble plot is the status of trade balance
 ![](Images/SketchPart1.jpg)
 ![](Images/SketchPart2.jpg)
 
-Row Names | Values
-----------| -----------
-Row 1     | Value 1
-Row 2     | Value 2
-Row 3     | Value 3
 
 ## 3.1 Clarity
 
@@ -120,7 +115,7 @@ The following steps show how to prepare the data via Tableau Prep Builder.
 
 Steps | Action
 ----------| -----------
-Exploring the data of the file in Microsoft Excel, we can see three tabs – _Content_, _T1_ and _T2_. From the description, _T1_ is for Imports, and _T2_ is for Exports data.     | ![](Images/img02.jpg){width=80%}
+Exploring the data of the file in Microsoft Excel, we can see three tabs – _Content_, _T1_ and _T2_. From the description, _T1_ is for Imports, and _T2_ is for Exports data.     | ![](Images/img02.jpg){width=60%}
 We then import the data into Tableau Prep Builder for processing. We do this by dragging the _ImportsExports.xlsx_ file into the Tableau window.     | ![](images/img16.png){width=100%}
 Once the data is imported, we load the individual tabs for data viewing. Here we load _T1_ (Imports) data by dragging _T1_ into the field.     | ![](images/img17.png){width=100%}
 We note that there is unnecessary description information in the data table. We can get Tableau to clean this up by checking the _Data Interpreter_ box. Tableau is able to scan through and distinguish the content. This way, only the table containing the data we need remains     | ![](images/img18.png){width=100%}
@@ -290,6 +285,8 @@ Rename the Action to _HighlightBoth_. <br></br> Tableau has selected to run acti
 And our final dashboard is ready!     | ![](images/img117.png){width=120%}
 
 # 5. The Final Visualization
+
+The visualization can be accessed  [here](https://public.tableau.com/app/profile/mt.tong/viz/DataVizMakeover2_16240837165630/TradeDB).
 
 ![](images/img117.png)
 
