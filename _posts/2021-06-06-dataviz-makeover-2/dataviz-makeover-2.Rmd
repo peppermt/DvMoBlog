@@ -288,19 +288,6 @@ And our final dashboard is ready!     | ![](images/img117.png){width=120%}
 
 # 5. The Final Visualization
 
-The visualization can be accessed  [here](https://public.tableau.com/app/profile/mt.tong/viz/DataVizMakeover2_16240837165630/TradeDB). 
-
-Here is a sample of the interactive visualization. Do feel free to try it! Dimensions shown below are not in the same scale as viewed on the Tableau site. 
-
-```{r, echo=FALSE}
-htmltools::includeHTML("embed.html")
-```
-
-<br>
-</br>
-
-**Comments**
-
 ![](images/img117.png)
 
 There can be various levels of interaction for this dashboard. Every change is animated so that the user is able to see the transition. 
@@ -322,6 +309,15 @@ If we want to see the _Top 20_ list instead of _Top 10_, we can easily change th
 Lastly, when one bubble or bar chart of one country is selected, the corresponding bar chart or bubble in the other chart would be highlighted.
 
 ![](images/img122.png)
+The visualization can be accessed  [here](https://public.tableau.com/app/profile/mt.tong/viz/DataVizMakeover2_16240837165630/TradeDB). 
+
+Here is a sample of the interactive visualization. Do feel free to try it! Dimensions shown below are not in the same scale as viewed on the Tableau site. 
+
+```{r, echo=FALSE}
+htmltools::includeHTML("embed.html")
+```
+
+
 
 # 6. Major Insights Revealed by the Final Visualization Prepared
 
