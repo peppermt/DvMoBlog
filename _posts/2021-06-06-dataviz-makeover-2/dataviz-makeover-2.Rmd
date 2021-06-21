@@ -288,7 +288,15 @@ And our final dashboard is ready!     | ![](images/img117.png){width=120%}
 
 # 5. The Final Visualization
 
-The visualization can be accessed  [here](https://public.tableau.com/app/profile/mt.tong/viz/DataVizMakeover2_16240837165630/TradeDB).
+The visualization can be accessed  [here](https://public.tableau.com/app/profile/mt.tong/viz/DataVizMakeover2_16240837165630/TradeDB). 
+
+Here is a sample of the interactive visualization. Do feel free to try it! Dimensions shown below are not in the same scale as viewed on the Tableau site. 
+
+```{r, echo=FALSE}
+htmltools::includeHTML("embed.html")
+```
+
+## Comments
 
 ![](images/img117.png)
 
