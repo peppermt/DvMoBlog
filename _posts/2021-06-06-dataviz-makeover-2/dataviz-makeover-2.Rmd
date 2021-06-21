@@ -296,7 +296,10 @@ Here is a sample of the interactive visualization. Do feel free to try it! Dimen
 htmltools::includeHTML("embed.html")
 ```
 
-## Comments
+<br>
+</br>
+
+**Comments**
 
 ![](images/img117.png)
 
