@@ -182,7 +182,7 @@ We will need to create the following charts, in the following sequence:
   2. Imports / Exports Bar Chart
   3. Net Exports Imports Bubble Plot
 
-The line chart will be used in the tooltips for the bar chart and the bubble plot.
+The line chart will be used in the tooltips for the bar chart.
 
 ### 4.2.1 Imports / Exports Line Charts
 
