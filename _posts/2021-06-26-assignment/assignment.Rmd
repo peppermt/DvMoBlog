@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 
 ```{r Installing Loading Reqd Libraries, include=FALSE}
 
-packages = c('DT','tidyverse', 'ggiraph', 'plotly', 'lubridate', 'naniar','stringr','dplyr','ggstance','ggpubr','hms','data.table','raster','sf','tmap','clock','rgdal','tibbletime','networkD3', 'mapview','scales')
+packages = c('DT','tidyverse', 'ggiraph', 'plotly', 'lubridate', 'naniar','stringr','dplyr','ggstance','ggpubr','hms','data.table','raster','sf','tmap','clock','rgdal','tibbletime','networkD3', 'mapview','scales','knitr')
 
 for(p in packages){
   if(!require(p, character.only = T)){
@@ -576,7 +576,7 @@ This would be for the "Visits at each Location for Each Day (Credit Card)".
 #palette = "YlGnBu", "RdPu"
 
 x2 <- length(unique(cardbyday$n))
-cc_colours2 <- colorRampPalette(c('green', 'yellow', 'orange', 'red'))(x2)
+cc_colours2 <- colorRampPalette(c('darkgreen', 'yellow', 'orange', 'red'))(x2)
 
 #Converting date back to POSIXct type
 cardbyday$date <- as.POSIXct(cardbyday$date, format = "%Y/%M/%D")
@@ -603,7 +603,7 @@ This is the same plot plotted via loyalty card data.
 ```{r same plot by day via loyalty card, echo=FALSE, fig.height=8, fig.width=16}
 
 x3 <- length(unique(loyalcardbyday$n))
-cc_colours3 <- colorRampPalette(c('green', 'yellow', 'orange', 'red'))(x3)
+cc_colours3 <- colorRampPalette(c('darkgreen', 'yellow', 'orange', 'red'))(x3)
 
 #Converting date back to POSIXct type
 loyalcardbyday$TimeStampFormatted <- as.POSIXct(loyalcardbyday$TimeStampFormatted, format = "%Y/%M/%D")
@@ -631,7 +631,7 @@ Next, this would be for "Visits at Each Location for Time of Day", which can onl
 #YlGnBu
 
 x4 <- length(unique(cardbytime$n))
-cc_colours4 <- colorRampPalette(c('green', 'yellow', 'orange', 'red'))(x4)
+cc_colours4 <- colorRampPalette(c('darkgreen', 'yellow', 'orange', 'red'))(x4)
 
 #Converting date back to POSIXct type
 cardbytime$thirtymins <- as.POSIXct(cardbytime$thirtymins, format = "%H:%M:%S")
@@ -752,12 +752,61 @@ This means that there are transactions paid by cash, not paid by credit card. Bu
 
 ## High Transaction Amounts
 
-```{r boxplot of transaction amounts}
+```{r boxplot of transaction amounts credit and loyalty, echo=FALSE}
 
+#Prep Data first by joining loyalty card number into credit card dataset
 
+credit_loyalty <- full_join(creditcard, loyaltycard, by = c("price" = "price", "date" = "TimeStampFormatted", "location" = "location"))
+
+#Boxplot
+
+p2 <- credit_loyalty %>% ggplot(aes(x = location, y = price)) +
+  geom_boxplot(color="darkblue", fill="cyan") +
+  labs(title = "Transaction Amounts (Credit & Loyalty Card)", x = NULL, y = "Price") +
+  theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(p2)
 
 ```
 
+Here, we see that the transaction with the highest amount of $10,000 is made at Frydos Autosupply n More. It is also very different from its normal range, an extreme outlier. We shall note this point.
+
+Extreme outliers are also detected at 
+
+* Nationwide Refinery: \$4742.67, \$4513.16, \$4429.76 and \$4367.43
+* Albert's Fine Clothing: \$1239.41
+* Chostus Hotel: \$600
+* General Grocer: \$477.60
+
+We shall also note the highest value purchases which are greater than $4000, with the exception of the highest transaction at _Stewart and Sons Fabrication_, as that is near to its normal range.
+
+* Abila Airport : \$4918.39
+* Abila Scrapyard : \$4277.40
+* Carlyle Chemical Inc : \$4983.52
+* Maximum Iron and Steel : \$4788.22
+
+Details of these transactions are tabulated as follows:
+
+```{r tabulate transaction amount outliers, echo=FALSE}
+
+#Creating outlier table
+
+Location <- c("Nationwide Refinery", "Nationwide Refinery", "Nationwide Refinery", "Albert s Fine Clothing", "Chostus Hotel", "General Grocer", "Abila Airport", "Abila Scrapyard", "Carlyle Chemical Inc ", "Maximum Iron and Steel")
+
+Price <- c(4742.67, 4513.16, 4429.76, 1239.41, 600, 477.6, 4918.39, 4277.4, 4983.52, 4788.22)
+
+txn_outlier <- cbind.data.frame(Location, Price)
+
+txn_outlier
+
+txn_outliertab <- left_join(txn_outlier,credit_loyalty, by = c("Location" = "location", "Price" = "price"))
+
+txn_outliertab <- txn_outliertab %>% select(c("Location", "Price", "TimeStampFormatted", "last4ccnum","loyaltynum"))
+                                            
+data.table(txn_outliertab)    
+
+```
+We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. 
 
 ## Question 2
 
@@ -801,10 +850,10 @@ We also notice that there is a high count of travels on weekdays with LastName =
 The route shows that these vehicles comes out from GasTech, goes round nearby areas, and would then go back to GasTech. 105 would go to Carlyle Chemical Inc., Nationwide Refinery, and Guy's Gyros. 107 would also travel to Maximum Iron and Steel often. Since both vehicles only move on weekdays, they are likely the company trucks, which are not assigned to a specific employee. The personnel who can use these vehicles are as tabulated below:
 
 
-```{r car_assigned missing values show truck drivers}
+```{r car_assigned missing values show truck drivers, echo=FALSE, results=}
 
-car_assigned %>% 
-  filter(is.na(CarID))
+datatable(car_assigned %>% 
+  filter(is.na(CarID)))
 
 ```
 We also notice that there was unusually high movement for the trucks on 16 Jan - 26116 gps points/day, compared to the usual 3000 - 6000 points/day on the other days within these 2 weeks. Further investigation will be covered in Question 5.
@@ -853,8 +902,6 @@ ggplotly(figG)
 ```
 
 
-
-
 We see that there are frequent visits to the supermarkets and pump refuel stations. This means that there were transactions and business, but the transactions were not paid in credit card and loyalty cards were not used either.
 
 
@@ -862,11 +909,11 @@ We see that there are frequent visits to the supermarkets and pump refuel statio
 
 **Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data?**
 
-#```{r Look at CC and Loyalty Card Matched}
+```{r Look at CC and Loyalty Card Matched}
 
 #Prep Data first by joining loyalty card number into credit card dataset
 
-credit_loyalty <- left_join(creditcardB, loyaltycardB, by = c("price" = "price", "date" = "TimeStampFormatted", "location" = "location"))
+credit_loyalty <- full_join(creditcard, loyaltycard, by = c("price" = "price", "date" = "TimeStampFormatted", "location" = "location"))
 
 #To see if credit card records and loyalty card pairs are unique
 
