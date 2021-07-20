@@ -752,7 +752,11 @@ This means that there are transactions paid by cash, not paid by credit card. Bu
 
 ## High Transaction Amounts
 
+```{r boxplot of transaction amounts}
 
+
+
+```
 
 
 ## Question 2
