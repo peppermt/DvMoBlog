@@ -174,13 +174,14 @@ car_assigned_only
 Next, we shall ensure that the Timestamps are in the right and consistent format, using the _lubridate_ package. For the _loyaltycard_ dataset, the timestamp is only in _mdy_ format. We will observe that the timestamp will be converted to POSIXct (for creditcard and gpstracking dataset), and Date (for loyaltycard as there is only date data).
 
 ```{r formatting timestamp, echo = TRUE}
+
 #For creditcard dataset
 creditcard$TimeStampFormatted <-mdy_hm(creditcard$timestamp)
 str(creditcard)
 
 #Delete timestamp column
 creditcard <- creditcard %>% 
-  select(-timestamp)
+  dplyr::select(-timestamp)
 
 #Reorder columns
 col_order <- c("TimeStampFormatted", "location","price","last4ccnum")
@@ -192,7 +193,7 @@ str(gpstracking)
 
 #Delete timestamp column
 gpstracking <- gpstracking %>% 
-  select(-Timestamp)
+  dplyr::select(-Timestamp)
 
 #Reorder columns
 col_order <- c("TimeStampFormatted", "id","lat","long")
@@ -204,7 +205,7 @@ str(loyaltycard)
 
 #Delete timestamp column
 loyaltycard <- loyaltycard %>% 
-  select(-timestamp)
+  dplyr::select(-timestamp)
 
 #Reorder columns
 col_order <- c("TimeStampFormatted", "location","price","loyaltynum")
@@ -301,7 +302,7 @@ We create the movement path from GPS points next for each car. Hence, we need to
 
 All gps points will be joined with a line, and output via st_cast.
 
-```{r Creating Movement Path, echo=TRUE, results=}
+```{r Creating Movement Path, include=FALSE}
 
 gps_path <- gps_sf %>% 
   group_by(id) %>% 
@@ -430,11 +431,11 @@ p <- ggplot(loccountA, aes(x = reorder(location, -count_occur), tooltip = locati
         plot.title = element_text(size = 24, face = "bold", hjust = 0.5),
         axis.title.y = element_text(size = 20))
 
-girafe(
-  ggobj = p,
-  width_svg = 15,
-  height_svg = 15*0.618
-)
+#girafe(
+  #ggobj = p,
+  #width_svg = 15,
+  #height_svg = 15*0.618
+#)
 
 
 ```
@@ -463,11 +464,11 @@ p1 <- ggplot(loccountB, aes(x = reorder(location, -count_occur), tooltip = locat
         plot.title = element_text(size = 24, face = "bold", hjust = 0.5),
         axis.title.y = element_text(size = 20))
 
-girafe(
-  ggobj = p1,
-  width_svg = 15,
-  height_svg = 15*0.618
-)
+#girafe(
+  #ggobj = p1,
+  #width_svg = 15,
+  #height_svg = 15*0.618
+#)
 
 ```
 
@@ -570,7 +571,7 @@ With the data prepared, we shall do the tile plot via _geom_tile()_ from _ggplot
 
 This would be for the "Visits at each Location for Each Day (Credit Card)".
 
-```{r trying out geom_tile, echo = FALSE, layout="1-body-outset", fig.width=16, fig.height=10}
+```{r trying out geom_tile, eval=FALSE, fig.height=10, fig.width=16, include=FALSE, layout="1-body-outset"}
 
 #palette = "YlGnBu", "RdPu"
 
@@ -599,13 +600,25 @@ ggplotly(figA)
 
 This is the same plot plotted via loyalty card data.
 
-```{r same plot by day via loyalty card, echo=FALSE}
+```{r same plot by day via loyalty card, eval=FALSE, include=FALSE}
 
-figE <- loyalcardbydayA %>% 
+x3 <- length(unique(loyalcardbyday$n))
+cc_colours3 <- colorRampPalette(c('green', 'yellow', 'orange', 'red'))(x3)
+
+#Converting date back to POSIXct type
+loyalcardbyday$TimeStampFormatted <- as.POSIXct(loyalcardbyday$TimeStampFormatted, format = "%Y/%M/%D")
+
+
+figE <- loyalcardbyday %>% 
  ggplot(aes(TimeStampFormatted, location)) +
-  geom_tile(aes(fill = n)) +
-  scale_fill_distiller(palette = "YlGnBu", direction = -1) +
-  labs(title = "Visits at each Location for Each Day (by Loyalty Card)", x = "Date")
+  geom_tile(aes(fill = as.factor(n))) +
+  #scale_fill_distiller(palette = "YlGnBu", direction = -1) +
+  scale_fill_manual(values = cc_colours3,
+                    name = "Frequency") +
+  labs(title = "Visits at each Location for Each Day (by Loyalty Card)", x = "Date") +
+  scale_x_datetime(breaks = date_breaks("1 day"),
+                   labels = date_format("%d")) +
+  theme(legend.key.height = unit(1, "cm"))
 
 ggplotly(figE)
 
@@ -613,11 +626,11 @@ ggplotly(figE)
 
 Next, this would be for "Visits at Each Location for Time of Day", which can only come from the credit card transactions dataset as transaction time information is not present in loyalty card dataset.
 
-```{r Visits at each Location by Time, echo = FALSE}
+```{r Visits at each Location by Time, eval=FALSE, include=FALSE}
 
 #YlGnBu
 
-x3 <- length(unique(cardbytime$n))
+x <- length(unique(cardbytime$n))
 cc_colours3 <- colorRampPalette(c('green', 'yellow', 'orange', 'red'))(x3)
 
 figB <- cardbytime %>% 
@@ -631,24 +644,6 @@ figB <- cardbytime %>%
                    labels = date_format("%H:%M"))
 
 ggplotly(figB)
-
-```
-
-```{r code to plot popular gps points CAN REMOVE THIS CHUNK}
-
-gps_path_selected <- gps_path_date %>% 
-  filter(id == 101, date == "2014-01-09")
-
-tmap_mode("view")
-tm_shape(bgmap) +
-  tm_rgb(bgmap, r = 1, g = 2, b = 3,
-         alpha = NA,
-         saturation = 1,
-         interpolate = TRUE,
-         max.value = 255) +
-  tm_shape(gps_path_selected) +
-  tm_lines()
-
 
 ```
 
@@ -678,7 +673,7 @@ Some anomalies detected:
 
 **Add the vehicle data to your analysis of the credit and loyalty card data. How does your assessment of the anomalies in question 1 change based on this new data? What discrepancies between vehicle, credit, and loyalty card data do you find?**
 
-```{r time periods of travel of each personnel}
+```{r time periods of travel of each personnel, eval=FALSE, include=FALSE}
 
 #Adding date and time columns to the gpsname dataset
 
@@ -726,7 +721,7 @@ We also notice that there was unusually high movement for the trucks on 16 Jan -
 
 Next, we will use the function below to do a plot of travel time periods on each day, for each personnel.
 
-```{r each personnel travel time period on each day, layout="1-page", fig.width=12, fig.height=10}
+```{r each personnel travel time period on each day, eval=FALSE, fig.height=10, fig.width=12, include=FALSE, layout="1-page"}
 
 gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
 
@@ -774,7 +769,7 @@ ggplotly(figG)
 
 **Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data?**
 
-```{r Look at CC and Loyalty Card Matched}
+#```{r Look at CC and Loyalty Card Matched}
 
 #Prep Data first by joining loyalty card number into credit card dataset
 
@@ -832,7 +827,7 @@ One credit card associated with multiple loyalty cards:
 ```
 
 
-```{r Sankey Plotly R}
+#```{r Sankey Plotly R}
 fig <- plot_ly(
     type = "sankey",
     orientation = "h",
