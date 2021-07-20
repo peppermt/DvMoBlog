@@ -431,11 +431,11 @@ p <- ggplot(loccountA, aes(x = reorder(location, -count_occur), tooltip = locati
         plot.title = element_text(size = 24, face = "bold", hjust = 0.5),
         axis.title.y = element_text(size = 20))
 
-#girafe(
-  #ggobj = p,
-  #width_svg = 15,
-  #height_svg = 15*0.618
-#)
+girafe(
+  ggobj = p,
+  width_svg = 15,
+  height_svg = 15*0.618
+)
 
 
 ```
@@ -464,11 +464,11 @@ p1 <- ggplot(loccountB, aes(x = reorder(location, -count_occur), tooltip = locat
         plot.title = element_text(size = 24, face = "bold", hjust = 0.5),
         axis.title.y = element_text(size = 20))
 
-#girafe(
-  #ggobj = p1,
-  #width_svg = 15,
-  #height_svg = 15*0.618
-#)
+girafe(
+  ggobj = p1,
+  width_svg = 15,
+  height_svg = 15*0.618
+)
 
 ```
 
@@ -476,7 +476,7 @@ However, the bar plots only tell us the total number of visits over the 2 weeks.
 
 We shall use the violin plots in the _plotly_ package as they are interactive, we can hover over the plots, especially where they are thicker to see what time periods are those. 
 
-```{r for time of the day, echo = FALSE, layout="1-body-outset", fig.width=16, fig.height=10}
+```{r for time of the day, echo=FALSE, fig.height=10, fig.width=20, layout="1-body-outset"}
 
 #from creditcardB
 
@@ -571,7 +571,7 @@ With the data prepared, we shall do the tile plot via _geom_tile()_ from _ggplot
 
 This would be for the "Visits at each Location for Each Day (Credit Card)".
 
-```{r trying out geom_tile, eval=FALSE, fig.height=10, fig.width=16, include=FALSE, layout="1-body-outset"}
+```{r trying out geom_tile, echo=FALSE, fig.height=10, fig.width=16, layout="1-body-outset"}
 
 #palette = "YlGnBu", "RdPu"
 
@@ -600,7 +600,7 @@ ggplotly(figA)
 
 This is the same plot plotted via loyalty card data.
 
-```{r same plot by day via loyalty card, eval=FALSE, include=FALSE}
+```{r same plot by day via loyalty card, echo=FALSE}
 
 x3 <- length(unique(loyalcardbyday$n))
 cc_colours3 <- colorRampPalette(c('green', 'yellow', 'orange', 'red'))(x3)
@@ -626,18 +626,21 @@ ggplotly(figE)
 
 Next, this would be for "Visits at Each Location for Time of Day", which can only come from the credit card transactions dataset as transaction time information is not present in loyalty card dataset.
 
-```{r Visits at each Location by Time, eval=FALSE, include=FALSE}
+```{r Visits at each Location by Time, echo=FALSE}
 
 #YlGnBu
 
-x <- length(unique(cardbytime$n))
-cc_colours3 <- colorRampPalette(c('green', 'yellow', 'orange', 'red'))(x3)
+x4 <- length(unique(cardbytime$n))
+cc_colours4 <- colorRampPalette(c('green', 'yellow', 'orange', 'red'))(x4)
+
+#Converting date back to POSIXct type
+cardbytime$thirtymins <- as.POSIXct(cardbytime$thirtymins, format = "%H:%M:%S")
 
 figB <- cardbytime %>% 
  ggplot(aes(thirtymins, location)) +
-  geom_tile(aes(fill = n)) +
+  geom_tile(aes(fill = as.factor(n))) +
   #scale_fill_distiller(palette = "YlGnBu", direction = -1) +
-  scale_fill_manual(values = cc_colours2,
+  scale_fill_manual(values = cc_colours4,
                     name = "Frequency") +
   labs(title = "Visits at each Location for Time of Day", x = "Time") +
   scale_x_datetime(breaks = date_breaks("1 hour"),
