@@ -476,7 +476,7 @@ However, the bar plots only tell us the total number of visits over the 2 weeks.
 
 We shall use the violin plots in the _plotly_ package as they are interactive, we can hover over the plots, especially where they are thicker to see what time periods are those. 
 
-```{r for time of the day, echo=FALSE, fig.height=10, fig.width=20, layout="1-body-outset"}
+```{r for time of the day, echo=FALSE, fig.height=5, layout="1-body-outset"}
 
 #from creditcardB
 
@@ -571,7 +571,7 @@ With the data prepared, we shall do the tile plot via _geom_tile()_ from _ggplot
 
 This would be for the "Visits at each Location for Each Day (Credit Card)".
 
-```{r trying out geom_tile, echo=FALSE, fig.height=10, fig.width=16, layout="1-body-outset"}
+```{r trying out geom_tile, echo=FALSE, fig.height=8, fig.width=16, layout="1-body-outset"}
 
 #palette = "YlGnBu", "RdPu"
 
@@ -600,7 +600,7 @@ ggplotly(figA)
 
 This is the same plot plotted via loyalty card data.
 
-```{r same plot by day via loyalty card, echo=FALSE}
+```{r same plot by day via loyalty card, echo=FALSE, fig.height=8, fig.width=16}
 
 x3 <- length(unique(loyalcardbyday$n))
 cc_colours3 <- colorRampPalette(c('green', 'yellow', 'orange', 'red'))(x3)
@@ -626,7 +626,7 @@ ggplotly(figE)
 
 Next, this would be for "Visits at Each Location for Time of Day", which can only come from the credit card transactions dataset as transaction time information is not present in loyalty card dataset.
 
-```{r Visits at each Location by Time, echo=FALSE}
+```{r Visits at each Location by Time, echo=FALSE, fig.height=8, fig.width=16}
 
 #YlGnBu
 
@@ -642,32 +642,115 @@ figB <- cardbytime %>%
   #scale_fill_distiller(palette = "YlGnBu", direction = -1) +
   scale_fill_manual(values = cc_colours4,
                     name = "Frequency") +
-  labs(title = "Visits at each Location for Time of Day", x = "Time") +
-  scale_x_datetime(breaks = date_breaks("1 hour"),
-                   labels = date_format("%H:%M"))
+    labs(title = "Visits at each Location for Time of Day", x = "Time") +
+    scale_x_datetime(breaks = date_breaks("1 hour"),
+                   labels = date_format("%H:%M")) +
+  theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(figB)
 
 ```
 
-
-### Answer
-
-From _Visits at Each Location for Each Day_, we could see that Katerina's Cafe, Hippokampos, Guy's Gyros and Brew've Been Served have the lightest bars across the 2 weeks. This shows that they are consistently popular. We also note that Guy's Gyros is more popular during weekdays than weekends, and Brew've Been Served only has visits on weekdays, indicating that it is probably not open on weekends.
+From the plots above, we could see that Katerina's Cafe, Hippokampos, Guy's Gyros and Brew've Been Served have the lightest bars across the 2 weeks. This shows that they are consistently popular. We also note that Guy's Gyros is more popular during weekdays than weekends, and Brew've Been Served only has visits on weekdays, indicating that it is probably not open on weekends.
 
 No. | Location | Periods Popular | Remarks
 ----| ---------| ----------------| -------
-1 | Katerina's Cafe | All Days ; 1300 hrs - 1430 hrs, 1900 hrs - 2130 hrs | NIL
-2 | Hippokampos | All Days ; 1230 hrs - 1430 hrs, 1930 hrs - 2230 hrs | NIL
-3 | Guy's Gyros | More Popular During Weekdays ; 1300 hrs - 1430 hrs, 1900 hrs - 2130 hrs | Unusually crowded on 19 Jan (Sun) compared to the previous Sunday and weekend crowd
-4 | Brew've Been Served | Weekday Mornings ; 0730 hrs - 0830 hrs | Huge Crowd at 0800 hrs ; Seems closed on weekends
+1 | Katerina's Cafe | All Days ; Lunchtime (1300 hrs - 1430 hrs), Dinnertime (1900 hrs - 2130 hrs) | NIL
+2 | Hippokampos | All Days ; Lunchtime (1230 hrs - 1430 hrs), Dinnertime (1930 hrs - 2230 hrs) | NIL
+3 | Guy's Gyros | More Popular During Weekdays ; Lunchtime (1300 hrs - 1430 hrs), Dinnertime (1900 hrs - 2130 hrs) | Unusually crowded on 19 Jan (Sun) compared to the previous Sunday and weekend crowd
+4 | Brew've Been Served | Weekday Mornings ; Morning Coffee (0730 hrs - 0830 hrs) | Huge Crowd at 0800 hrs ; Seems closed on weekends
 
-Some anomalies detected:
+# Anomalies Detected
 
-* We note that the above popular locations are all identified on the map of Abila, and are located near Gastech, all except for Hippokampos, which is nowhere to be found on the map. This is an anomaly. To be able to solve the mystery of where Hippokampos is, we would have to delve into other data like vehicle tracking.
-![](images/Top3LocationsVisited.png)
+## Hippokampos is nowhere to be found on the map of Abila 
 
-* U Pump is a refuel station, yet it is only visited twice from the credit card transactions, on two separate days - 6th and 13th Jan. The frequency of refuel is unusually infrequent. It could be due to employees not needing to pay for the fuel using their own credit cards. But strange thing is the loyalty card is also not used either. The same goes for Frank's Fuel, there were only transactions on 2 days - 8th and 18th Jan. This is just an abnormal situation, which we hope to seek further insights later.
+We note that the above popular locations are all identified on the map of Abila, and are located near Gastech, all except for Hippokampos, which is nowhere to be found on the map. This is an anomaly. To be able to solve the mystery of where Hippokampos is, we would have to delve into other data like vehicle tracking.
+
+## Awfully infrequent visits at refuel stations U Pump and Frank's Fuel
+
+```{r Refuel stations transaction by day credit, echo=FALSE}
+
+figI <- cardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>% 
+ ggplot(aes(date, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+      labs(title = "Visits at each Fuel Station for Each Day (Credit Card)", x = "Date") +
+  scale_x_datetime(breaks = date_breaks("1 day"),
+                   labels = date_format("%d")) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figI)
+
+
+```
+
+
+```{r Refuel transactions by Day Loyalty, echo=FALSE}
+
+figK <- loyalcardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>%
+ ggplot(aes(TimeStampFormatted, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+    labs(title = "Visits at each Fuel Station for Each Day (by Loyalty Card)", x = "Date") +
+  scale_x_datetime(breaks = date_breaks("1 day"),
+                   labels = date_format("%d")) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figK)
+
+```
+
+U Pump is a refuel station, yet it is only visited twice from the credit card transactions, on two separate days - 6th and 13th Jan. The frequency of refuel is unusually infrequent. It could be due to employees not needing to pay for the fuel using their own credit cards. But strange thing is the loyalty card is also not used either. The same goes for Frank's Fuel, there were only transactions on 2 days - 8th and 18th Jan. This is just an abnormal situation, which we hope to seek further insights later.
+
+## Unusually infrequent visits for supermarkets
+
+
+```{r Supermarkets transaction by day credit, echo=FALSE}
+
+figC <- cardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>% 
+ ggplot(aes(date, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+      labs(title = "Visits at each Supermarket for Each Day (Credit Card)", x = "Date") +
+  scale_x_datetime(breaks = date_breaks("1 day"),
+                   labels = date_format("%d")) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figC)
+
+
+```
+
+```{r Supermarket transactions by Day Loyalty, echo=FALSE}
+
+figD <- loyalcardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>%
+ ggplot(aes(TimeStampFormatted, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+    labs(title = "Visits at each Supermarket for Each Day (by Loyalty Card)", x = "Date") +
+  scale_x_datetime(breaks = date_breaks("1 day"),
+                   labels = date_format("%d")) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figD)
+
+```
+
+Supermarkets should have daily transactions. However, according to credit card transaction data, Kronos Mart and General Grocer can have 3 - 5 days without any transactions within the 2 weeks. Maximum number of transactions only goes up to 3 for Kronos Mart, and 2 for General Grocer for one day each. Business seems awfully bad.
+
+When we compare this with loyalty card transaction data, there are still days without any transactions, but we see the following differences:
+
+Date | Credit Card Data | Loyalty Card Data
+-----| ---------------- | -----------------
+9 Jan | No transaction | 1 transaction
+10 Jan | 1 transaction | No transaction
+12 Jan | 1 transaction | 2 transactions
+13 Jan | 2 transactions | No transaction
+14 Jan | 1 transaction | No transaction
+15 Jan | No transaction | 1 transaction
+17 Jan | 1 transaction | No transaction
+18 Jan | No transaction | 3 transactions
+19 Jan | 3 transactions | No transaction
+
+This means that there are transactions paid by cash, not paid by credit card. But business still seems abnormally bad.
+
+## High Transaction Amounts
 
 
 
@@ -768,6 +851,9 @@ ggplotly(figG)
 
 
 
+We see that there are frequent visits to the supermarkets and pump refuel stations. This means that there were transactions and business, but the transactions were not paid in credit card and loyalty cards were not used either.
+
+
 ## Question 3
 
 **Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data?**
@@ -830,7 +916,7 @@ One credit card associated with multiple loyalty cards:
 ```
 
 
-#```{r Sankey Plotly R}
+```{r Sankey Plotly R}
 fig <- plot_ly(
     type = "sankey",
     orientation = "h",
@@ -898,6 +984,41 @@ fig <- fig %>% layout(
 8. 8332 associated with L2070 (27) and L8566 (1) [Same pattern as 4795!] 4795 associated with L2070 (1) and L8566 (25)
 
 9. Guy's Gyros is unusually crowded on 19 Jan (Sun) compared to the previous Sunday and weekend crowd.
+
+10. Supermarket transactions in the wee hours, with high transaction amounts
+
+
+```{r Supermarket visits by time of day, echo=FALSE}
+
+figH <- cardbytime %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>%
+ ggplot(aes(thirtymins, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+      labs(title = "Visits at each Location for Time of Day", x = "Time") +
+    scale_x_datetime(breaks = date_breaks("1 hour"),
+                   labels = date_format("%H:%M")) +
+  theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(figH)
+
+```
+
+The above plot also shows that there were 5 transactions made at Kronos Mart in the wee hours between 0300 - 0400 hrs. The 5 transactions are as shown in the table below. We also observe that the transaction amounts are unusually high, for a midnight purchase.
+
+```{r midnight transactions at Kronos Mart}
+
+kronos <- creditcard %>% filter(location == "Kronos Mart") %>% 
+  arrange(time)  %>%  slice_min(time,n = 6)
+
+kronos
+
+```
+
+
+
+
+
+
+11. High transaction amounts
 
 
 
