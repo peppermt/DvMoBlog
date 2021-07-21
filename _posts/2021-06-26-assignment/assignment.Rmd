@@ -288,9 +288,40 @@ gps_sf <- st_as_sf(gpstracking,
 
 ```
 
-We can view an interactive map with all the locations plotted as points via the mapview() function.
+
+First, we have to identify the coordinate points where the vehicles have possibly made stops, and be able to visualize where these stops are on the map. We could decipher this information from the _gpstracking_ data, which tracks the coordinate points of vehicles as long as they are moving. This means that when there is a long gap in the timestamp at a particular coordinate point, it is likely that the vehicle has parked. Stops at traffic light junctions should take no longer than 2 minutes. As such, we shall assume for vehicles which are stationary for more than 4 minutes to be parked (i.e. search for timestamps with lag of more than 4 minutes). 
+
+In addition, we note that for position coordinates, the number of decimal places required for a particular accuracy at the equator is:
+
+![Source: http://wiki.gis.com/wiki/index.php/Decimal_degrees](images/DegreeAccuracy.jpg)
+Considering the sizes of typical carparks, the accuracy of 1.11m would be too precise. A more likely range could be 11.1m. With this, we shall round all our coordinate points up to 4 decimal points for analysis.  
+
 
 ```{r interactive map viewing of the points}
+
+#Round lat long points to 4 decimal points
+
+gpstracking$lat <- round(gpstracking$lat, 4)
+gpstracking$long <- round(gpstracking$long, 4)
+
+#Identifying stops, filtering stop coordinates by Car ID and Time Period
+
+stops <- gpstracking %>% as_tbl_time(index=TimeStampFormatted) %>%
+  group_by(id) %>%
+  filter(id == 15) %>% 
+  filter_time('2014-01-06 07:00:00'~'2014-01-06 09:00:00') %>% 
+  mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
+  mutate(parked = ifelse(stop >60*4, TRUE,FALSE)) %>%
+  ungroup() %>%
+  filter(parked == TRUE) %>%
+  distinct(lat, long)
+
+#Filtering stop coordinates by car ID
+
+
+
+#Viewing it on the map
+
 
 
 
@@ -312,7 +343,20 @@ gps_path <- gps_sf %>%
 
 ```
 
+With the above codes, the following function is created to generate the routes of a specific vehicle, during a specific time period.
+
+```{r}
+
+
+
+```
+
+
+
+
+
 The following date and time versions for sf is created to enable easier filtering later.
+
 
 ```{r creating date and time versions for sf, message=FALSE}
 #Including Date and Time for gps_sf
@@ -401,6 +445,22 @@ tm_shape(bgmap) +
 
 
 ```
+
+
+```{r function for printing vehicle routes by ID and datetime}
+
+print_routes_ID_date <- function(emp_id,datetime){
+  
+  #filter by ID
+  
+  
+  
+  
+}
+
+
+```
+
 
 
 # Questions
@@ -748,7 +808,7 @@ Date | Credit Card Data | Loyalty Card Data
 18 Jan | No transaction | 3 transactions
 19 Jan | 3 transactions | No transaction
 
-This means that there are transactions paid by cash, not paid by credit card. But business still seems abnormally bad.
+This means that there are transactions paid by cash, not paid by credit card. There were also transactions made without using loyalty card. But business still seems abnormally bad.
 
 ## High Transaction Amounts
 
@@ -797,13 +857,11 @@ Price <- c(4742.67, 4513.16, 4429.76, 1239.41, 600, 477.6, 4918.39, 4277.4, 4983
 
 txn_outlier <- cbind.data.frame(Location, Price)
 
-txn_outlier
-
 txn_outliertab <- left_join(txn_outlier,credit_loyalty, by = c("Location" = "location", "Price" = "price"))
 
-txn_outliertab <- txn_outliertab %>% select(c("Location", "Price", "TimeStampFormatted", "last4ccnum","loyaltynum"))
+txn_outliertab <- txn_outliertab %>% dplyr::select(c("Location", "Price", "TimeStampFormatted", "last4ccnum","loyaltynum"))
                                             
-data.table(txn_outliertab)    
+datatable(txn_outliertab)    
 
 ```
 We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. 
@@ -812,7 +870,7 @@ We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and lo
 
 **Add the vehicle data to your analysis of the credit and loyalty card data. How does your assessment of the anomalies in question 1 change based on this new data? What discrepancies between vehicle, credit, and loyalty card data do you find?**
 
-```{r time periods of travel of each personnel, eval=FALSE, include=FALSE}
+```{r time periods of travel of each personnel, echo=FALSE}
 
 #Adding date and time columns to the gpsname dataset
 
@@ -840,8 +898,28 @@ ggplotly(figC)
 
 ```
 
+```{r}
+
+test <- gpsname %>% filter(id > 100) %>% 
+  group_by(id) %>% 
+  summarize(m = mean(TimeStampFormatted), do_union = FALSE)
+
+test %>% dplyr::select(-m)
+
+test
+
+```
+
 From the above plot, we see that most employees, except for Sanjorge Jr Sten, traveled daily. Sanjorge Jr Sten is the CEO of Gastech, and was likely chauffeured instead of driving on his own. 
-We also notice that there is a high count of travels on weekdays with LastName = NA. Checking on the _gpsname_ data, we find that there is gps tracking information for vehicle ID 105 and 107, which do not exist in the _car_assigned_ dataset, this is why LastName was NA. Tracking of the route for vehicle ID 105 and 107 are as below.
+We also notice that there is a high count of travels on weekdays with LastName = NA. Checking on the _gpsname_ data, we find that there is gps tracking information for vehicle IDs 101, 104, 105, 106 and 107, which do not exist in the _car_assigned_ dataset, this is why LastName was NA. 
+
+
+
+
+
+(This chunk onwards KIV)
+
+Tracking of the route for vehicle ID 105 and 107 are as below.
 
 ![Route of Vehicle ID 105](Images/105Route.jpg)
 
@@ -850,7 +928,7 @@ We also notice that there is a high count of travels on weekdays with LastName =
 The route shows that these vehicles comes out from GasTech, goes round nearby areas, and would then go back to GasTech. 105 would go to Carlyle Chemical Inc., Nationwide Refinery, and Guy's Gyros. 107 would also travel to Maximum Iron and Steel often. Since both vehicles only move on weekdays, they are likely the company trucks, which are not assigned to a specific employee. The personnel who can use these vehicles are as tabulated below:
 
 
-```{r car_assigned missing values show truck drivers, echo=FALSE, results=}
+```{r car_assigned missing values show truck drivers, echo=FALSE}
 
 datatable(car_assigned %>% 
   filter(is.na(CarID)))
@@ -860,7 +938,7 @@ We also notice that there was unusually high movement for the trucks on 16 Jan -
 
 Next, we will use the function below to do a plot of travel time periods on each day, for each personnel.
 
-```{r each personnel travel time period on each day, eval=FALSE, fig.height=10, fig.width=12, include=FALSE, layout="1-page"}
+```{r each personnel travel time period on each day, echo=FALSE, fig.height=10, fig.width=12, layout="1-page"}
 
 gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
 
