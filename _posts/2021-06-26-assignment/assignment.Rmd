@@ -341,7 +341,8 @@ all_stops <- gpstracking %>%
 
 all_stops_sf <- st_as_sf(all_stops,
                          coords = c("long", "lat"),
-                         crs = 4326) 
+                         crs = 4326) %>% 
+  mutate(coordinates = geometry)
 
 #Viewing it on the map
 
@@ -373,7 +374,8 @@ print_routes_ID_date <- function(emp_id,start_dt,end_dt){
   
   gps_sf_selected <- st_as_sf(id_time_select,
                          coords = c("long", "lat"),
-                         crs = 4326)
+                         crs = 4326) %>% 
+    mutate(coordinates = geometry)
   
   #Create a LineString
   
@@ -686,7 +688,7 @@ No. | Location | Periods Popular | Remarks
 
 ## Hippokampos is nowhere to be found on the map of Abila 
 
-We note that the above popular locations are all identified on the map of Abila, and are located near Gastech, all except for Hippokampos, which is nowhere to be found on the map. This is an anomaly. To be able to solve the mystery of where Hippokampos is, we would have to delve into other data like vehicle tracking.
+We note that the above popular locations are all identified on the map of Abila, and are located near Gastech, all except for Hippokampos, which is nowhere to be found on the map. This is an anomaly. To be able to solve the mystery of where Hippokampos is, we would have to delve into other data like vehicle tracking. We would need to match transaction timings with gps tracking data, the coordinates matching at that time would tell us the position of Hippokampos.
 
 ## Awfully infrequent visits at refuel stations U Pump and Frank's Fuel
 
@@ -720,7 +722,7 @@ ggplotly(figK)
 
 ```
 
-U Pump is a refuel station, yet it is only visited twice from the credit card transactions, on two separate days - 6th and 13th Jan. The frequency of refuel is unusually infrequent. It could be due to employees not needing to pay for the fuel using their own credit cards. But strange thing is the loyalty card is also not used either. The same goes for Frank's Fuel, there were only transactions on 2 days - 8th and 18th Jan. This is just an abnormal situation, which we hope to seek further insights later.
+U Pump is a refuel station, yet it is only visited twice from the credit card transactions, on two separate days - 6th and 13th Jan. The frequency of refuel is unusually infrequent. It could be due to employees not needing to pay for the fuel using their own credit cards. But strange thing is the loyalty card is also not used either. The same goes for Frank's Fuel, there were only transactions on 2 days - 8th and 18th Jan. This is just an abnormal situation, which we hope to seek further insights later. Or it could be that there were visits, but purchases were neither paid by credit card nor loyalty card was applied. This would be suspicious, as though the purchasers wanted to keep their tracks secret. We can similary look at gps tracking data to see if there were stops at the fuel stations. 
 
 ## Unusually infrequent visits for supermarkets
 
@@ -770,7 +772,7 @@ Date | Credit Card Data | Loyalty Card Data
 18 Jan | No transaction | 3 transactions
 19 Jan | 3 transactions | No transaction
 
-This means that there are transactions paid by cash, not paid by credit card. There were also transactions made without using loyalty card. But business still seems abnormally bad.
+This means that there are transactions paid by cash, not paid by credit card. There were also transactions made without using loyalty card. But business still seems abnormally bad. We would use gpstracking data to see if there were actually any visits to the supermarkets, just that transactions were paid in cash. 
 
 ## High Transaction Amounts
 
@@ -826,11 +828,65 @@ txn_outliertab <- txn_outliertab %>% dplyr::select(c("Location", "Price", "TimeS
 datatable(txn_outliertab)    
 
 ```
-We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. 
+We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. It is also strange that the purchaser behind the huge transaction of $4918.39 at Abila Airport did not use his/her loyalty card to get further discounts on such a big ticket purchase.
 
 ## Question 2
 
 **Add the vehicle data to your analysis of the credit and loyalty card data. How does your assessment of the anomalies in question 1 change based on this new data? What discrepancies between vehicle, credit, and loyalty card data do you find?**
+
+### Anomaly: Hippokampos nowhere to be found on Abila Map
+
+```{r scatter plot of hippokampos }
+
+# Add time column to gpstracking to enable filtering by time periods and date
+gpstracking$time <- as.POSIXct(hms::as_hms(gpstracking$TimeStampFormatted))
+gpstracking$date <- as_date(gpstracking$TimeStampFormatted)
+
+# Filter gpstracking by time period
+
+hippostops <- gpstracking %>% as_tbl_time(index=time) %>%
+  filter_time('00:00:00' ~ '06:00:00') #%>%
+  #group_by(id) %>% 
+  #mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
+  #mutate(parked = ifelse(stop >60*3, TRUE,FALSE)) %>%
+  #ungroup() %>%
+  #filter(parked == TRUE) %>% mutate(count = n()) %>% 
+  #dplyr::select(c(id, lat, long, TimeStampFormatted))
+
+#Visualizing on map
+
+  #Converting stop points to sf
+  
+  hippostops_sf <- st_as_sf(hippostops,
+                         coords = c("long", "lat"),
+                         crs = 4326) %>% 
+    mutate(coordinates = geometry)
+  
+  #Viewing it on the map
+  
+  hippoviz <- tm_all_stops +
+    tm_shape(hippostops_sf) +
+    tm_dots(size = 0.1,
+            alpha = 0.3,
+            col = "green")
+  
+  hippoviz
+
+
+
+```
+
+
+### Anomaly: Awfully Infrequent Visits at Refuel Stations
+
+
+
+
+### Anomaly: Unusually Infrequent Visits at Supermarkets
+
+
+
+
 
 ```{r time periods of travel of each personnel, echo=FALSE}
 
