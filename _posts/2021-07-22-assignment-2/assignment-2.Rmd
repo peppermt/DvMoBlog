@@ -238,14 +238,14 @@ bgmap <- raster("data/MC2/MC2-tourist_modified.tif")
 
 #Plotting the Raster Layer and defining as base layer.
 
-tmap_mode("plot")
-
 tmain <- tm_shape(bgmap) +
   tm_rgb(bgmap, r = 1, g = 2, b = 3,
             alpha = NA,
          saturation = 1,
          interpolate = TRUE,
          max.value = 255)
+
+tmap_mode("plot")
 
 tmain
 
@@ -471,6 +471,54 @@ girafe(
   width_svg = 15,
   height_svg = 15*0.618
 )
+
+```
+
+However, the bar plots only tell us the total number of visits over the 2 weeks. We do not know which days have higher visits, or the profile of the visits over the day. To view this, we can use violin plots. The thickness of the plots will also reflect the frequency of the visit at that point in time. We will also be able to see which days did the visits take place. 
+
+We shall use the violin plots in the _plotly_ package as they are interactive, we can hover over the plots, especially where they are thicker to see what time periods are those.
+
+```{r for time of the day, echo=FALSE, fig.height=5, layout="1-body-outset"}
+
+#from creditcardB
+
+#ggplot(creditcardB, aes(TimeStampFormatted,location)) +
+  #geom_violin(scale = "area")
+  #scale_x_discrete(guide = guide_axis(angle = 90))
+
+fig <- creditcard %>%
+    plot_ly(
+    x = ~location,
+    y = ~TimeStampFormatted,
+    type = 'violin',
+    split = ~location,
+    box = list(
+      visible = T
+    ),
+    meanline = list(
+      visible = T
+        )
+  )
+
+fig <- fig %>% 
+  layout(title = 'Violin Plots of Spread of Visits Across the 2 Weeks for Each Location',
+    xaxis = list(
+      title = "Location"
+    ),
+    yaxis = list(
+      title = "Timestamp",
+      zeroline = F,
+      range = c(as.numeric(as.POSIXct("1/4/2014", format="%m/%d/%Y"))*1000,
+                as.numeric(as.POSIXct("1/25/2014", format="%m/%d/%Y"))*1000
+      )
+    ),
+    showlegend = FALSE
+  )
+
+fig <- fig %>% 
+  add_segments(x = 0, xend = 10000, y = "1/13/2014", yend = "1/13/2014", line = list(dash = "dash"))
+
+fig
 
 ```
 
