@@ -1,5 +1,5 @@
 ---
-title: "Assignment 2"
+title: "Visual Assignment"
 description: |
   A short description of the post.
 author:
@@ -10,6 +10,7 @@ output:
   distill::distill_article:
     self_contained: false
 draft: true
+toc: true
 ---
 
 
@@ -17,8 +18,57 @@ draft: true
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Distill is a publication format for scientific and technical writing, native to the web.
+```{r Installing Loading Reqd Libraries, include=FALSE}
 
-Learn more about using Distill at <https://rstudio.github.io/distill>.
+packages = c('DT','tidyverse', 'ggiraph', 'plotly', 'lubridate', 'naniar','stringr','dplyr','ggstance','ggpubr','hms','data.table','raster','sf','tmap','clock','rgdal','tibbletime','scales','knitr')
+
+for(p in packages){
+  if(!require(p, character.only = T)){
+    install.packages(p)
+  }
+  library(p, character.only = T)
+}
+```
+
+# Background
+
+Since 20 years ago, GASTech has been operating a natural gas production site in the island country of Kronos. The business has been profitable, and the company has also developed close relationships with the Kronos Government. In January 2014, following GASTech's initial public offering listing, several GASTech employees has gone missing. An organization known as Protectors of Kronos (POK) is suspected in these cases of missing persons, as GASTech's business moves had not been too environmentally friendly. A thorough investigation is to be carried out by the law enforcers of Kronos and Tethys to break this case.
+
+Information and data pertaining to the whereabouts of company cars, purchases made by employees in local stores have been provided to the law enforcers. We shall use visual analytics to sense-make this data to facilitate the investigation. 
+
+This would be done as a sub-component which would eventually feed into an interactive Shiny app for the use of the law enforcers, together with other sub-components covered by my project group mates. The objective of this assignment is to explore what the insights are and how they can be brought out from the depths of this dataset to aid in the investigation.  
+
+# Literature Review
+
+## Crime Analysis - Overall
+
+Crime analysis is a law enforcement function which involves systematic analysis for identifying and analyzing patterns and trends in crime and disorder [**Wikipedia**]. Too little data would inevitably limit the efficiency of the investigation, but overwhelming volume of information could pose a huge challenge as well. Coupled with the need for rapid analysis, too much information to absorb, categorize, remember and draw meaning from could compromise the overall investigation [**Crime-Analysis ScienceDirect**]. Visual analytics techniques could be employed to gain useful insight from massive raw data.
+
+For efficiency in data processing, information must first be consistent as subtle differences can greatly increase variability and reduce the reliability and value of a dataset [**Crime-Analysis ScienceDirect**]. Next, there cannot be information overload within a diagram. Good practices such as appropriate brushing and linking, selecting and marking, aggregation, elimination, virtual navigation techniques such as zooming, focus + context, and details-on-demand techniques have been studied and used to overcome an over-cluttered screen.[**Ku et. al, 2016**]. Uninteresting and expected patterns can also be unmarked to improve efficiency and reduce false positives. [**Arxiv**]
+
+## Approaches to Analyze Anomalous User Behaviors
+
+According to [**Arxiv, Visual of Anomalous User Behavior**], detection of anomalous user behaviors can be a challenging task as the boundary between abnormal and normal data may not be clearly defined, and approaches like machine learning lack contextual information to support decision-making. Visualization techniques like sequence visualization, graph visualization, text visualization, geographic visualization, chart visualization can be combined with interaction methods like tracking and monitoring, pattern discovery, exploration and navigation to analyze anomalous user behaviors.
+
+Analysis of anomalous travel behaviors can take the following approaches:
+
+* Difference from expected patterns indicated by historic records
+* Detection of irregular driving direction, hotspots
+* Characteristic travel patterns associated with groups of travelers
+* Statistical methods to identify outliers such as use of boxplots to look at deviation and its extent
+
+Analysis of anomalous transactions can take the following approaches:
+
+* To be used in conjunction with spatiotemporal data
+* Probe into time series along with details on amounts transacted, no. of transactions within a period
+* Identify activities that are new to the user
+
+## Visualizing Movement / Geospatial Map Types
+
+According to Robert Krueger [**Year**], movement data is more complex to handle than simple point-based data as it contains complex hierarchical structures of overlapping trajectories with diverse shapes and directions. 
+
+1. Graphs (**R. Krueger**)
+
+Movements can be spatially aggregated. A full spatial and temporal aggregation of the trajectories can result in a static graph G = (V,E) consisting of nodes V and edges E. Each edge e = (u,v) can encode directions and contain a weight that holds the travel volumes between the nodes. Analysis is flexible with this graph network and techniques such as clustering, segmentation, aggregation can be performed.  
 
 
