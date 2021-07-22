@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 
 ```{r Installing Loading Reqd Libraries, include=FALSE}
 
-packages = c('DT','tidyverse', 'ggiraph', 'plotly', 'lubridate', 'naniar','stringr','dplyr','ggstance','ggpubr','hms','data.table','raster','sf','tmap','clock','rgdal','tibbletime','networkD3', 'mapview','scales','knitr')
+packages = c('DT','tidyverse', 'ggiraph', 'plotly', 'lubridate', 'naniar','stringr','dplyr','ggstance','ggpubr','hms','data.table','raster','sf','tmap','clock','rgdal','tibbletime','scales','knitr')
 
 for(p in packages){
   if(!require(p, character.only = T)){
@@ -28,7 +28,6 @@ for(p in packages){
   }
   library(p, character.only = T)
 }
-
 ```
 
 
@@ -98,6 +97,7 @@ There can be perspective distortion and occlusion, but the spatio-temporal distr
 3. mapview, tmap, sf, raster - to handle geospatial data and movement visualization
 4. lubridate, clock - to handle time and date values
 5. scales - To handle label formatting in charts
+6. naniar - For data exploration ; Check for missing values
 
 
 crosstalk - To create links between objects for interactivity
@@ -123,6 +123,7 @@ The following information is available.
 2. GPS Tracking Info of Company Cars : Date, Time, Car ID, Latitude, Longitude [_gps.csv_]
 3. Credit Card Transactions: Location, Date, Time, Price, Credit Card No. [_cc_data.csv_]
 4. Loyalty Card: Location, Date, Price, Loyalty Card No. [_loyalty_data.csv_]
+5. Employee Information: LastName, FirstName, Gender, CurrentEmployment Title [EmployeeRecords.csv]
 
 
 # Data Wrangling and Preparation
@@ -320,6 +321,8 @@ gpstracking$long <- round(gpstracking$long, 4)
 
 #Identifying all stops for all Car IDs and Time
 
+tmap_mode("view")
+
 all_stops <- gpstracking %>%
   group_by(id) %>%
   mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
@@ -516,7 +519,7 @@ fig <- creditcard %>%
 fig <- fig %>% 
   layout(title = 'Violin Plots of Spread of Visits Across the 2 Weeks for Each Location',
     xaxis = list(
-      title = "Location"
+      title = "Location", tickangle = 90
     ),
     yaxis = list(
       title = "Timestamp",
