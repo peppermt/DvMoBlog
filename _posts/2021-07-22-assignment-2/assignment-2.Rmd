@@ -503,7 +503,7 @@ fig <- creditcard %>%
 fig <- fig %>% 
   layout(title = 'Violin Plots of Spread of Visits Across the 2 Weeks for Each Location',
     xaxis = list(
-      title = "Location"
+      title = "Location", tickangle = 270
     ),
     yaxis = list(
       title = "Timestamp",
