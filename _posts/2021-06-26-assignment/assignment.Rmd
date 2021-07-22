@@ -15,7 +15,7 @@ toc: true
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE, fig.retina = 3)
 ```
 
 ```{r Installing Loading Reqd Libraries, include=FALSE}
@@ -306,11 +306,11 @@ First, we have to identify the coordinate points where the vehicles have possibl
 
 In addition, we note that for position coordinates, the number of decimal places required for a particular accuracy at the equator is:
 
-![Source: http://wiki.gis.com/wiki/index.php/Decimal_degrees](images/DegreeAccuracy.jpg)
+![Source: http://wiki.gis.com/wiki/index.php/Decimal_degrees](images/DegreeAccuracy.jpg){width=35%}
+
 Considering the sizes of typical carparks, the accuracy of 1.11m would be too precise. A more likely range could be 11.1m. With this, we shall round all our coordinate points up to 4 decimal points for analysis.
 
 A map with all stops identified from the entire _gpstracking_ dataset is as shown.
-
 
 ```{r interactive map viewing of the points}
 
@@ -350,7 +350,7 @@ tm_all_stops
 
 ```
 
-With all of the above codes, the following function _print_routes_ID_date(emp_id, start_dt,end_dt) is created to generate the routes of a specific vehicle, during a specific time period. This way, we are able to print the routes for a specific vehicle ID, for a selected time period from *start_dt* to *end_dt*. 
+With all of the above codes, the following function *print_routes_ID_date(emp_id, start_dt,end_dt) is created to generate the routes of a specific vehicle, during a specific time period. This way, we are able to print the routes for a specific vehicle ID, for a selected time period from *start_dt* to *end_dt*. 
 
 ```{r function for printing vehicle routes by ID and datetime}
 
@@ -519,7 +519,7 @@ fig <- creditcard %>%
 fig <- fig %>% 
   layout(title = 'Violin Plots of Spread of Visits Across the 2 Weeks for Each Location',
     xaxis = list(
-      title = "Location", tickangle = 90
+      title = "Location", tickangle = 270
     ),
     yaxis = list(
       title = "Timestamp",
@@ -805,7 +805,7 @@ We shall also note the highest value purchases which are greater than $4000, wit
 
 Details of these transactions are tabulated as follows:
 
-```{r tabulate transaction amount outliers, echo=FALSE}
+```{r tabulate transaction amount outliers, echo=FALSE, layout = "1-body-outset"}
 
 #Creating outlier table
 
@@ -819,7 +819,7 @@ txn_outliertab <- left_join(txn_outlier,credit_loyalty, by = c("Location" = "loc
 
 txn_outliertab <- txn_outliertab %>% dplyr::select(c("Location", "Price", "TimeStampFormatted", "last4ccnum","loyaltynum"))
                                             
-txn_outliertab    
+rmarkdown::paged_table(txn_outliertab)    
 
 ```
 We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. It is also strange that the purchaser behind the huge transaction of $4918.39 at Abila Airport did not use his/her loyalty card to get further discounts on such a big ticket purchase.
@@ -833,33 +833,38 @@ We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and lo
 ```{r scatter plot of hippokampos }
 
 # Add time column to gpstracking to enable filtering by time periods and date
-gpstracking$time <- as.POSIXct(hms::as_hms(gpstracking$TimeStampFormatted))
+
+gpstracking$time <- hms::as_hms(gpstracking$TimeStampFormatted)
+gpstracking$hour <- hour(gpstracking$TimeStampFormatted)
 gpstracking$date <- as_date(gpstracking$TimeStampFormatted)
 
+```
+
+```{r}
 # Filter gpstracking by time period
 
-hippostops <- gpstracking %>% as_tbl_time(index=time) %>%
-  filter_time('1970-01-01 00:00:00' ~ '1970-01-01 06:00:00') %>%
+hippostops <- gpstracking %>% 
+  filter(hour >=22, hour <= 23) %>%
   group_by(id) %>% 
   mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
   mutate(parked = ifelse(stop >60*3, TRUE,FALSE)) %>%
   ungroup() %>%
   filter(parked == TRUE) %>% mutate(count = n()) %>% 
-  dplyr::select(c(id, lat, long, TimeStampFormatted))
+  dplyr::select(c(id, lat, long, TimeStampFormatted, hour))
 
 #Visualizing on map
 
   #Converting stop points to sf
   
-  #hippostops_sf <- st_as_sf(hippostops,
-                         #coords = c("long", "lat"),
-                         #crs = 4326) %>% 
-    #mutate(coordinates = geometry)
+  hippostops_sf <- st_as_sf(hippostops,
+                         coords = c("long", "lat"),
+                         crs = 4326) %>% 
+    mutate(coordinates = geometry)
   
   #Viewing it on the map
   
   hippoviz <- tm_all_stops +
-    #tm_shape(hippostops_sf) +
+    tm_shape(hippostops_sf) +
     tm_dots(size = 0.1,
             alpha = 0.3,
             col = "green")
@@ -950,10 +955,29 @@ We also notice that there was unusually high movement for the trucks on 16 Jan -
 
 Next, we will use the function below to do a plot of travel time periods on each day, for each personnel.
 
-```{r each personnel travel time period on each day, echo=FALSE, fig.height=10, fig.width=12, layout="1-page"}
+
+```{r each personnel travel time period on each day, echo=FALSE, fig.height=10, fig.width=12}
 
 gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
 
+#Scatter Plot of Day with Time for Each Individual
+
+
+
+testfigF <- gpsname %>% filter(name == "Willem Vasco-Pais") %>% 
+  group_by(name) %>% mutate(namecountperday = n()) %>% 
+  distinct(name, date, time, namecountperday) %>% 
+  ggplot(aes(time, date)) +
+  geom_point(color = "darkgreen") +
+  scale_y_date(breaks = breaks_pretty(14)) +
+  ggtitle(paste0("Travel Periods for",name)) + 
+  labs(x = "Time")
+
+chartviz <- ggplotly(testfigF)
+
+```
+
+```{r}
 dgpsperson <- gpsname %>% filter(FirstName == "Willem") %>% 
   group_by(name) %>% mutate(namecountperday = n()) %>% 
   distinct(name, date, time, namecountperday)
@@ -1055,9 +1079,6 @@ One credit card associated with multiple loyalty cards:
 7889 associated with L2247 (1) and L6119 (20) [Same pattern with 5368! Opposite!]
 8332 associated with L2070 (27) and L8566 (1) [Same pattern as 4795!]
 
-
-
-```
 
 
 ```{r Sankey Plotly R}
