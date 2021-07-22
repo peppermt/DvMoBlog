@@ -267,15 +267,6 @@ tmain <- tm_shape(bgmap) +
 
 ```
 
-**KIV CAN DELETE THIS IF NOT USED EVENTUALLY**
-Next we input the vectors, which comes in the form of ESRI shapefile format. We shall import this shapefile using _st_read()_ of the sf package. This shapefile is already coded in WGS 84 format.
-
-```{r importing vector GIS data file CAN DELETE IF DONT NEED}
-
-Abila_st <- st_read(dsn = "data/MC2/Geospatial",
-                    layer = "Abila")
-
-```
 Then, we shall map the aspatial data next. Essentially, the following general steps are required to be able to create layers to visualize on the map:
 
 1. Select the latitude and longitude coordinates that we want displayed. These coordinates are in the _.dbl_ format.
@@ -284,7 +275,7 @@ Then, we shall map the aspatial data next. Essentially, the following general st
 
 Example:
 
-```{r Conversion into Simple Feature Data Frame, echo=TRUE}
+```{r Conversion into Simple Feature Data Frame, eval=FALSE, include=TRUE}
 
 gps_sf <- st_as_sf(gpstracking,
                    coords = c("long", "lat"),
@@ -299,7 +290,7 @@ Example:
 
 (Here, we are creating the movement path from GPS points for each car. Hence, we need to group the data by the car ID, the identifier. As R requires a command following the group_by() function, an input will be required for the code to run, so we include a dummy summarize() code to overcome this issue.)
 
-```{r Creating Movement Path, echo=TRUE}
+```{r Creating Movement Path, eval=FALSE, include=TRUE}
 
 gps_path <- gps_sf %>% 
   group_by(id) %>% 
@@ -825,7 +816,7 @@ txn_outliertab <- left_join(txn_outlier,credit_loyalty, by = c("Location" = "loc
 
 txn_outliertab <- txn_outliertab %>% dplyr::select(c("Location", "Price", "TimeStampFormatted", "last4ccnum","loyaltynum"))
                                             
-datatable(txn_outliertab)    
+txn_outliertab    
 
 ```
 We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. It is also strange that the purchaser behind the huge transaction of $4918.39 at Abila Airport did not use his/her loyalty card to get further discounts on such a big ticket purchase.
@@ -845,27 +836,27 @@ gpstracking$date <- as_date(gpstracking$TimeStampFormatted)
 # Filter gpstracking by time period
 
 hippostops <- gpstracking %>% as_tbl_time(index=time) %>%
-  filter_time('00:00:00' ~ '06:00:00') #%>%
-  #group_by(id) %>% 
-  #mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
-  #mutate(parked = ifelse(stop >60*3, TRUE,FALSE)) %>%
-  #ungroup() %>%
-  #filter(parked == TRUE) %>% mutate(count = n()) %>% 
-  #dplyr::select(c(id, lat, long, TimeStampFormatted))
+  filter_time('1970-01-01 00:00:00' ~ '1970-01-01 06:00:00') %>%
+  group_by(id) %>% 
+  mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
+  mutate(parked = ifelse(stop >60*3, TRUE,FALSE)) %>%
+  ungroup() %>%
+  filter(parked == TRUE) %>% mutate(count = n()) %>% 
+  dplyr::select(c(id, lat, long, TimeStampFormatted))
 
 #Visualizing on map
 
   #Converting stop points to sf
   
-  hippostops_sf <- st_as_sf(hippostops,
-                         coords = c("long", "lat"),
-                         crs = 4326) %>% 
-    mutate(coordinates = geometry)
+  #hippostops_sf <- st_as_sf(hippostops,
+                         #coords = c("long", "lat"),
+                         #crs = 4326) %>% 
+    #mutate(coordinates = geometry)
   
   #Viewing it on the map
   
   hippoviz <- tm_all_stops +
-    tm_shape(hippostops_sf) +
+    #tm_shape(hippostops_sf) +
     tm_dots(size = 0.1,
             alpha = 0.3,
             col = "green")
@@ -948,8 +939,8 @@ The route shows that these vehicles comes out from GasTech, goes round nearby ar
 
 ```{r car_assigned missing values show truck drivers, echo=FALSE}
 
-datatable(car_assigned %>% 
-  filter(is.na(CarID)))
+car_assigned %>% 
+  filter(is.na(CarID))
 
 ```
 We also notice that there was unusually high movement for the trucks on 16 Jan - 26116 gps points/day, compared to the usual 3000 - 6000 points/day on the other days within these 2 weeks. Further investigation will be covered in Question 5.
