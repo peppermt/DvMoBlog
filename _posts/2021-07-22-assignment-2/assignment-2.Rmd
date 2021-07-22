@@ -522,3 +522,25 @@ fig
 
 ```
 
+From the violin plot above, we can see that the top 3 frequented locations identified above (Katerina's Cafe, Hippokampos, Guy's Gyros, Brew've been Served) have a pretty consistent visit rate daily throughout the 2 weeks from 6th to 20th Jan. The thickness of the violin plot is consistent. This means that they are popular throughout the 2 weeks.
+
+However, it is observed that other locations can have higher visiting rates at specific periods than the identified Top 3. For example, the visiting rates for Desaflo Golf Course was much higher specifically on 19th Jan, same for Kronos Pipe and Irrigation on 7th Jan. Hallowed Grounds also had peak visiting rates on 8th and 15th Jan.
+
+The violin plot showed a good overview that the visiting days vary across the locations. Now we shall dissect this further into day and time.
+
+We shall use the geom_tile plot from ggplot to visualize this, wrapped with _ggplotly()_ to provide us with interactivity as we would be able to hover over each square and see the corresponding location and date/time. One tile plot would be for "Visits at Each Location for Each Day" and "Visits at Each Location for Time of Day".
+
+We would first prepare the dataset for this plot by extracting the date and time data into different columns, then do a count for them respectively. As the timestamp has been formatted into POSIXct format earlier, R already stores it in dttm (date-time) format. We can just use the _as_date_ and _as_hms_ functions from the _lubridate_ package to extract them out. We should retain them in date and time format for easier manipulation later.
+
+```{r adding date and time columns to the creditcardB dataset, echo = TRUE, results = 'hide'}
+
+glimpse(creditcard)
+
+class(creditcard$TimeStampFormatted)
+
+creditcard$date <- as_date(creditcard$TimeStampFormatted)
+
+creditcard$time <- hms::as_hms(creditcard$TimeStampFormatted)
+
+```
+
