@@ -607,8 +607,8 @@ figA <- cardbyday %>%
   scale_fill_manual(values = cc_colours2,
                     name = "Frequency") +
   labs(title = "Visits at each Location for Each Day (Credit Card)", x = "Date") +
-  scale_x_datetime(breaks = date_breaks("1 day"),
-                   labels = date_format("%d")) +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
 
 ggplotly(figA)
@@ -634,8 +634,8 @@ figE <- loyalcardbyday %>%
   scale_fill_manual(values = cc_colours3,
                     name = "Frequency") +
   labs(title = "Visits at each Location for Each Day (by Loyalty Card)", x = "Date") +
-  scale_x_datetime(breaks = date_breaks("1 day"),
-                   labels = date_format("%d")) +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
 
 ggplotly(figE)
@@ -692,8 +692,8 @@ figI <- cardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>%
  ggplot(aes(date, location)) +
   geom_tile(aes(fill = as.factor(n))) +
       labs(title = "Visits at each Fuel Station for Each Day (Credit Card)", x = "Date") +
-  scale_x_datetime(breaks = date_breaks("1 day"),
-                   labels = date_format("%d")) +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
 
 ggplotly(figI)
@@ -708,8 +708,8 @@ figK <- loyalcardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>%
  ggplot(aes(TimeStampFormatted, location)) +
   geom_tile(aes(fill = as.factor(n))) +
     labs(title = "Visits at each Fuel Station for Each Day (by Loyalty Card)", x = "Date") +
-  scale_x_datetime(breaks = date_breaks("1 day"),
-                   labels = date_format("%d")) +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
 
 ggplotly(figK)
@@ -727,8 +727,8 @@ figC <- cardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer")) %
  ggplot(aes(date, location)) +
   geom_tile(aes(fill = as.factor(n))) +
       labs(title = "Visits at each Supermarket for Each Day (Credit Card)", x = "Date") +
-  scale_x_datetime(breaks = date_breaks("1 day"),
-                   labels = date_format("%d")) +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
 
 ggplotly(figC)
@@ -742,9 +742,9 @@ figD <- loyalcardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer
  ggplot(aes(TimeStampFormatted, location)) +
   geom_tile(aes(fill = as.factor(n))) +
     labs(title = "Visits at each Supermarket for Each Day (by Loyalty Card)", x = "Date") +
-  scale_x_datetime(breaks = date_breaks("1 day"),
-                   labels = date_format("%d")) +
-  theme(legend.key.height = unit(1, "cm"))
+    theme(legend.key.height = unit(1, "cm")) +
+    scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(figD)
 
@@ -909,7 +909,9 @@ figC <- dgpsname %>%
   ggplot(aes(date, LastName)) +
   geom_tile(aes(fill = namecountperday)) +
   scale_fill_distiller(palette = "Spectral", direction = -1) +
-  labs(title = "Travel Frequency for Day", x = "Date")
+  labs(title = "Travel Frequency for Day", x = "Date") +
+  scale_x_date(breaks = breaks_pretty(14)) +
+  theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(figC)
 
@@ -959,25 +961,66 @@ Next, we will use the function below to do a plot of travel time periods on each
 ```{r each personnel travel time period on each day, echo=FALSE, fig.height=10, fig.width=12}
 
 gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
+#Add gender to gpsname!!Then distinguish by color in the plot
 
-#Scatter Plot of Day with Time for Each Individual
+#Dot Plot of Day with Time for Each Individual
+
+namedistinct <- gpsname %>% 
+    distinct(name)
+
+#Can clean these up eventually
+#namelist <- list()
+#for(i in 1:nrow(namedistinct)) {
+  #namelist[[i]] <- namedistinct[i,]
+#}
+#head(namelist)
+
+#Slicing the namelist into individuals
+onetosix <- namedistinct %>% slice(1:6)
+sevtotwelve <- namedistinct %>% slice(7:12)
+thirteentoeighteen <- namedistinct %>% slice(13:18)
+nineteentotwofour <- namedistinct %>% slice(19:24)
+twofivetothirty <- namedistinct %>% slice(25:30)
+thirtyonetothirtysix <- namedistinct %>% slice(31:36)
+
+#Plotting the chart
+gps_indivA <- gpsname %>% filter(name %in% onetosix$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday)
+
+indivA <- ggplot(gps_indivA, aes(time, date, color=name, group=name)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(color = "darkgreen") +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                #scale_x_datetime(breaks = breaks_pretty(24)) +
+                labs(title = "Travel periods of Individuals (Group 1)", x = "Time")
+
+ggplotly(indivA)
+
+```
+
+```{r for the other individual groups 2 to 6}
 
 
+```
 
+```{r eval=FALSE, include=FALSE}
+#OBSOLETED
 testfigF <- gpsname %>% filter(name == "Willem Vasco-Pais") %>% 
   group_by(name) %>% mutate(namecountperday = n()) %>% 
   distinct(name, date, time, namecountperday) %>% 
   ggplot(aes(time, date)) +
   geom_point(color = "darkgreen") +
   scale_y_date(breaks = breaks_pretty(14)) +
-  ggtitle(paste0("Travel Periods for",name)) + 
+  scale_x_datetime(breaks = breaks_pretty(24)) +
+  ggtitle("Travel Periods for") + 
   labs(x = "Time")
 
 chartviz <- ggplotly(testfigF)
 
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 dgpsperson <- gpsname %>% filter(FirstName == "Willem") %>% 
   group_by(name) %>% mutate(namecountperday = n()) %>% 
   distinct(name, date, time, namecountperday)
