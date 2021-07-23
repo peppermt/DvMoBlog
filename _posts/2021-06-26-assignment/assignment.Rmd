@@ -189,6 +189,7 @@ creditcard <- creditcard[, col_order]
 
 #For gpstracking dataset
 gpstracking$TimeStampFormatted <-mdy_hms(gpstracking$Timestamp)
+gpstracking$hour <- hour(gpstracking$TimeStampFormatted)
 
 #Delete timestamp column
 gpstracking <- gpstracking %>% 
@@ -239,7 +240,7 @@ gpsname <- left_join(gpstracking, car_assigned_only, by = c("id" = "CarID"))
 gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
 
 #Reorder cols
-col_order <- c("TimeStampFormatted", "id","lat","long","name","LastName","FirstName","CurrentEmploymentType","CurrentEmploymentTitle")
+col_order <- c("TimeStampFormatted", "id","lat","long","hour","name","LastName","FirstName","CurrentEmploymentType","CurrentEmploymentTitle")
 gpsname <- gpsname[, col_order]
 
 ```
@@ -961,7 +962,16 @@ Next, we will use the function below to do a plot of travel time periods on each
 ```{r each personnel travel time period on each day, echo=FALSE, fig.height=10, fig.width=12}
 
 gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
+
 #Add gender to gpsname!!Then distinguish by color in the plot
+
+#Do a left join to add gender to gpsname
+
+gpsnamegender <- left_join(gpsname, emprecords, by = c("LastName" = "LastName", "FirstName" = "FirstName"))
+
+head(gpsnamegender)
+
+gpsnamegender <- gpsnamegender %>% dplyr::select(c("TimeStampFormatted","name","id","lat","long","time","hour","date","Gender","CurrentEmploymentTitle.x","CurrentEmploymentType.x","LastName","FirstName"))
 
 #Dot Plot of Day with Time for Each Individual
 
@@ -984,13 +994,13 @@ twofivetothirty <- namedistinct %>% slice(25:30)
 thirtyonetothirtysix <- namedistinct %>% slice(31:36)
 
 #Plotting the chart
-gps_indivA <- gpsname %>% filter(name %in% onetosix$name)  %>% 
+gps_indivA <- gpsnamegender %>% filter(name %in% onetosix$name)  %>% 
                     group_by(name) %>% mutate(namecountperday = n()) %>% 
-                    distinct(name,date,time,namecountperday)
+                    distinct(name,date,time,namecountperday, Gender)
 
-indivA <- ggplot(gps_indivA, aes(time, date, color=name, group=name)) +
+indivA <- ggplot(gps_indivA, aes(time, date, fill=Gender, group=name)) +
                 facet_wrap(.~name, nrow = 18, ncol = 2) +
-                geom_point(color = "darkgreen") +
+                geom_point() +
                 scale_y_date(breaks = breaks_pretty(14)) +
                 #scale_x_datetime(breaks = breaks_pretty(24)) +
                 labs(title = "Travel periods of Individuals (Group 1)", x = "Time")
