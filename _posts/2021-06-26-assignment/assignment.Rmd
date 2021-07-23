@@ -196,7 +196,7 @@ gpstracking <- gpstracking %>%
   dplyr::select(-Timestamp)
 
 #Reorder columns
-col_order <- c("TimeStampFormatted", "id","lat","long")
+col_order <- c("TimeStampFormatted", "id","lat","long","hour")
 gpstracking <- gpstracking[, col_order]
 
 #For loyaltycard dataset
