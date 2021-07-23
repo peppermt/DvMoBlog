@@ -418,7 +418,7 @@ Example of printing the route for ID #15, on 7th Jan.
 
 ```{r trying out the print_route function, echo=TRUE}
 
-print_routes_ID_date(15,'2014-01-07','2014-01-07')
+print_routes_ID_date(7,'2014-01-14 07:21:00','2014-01-14 13:32:00')
 
 ```
 
@@ -552,8 +552,6 @@ We would first prepare the dataset for this plot by extracting the date and time
 
 glimpse(creditcard)
 
-class(creditcard$TimeStampFormatted)
-
 creditcard$date <- as_date(creditcard$TimeStampFormatted)
 
 creditcard$time <- hms::as_hms(creditcard$TimeStampFormatted)
@@ -663,7 +661,7 @@ figB <- cardbytime %>%
                     name = "Frequency") +
     labs(title = "Visits at each Location for Time of Day", x = "Time") +
     scale_x_datetime(breaks = date_breaks("1 hour"),
-                   labels = date_format("%H:%M")) +
+                   labels = time_format("%H:%M")) +
   theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(figB)
@@ -918,18 +916,6 @@ ggplotly(figC)
 
 ```
 
-```{r}
-
-test <- gpsname %>% filter(id > 100) %>% 
-  group_by(id) %>% 
-  summarize(m = mean(TimeStampFormatted), do_union = FALSE)
-
-test %>% dplyr::select(-m)
-
-test
-
-```
-
 From the above plot, we see that most employees, except for Sanjorge Jr Sten, traveled daily. Sanjorge Jr Sten is the CEO of Gastech, and was likely chauffeured instead of driving on his own. 
 We also notice that there is a high count of travels on weekdays with LastName = NA. Checking on the _gpsname_ data, we find that there is gps tracking information for vehicle IDs 101, 104, 105, 106 and 107, which do not exist in the _car_assigned_ dataset, this is why LastName was NA. 
 
@@ -969,14 +955,18 @@ gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
 
 gpsnamegender <- left_join(gpsname, emprecords, by = c("LastName" = "LastName", "FirstName" = "FirstName"))
 
-head(gpsnamegender)
-
 gpsnamegender <- gpsnamegender %>% dplyr::select(c("TimeStampFormatted","name","id","lat","long","time","hour","date","Gender","CurrentEmploymentTitle.x","CurrentEmploymentType.x","LastName","FirstName"))
 
 #Dot Plot of Day with Time for Each Individual
 
 namedistinct <- gpsname %>% 
     distinct(name)
+
+#Write to csv
+#write.csv(gpsnamegender,"C:\\Users\\tongr\\OneDrive - Singapore Management University\\Course Mat SMU\\Term #2\\Visual Analytics\\Assignment\\gpsnamegender2.csv")
+
+#write.csv(namedistinct,"C:\\Users\\tongr\\OneDrive - Singapore Management University\\Course #Mat SMU\\Term 2\\Visual Analytics\\Assignment\\namedistinct.csv")
+
 
 #Can clean these up eventually
 #namelist <- list()
@@ -996,77 +986,93 @@ thirtyonetothirtysix <- namedistinct %>% slice(31:36)
 #Plotting the chart
 gps_indivA <- gpsnamegender %>% filter(name %in% onetosix$name)  %>% 
                     group_by(name) %>% mutate(namecountperday = n()) %>% 
-                    distinct(name,date,time,namecountperday, Gender)
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
 
-indivA <- ggplot(gps_indivA, aes(time, date, fill=Gender, group=name)) +
+indivA <- ggplot(gps_indivA, aes(time, date, fill=Gender, label = lat, label2 = long)) +
                 facet_wrap(.~name, nrow = 18, ncol = 2) +
                 geom_point() +
                 scale_y_date(breaks = breaks_pretty(14)) +
-                #scale_x_datetime(breaks = breaks_pretty(24)) +
-                labs(title = "Travel periods of Individuals (Group 1)", x = "Time")
+                labs(title = "Travel periods of Individuals (Group 1)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(indivA)
 
 ```
 
-```{r for the other individual groups 2 to 6}
+
+
+
+```{r plotting the individual charts for the other groups}
+
+#Plotting the chart B
+gps_indivPB <- gpsnamegender %>% filter(name %in% sevtotwelve$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPB <- ggplot(gps_indivPB, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel periods of Individuals (Group 2)", x = "Time")
+
+ggplotly(indivPB)
+
+#Plotting the chart C
+gps_indivPC <- gpsnamegender %>% filter(name %in% thirteentoeighteen$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPC <- ggplot(gps_indivPC, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel periods of Individuals (Group 3)", x = "Time")
+
+ggplotly(indivPC)
+
+#Plotting the chart D
+gps_indivPD <- gpsnamegender %>% filter(name %in% nineteentotwofour$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPD <- ggplot(gps_indivPD, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel periods of Individuals (Group 4)", x = "Time")
+
+ggplotly(indivPD)
+
+#Plotting the chart E
+gps_indivPE <- gpsnamegender %>% filter(name %in% twofivetothirty$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPE <- ggplot(gps_indivPE, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel periods of Individuals (Group 5)", x = "Time")
+
+ggplotly(indivPE)
+
+#Plotting the chart F
+gps_indivPF <- gpsnamegender %>% filter(name %in% thirtyonetothirtysix$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPF <- ggplot(gps_indivPF, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel periods of Individuals (Group 6)", x = "Time")
+
+ggplotly(indivPF)
+
 
 
 ```
 
-```{r eval=FALSE, include=FALSE}
-#OBSOLETED
-testfigF <- gpsname %>% filter(name == "Willem Vasco-Pais") %>% 
-  group_by(name) %>% mutate(namecountperday = n()) %>% 
-  distinct(name, date, time, namecountperday) %>% 
-  ggplot(aes(time, date)) +
-  geom_point(color = "darkgreen") +
-  scale_y_date(breaks = breaks_pretty(14)) +
-  scale_x_datetime(breaks = breaks_pretty(24)) +
-  ggtitle("Travel Periods for") + 
-  labs(x = "Time")
-
-chartviz <- ggplotly(testfigF)
-
-```
-
-```{r eval=FALSE, include=FALSE}
-dgpsperson <- gpsname %>% filter(FirstName == "Willem") %>% 
-  group_by(name) %>% mutate(namecountperday = n()) %>% 
-  distinct(name, date, time, namecountperday)
-
-dgpsperson
-
-rm(figF)
-
-#palette = "YlGnBu", direction = -1
-
-figF <- gpsname %>% filter(FirstName == "Willem") %>% 
-  group_by(name) %>% mutate(namecountperday = n()) %>% 
-  distinct(name, date, time, namecountperday) %>% 
-  ggplot(aes(time, date)) +
-  geom_tile(aes(fill = namecountperday)) +
-  scale_fill_distiller(limits = c(0,200), palette = "YlGnBu", direction = 1) +
-  labs(title = "Travel Periods for Person", x = "Date")
-
-ggplotly(figF)
-
-figG <- gpsname %>%  
-  group_by(name) %>% 
-  mutate(namecountperday = n()) %>% 
-  distinct(name, date, time, namecountperday) %>% 
-  ggplot(aes(time, date)) +
-  geom_tile(aes(fill = namecountperday)) +
-  scale_fill_distiller(limits = c(0,200), palette = "YlGnBu", direction = 1) +
-  labs(title = "Travel Behavior for Each Individual", x = "Time") +
-  theme(legend.position = "none") +
-  facet_wrap(~name)
-
-ggplotly(figG)
-
-
-
-```
 
 
 *We see that there are frequent visits to the supermarkets and pump refuel stations. This means that there were transactions and business, but the transactions were not paid in credit card and loyalty cards were not used either.
@@ -1177,6 +1183,21 @@ fig <- fig %>% layout(
 
 2. Find out who went to whose home at night
 
+### How Others Have Attempted this Question
+
+I have found that some fellow analysts used matching of coordinate points with Chostus Hotel's to identify if the person has been there. However, this might not yield accurate results, because what we should look at is if there was a significant **stop** at Chostus Hotel, and not just passing by. True enough, I explored the _gpstracking_ data and found that there are indeed a number of coordinate points which would coincide with Chostus Hotel's, but most are just passes as there are subsequent changes in coordinate points in the next few seconds. As such, I only consider a visit at the Chostus Hotel only if there is a stay of more than 4 minutes.
+
+There are others who also attempt this by finding out individual homes and who have visited/stayed over at each other's homes. 
+
+### Potential Unofficial Relationship: Brand Tempestad and Elsa Orilla
+
+Analyzing the time periods of travel of individuals, I noticed that Brand Tempestad and Elsa Orilla both left GasTech office at 11 plus in the morning on 8th Jan. A check on their routes told me that both stopped at Chostus Hotel. Thereafter, both left the hotel at around 1 plus in the afternoon. This similar behavior was observed on 14th Jan. If they were an open couple, they could have gone to the hotel in one car, and not in their own cars, leaving at slightly different timings. Therefore, I have evidence to suspect that Brand Tempestad and Elsa Orilla are involved in an underground intimate relationship.
+
+Their movements from morning, till the time they returned to GasTech after their stop at Chostus Hotel, for both 8th and 14th Jan are as follows. These timings have been extracted from the plots of _Travel Periods of Individuals_, and their stops deduced from the route and stops generated by our coded function ____(). We can see from the images below that their travel behavior is similar.
+
+![](images/BrandTempestadCouple.jpg)
+
+![](images/ElsaCouple.jpg)
 
 
 ## Question 5
@@ -1213,7 +1234,7 @@ figH <- cardbytime %>% filter(location %in% c("Kronos Mart", "General Grocer")) 
   geom_tile(aes(fill = as.factor(n))) +
       labs(title = "Visits at each Location for Time of Day", x = "Time") +
     scale_x_datetime(breaks = date_breaks("1 hour"),
-                   labels = date_format("%H:%M")) +
+                   labels = time_format("%H:%M")) +
   theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(figH)
@@ -1271,7 +1292,7 @@ kronos
 * Lubridate - To do more with dates and times (can also check overlap timing)
 
 ### Question 5
-* For Suspicious Activities - Check for:
+* For Suspicious Activities - Check for:_
   * All large transaction amounts
   * Whether there are transactions for that specific place that is/are very much higher than average
   * Purchase patterns of a card (same card same location same unit price diff day or same card diff location same unit price same day etc.)
