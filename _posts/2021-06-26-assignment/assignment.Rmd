@@ -43,13 +43,13 @@ This would be done as a sub-component which would eventually feed into an intera
 
 ## Crime Analysis - Overall
 
-Crime analysis is a law enforcement function which involves systematic analysis for identifying and analyzing patterns and trends in crime and disorder [**Wikipedia**]. Too little data would inevitably limit the efficiency of the investigation, but overwhelming volume of information could pose a huge challenge as well. Coupled with the need for rapid analysis, too much information to absorb, categorize, remember and draw meaning from could compromise the overall investigation [**Crime-Analysis ScienceDirect**]. Visual analytics techniques could be employed to gain useful insight from massive raw data.
+Crime analysis is a law enforcement function which involves systematic analysis for identifying and analyzing patterns and trends in crime and disorder [*Wikipedia*]. Too little data would inevitably limit the efficiency of the investigation, but overwhelming volume of information could pose a huge challenge as well. Coupled with the need for rapid analysis, too much information to absorb, categorize, remember and draw meaning from could compromise the overall investigation [*Crime-Analysis ScienceDirect*]. Visual analytics techniques could be employed to gain useful insight from massive raw data.
 
-For efficiency in data processing, information must first be consistent as subtle differences can greatly increase variability and reduce the reliability and value of a dataset [**Crime-Analysis ScienceDirect**]. Next, there cannot be information overload within a diagram. Good practices such as appropriate brushing and linking, selecting and marking, aggregation, elimination, virtual navigation techniques such as zooming, focus + context, and details-on-demand techniques have been studied and used to overcome an over-cluttered screen.[**Ku et. al, 2016**]. Uninteresting and expected patterns can also be unmarked to improve efficiency and reduce false positives. [**Arxiv**]
+For efficiency in data processing, information must first be consistent as subtle differences can greatly increase variability and reduce the reliability and value of a dataset [*Crime-Analysis ScienceDirect*]. Next, there cannot be information overload within a diagram. Good practices such as appropriate brushing and linking, selecting and marking, aggregation, elimination, virtual navigation techniques such as zooming, focus + context, and details-on-demand techniques have been studied and used to overcome an over-cluttered screen.[*Ku et. al, 2016*]. Uninteresting and expected patterns can also be unmarked to improve efficiency and reduce false positives. [*Arxiv, Visual of Anomalous User Behavior* ]
 
 ## Approaches to Analyze Anomalous User Behaviors
 
-According to [**Arxiv, Visual of Anomalous User Behavior**], detection of anomalous user behaviors can be a challenging task as the boundary between abnormal and normal data may not be clearly defined, and approaches like machine learning lack contextual information to support decision-making. Visualization techniques like sequence visualization, graph visualization, text visualization, geographic visualization, chart visualization can be combined with interaction methods like tracking and monitoring, pattern discovery, exploration and navigation to analyze anomalous user behaviors.
+According to [*Arxiv, Visual of Anomalous User Behavior*], detection of anomalous user behaviors can be a challenging task as the boundary between abnormal and normal data may not be clearly defined, and approaches like machine learning lack contextual information to support decision-making. Visualization techniques like sequence visualization, graph visualization, text visualization, geographic visualization, chart visualization can be combined with interaction methods like tracking and monitoring, pattern discovery, exploration and navigation to analyze anomalous user behaviors.
 
 Analysis of anomalous travel behaviors can take the following approaches:
 
@@ -66,9 +66,9 @@ Analysis of anomalous transactions can take the following approaches:
 
 ## Visualizing Movement / Geospatial Map Types
 
-According to Robert Krueger [**Year**], movement data is more complex to handle than simple point-based data as it contains complex hierarchical structures of overlapping trajectories with diverse shapes and directions. 
+According to Robert Krueger, movement data is more complex to handle than simple point-based data as it contains complex hierarchical structures of overlapping trajectories with diverse shapes and directions. 
 
-1. Graphs (**R. Krueger**)
+1. Graphs (*R. Krueger*)
 
 Movements can be spatially aggregated. A full spatial and temporal aggregation of the trajectories can result in a static graph G = (V,E) consisting of nodes V and edges E. Each edge e = (u,v) can encode directions and contain a weight that holds the travel volumes between the nodes. Analysis is flexible with this graph network and techniques such as clustering, segmentation, aggregation can be performed.  
 
@@ -80,13 +80,13 @@ This is the world famous cholera map produced by [Doctor John Snow](https://www.
 
 3. Spatial-Temporal Perspectives: Multiple Coordinated Views (MCV)
 
-Visualizations can include many types such as thematic maps, scatter plots, parallel coordinate plots, timelines and a wide range of other techniques. Interactivity to allow quick switching between these views can facilitate more insights. These systems are described generally as [coordinated-view visualizations](https://gistbok.ucgis.org/bok-topics/geovisual-analytics). An example is shown as below. Global population trends by country are compared using a parallel coordinate plot, choropleth map and treemap. (Image courtesy of the National Center for Visual Analytics at Linkoping University)
+Visualizations can include many types such as thematic maps, scatter plots, parallel coordinate plots, timelines and a wide range of other techniques. Interactivity to allow quick switching between these views can facilitate more insights. These systems are described generally as [coordinated-view visualizations](https://gistbok.ucgis.org/bok-topics/geovisual-analytics). An example is shown as below. Global population trends by country are compared using a parallel coordinate plot, choropleth map and treemap. (*Image courtesy of the National Center for Visual Analytics at Linkoping University*)
 
 ![](images/CoordinatedViewViz.png)
 
 4. Spatial-Temporal Perspectives: 3D Coordinate System (Space-Time Cubes)
 
-There can be perspective distortion and occlusion, but the spatio-temporal distribution can be highlighted. [**R. Krueger**]. [Space-time cubes](https://gisgeography.com/space-time-cubes/) show change over time within geographic space. Each cube represents a slice of time, in which the topmost cube has the newest timestamp. Temporal changes in that geographic area can then be visualized. Map below shows a space-time cube web scene in [ArcGIS Online (AGOL)](https://gisgeography.com/space-time-cubes/).
+There can be perspective distortion and occlusion, but the spatio-temporal distribution can be highlighted. [*R. Krueger*]. [Space-time cubes](https://gisgeography.com/space-time-cubes/) show change over time within geographic space. Each cube represents a slice of time, in which the topmost cube has the newest timestamp. Temporal changes in that geographic area can then be visualized. Map below shows a space-time cube web scene in [ArcGIS Online (AGOL)](https://gisgeography.com/space-time-cubes/).
 
 ![](images/SpaceTimeCube.png)
 
@@ -99,21 +99,6 @@ There can be perspective distortion and occlusion, but the spatio-temporal distr
 5. scales - To handle label formatting in charts
 6. naniar - For data exploration ; Check for missing values
 
-
-crosstalk - To create links between objects for interactivity
-raster - to handle geospatial data
-sf - to handle geospatial data
-tmap - for map visualization
-clock - to take care of time value (newer r package compared to lubridate)
-lubridate - 
-mapview - to visualize maps
-
-raster, tmap, sf, clock (for movement visualization)
-
-for geospatial data
-tmap for map visualization
-raster and sf for handling geospatial data
-can use clock package to suss out the day of week/day of year for our MC2 question.
 
 # Data Available
 
@@ -420,7 +405,7 @@ Example of printing the route for car ID #, on a specific date time period.
 
 ```{r trying out the print_route function, echo=TRUE}
 
-print_routes_ID_date(7,'2014-01-10 07:00:00','2014-01-10 08:00:00')
+print_routes_ID_date(31,'2014-01-19 15:50:00','2014-01-19 18:56:00')
 
 ```
 
@@ -885,64 +870,10 @@ For example, Elsa Orilla would pop by Coffee Shack on her way to GasTech every w
 
 ![](images/ElsaCoffeeShack.jpg)
 
-This shows that looking at transaction data via credit card/loyalty card alone is insufficient to show whether a location is popular or not. There could be transactions made by cash as well, though we are not sure why would the people not make use of discounts from loyalty cards. This would apply to the unusually low number of transactions at refuel stations and supermarkets as well.
-
-
-```{r time periods of travel of each personnel, echo=FALSE}
-
-#Adding date and time columns to the gpsname dataset
-
-gpsname$date <- as_date(gpsname$TimeStampFormatted)
-
-gpsname$time <- hms::as_hms(gpsname$TimeStampFormatted)
-
-#Filter by CarID, date == "2014-01-06"
-
-target <- c(1,2,3,4,5)
-
-dgpsname <- gpsname %>% #%>% filter(id %in% target) %>% 
-  group_by(LastName, date) %>% mutate(namecountperday = n()) %>% 
-  distinct(date, LastName, namecountperday)
-
-dgpsname
-
-figC <- dgpsname %>% 
-  ggplot(aes(date, LastName)) +
-  geom_tile(aes(fill = namecountperday)) +
-  scale_fill_distiller(palette = "Spectral", direction = -1) +
-  labs(title = "Travel Frequency for Day", x = "Date") +
-  scale_x_date(breaks = breaks_pretty(14)) +
-  theme(axis.text.x = element_text(angle = 45))
-
-ggplotly(figC)
-
-```
-
-From the above plot, we see that most employees, except for Sanjorge Jr Sten, traveled daily. Sanjorge Jr Sten is the CEO of Gastech, and was likely chauffeured instead of driving on his own. 
-We also notice that there is a high count of travels on weekdays with LastName = NA. Checking on the _gpsname_ data, we find that there is gps tracking information for vehicle IDs 101, 104, 105, 106 and 107, which do not exist in the _car_assigned_ dataset, this is why LastName was NA. 
+This shows that looking at transaction data via credit card/loyalty card alone is insufficient to show whether a location is popular or not. There could be transactions made by cash as well, though we are not sure why would the people not make use of discounts from loyalty cards. This would apply to the unusually low number of transactions at refuel stations and supermarkets as well, resolving the anomaly in Q1.
 
 
 
-
-
-(This chunk onwards KIV)
-
-Tracking of the route for vehicle ID 105 and 107 are as below.
-
-![Route of Vehicle ID 105](Images/105Route.jpg)
-
-![Route of Vehicle ID 107](Images/107Route.jpg)
-
-The route shows that these vehicles comes out from GasTech, goes round nearby areas, and would then go back to GasTech. 105 would go to Carlyle Chemical Inc., Nationwide Refinery, and Guy's Gyros. 107 would also travel to Maximum Iron and Steel often. Since both vehicles only move on weekdays, they are likely the company trucks, which are not assigned to a specific employee. The personnel who can use these vehicles are as tabulated below:
-
-
-```{r car_assigned missing values show truck drivers, echo=FALSE}
-
-car_assigned %>% 
-  filter(is.na(CarID))
-
-```
-We also notice that there was unusually high movement for the trucks on 16 Jan - 26116 gps points/day, compared to the usual 3000 - 6000 points/day on the other days within these 2 weeks. Further investigation will be covered in Question 5.
 
 Next, we will use the function below to do a plot of travel time periods on each day, for each personnel.
 
@@ -1207,13 +1138,67 @@ Elsa Orilla <br> Car ID: 7 | **08 Jan** <br> 0720 hrs: Set off from home <br> 07
 
 **Do you see evidence of suspicious activity? Identify 1- 10 locations where you believe the suspicious activity is occurring, and why**
 
-1. Unusually high movement activity for truck on 16 Jan 2014.
+### Sanjorge Jr. only had 3 day of GPS records from 17th to 19th Jan, while everyone else travelled almost daily.
+```{r time periods of travel of each personnel, echo=FALSE}
 
+#Adding date and time columns to the gpsname dataset
+
+gpsname$date <- as_date(gpsname$TimeStampFormatted)
+
+gpsname$time <- hms::as_hms(gpsname$TimeStampFormatted)
+
+#Filter by CarID, date == "2014-01-06"
+
+target <- c(1,2,3,4,5)
+
+dgpsname <- gpsname %>% #%>% filter(id %in% target) %>% 
+  group_by(LastName, date) %>% mutate(namecountperday = n()) %>% 
+  distinct(date, LastName, namecountperday)
+
+dgpsname
+
+figC <- dgpsname %>% 
+  ggplot(aes(date, LastName)) +
+  geom_tile(aes(fill = namecountperday)) +
+  scale_fill_distiller(palette = "Spectral", direction = -1) +
+  labs(title = "Travel Frequency for Day", x = "Date") +
+  scale_x_date(breaks = breaks_pretty(14)) +
+  theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(figC)
+
+```
+
+From the above plot, we see that most employees, except for Sanjorge Jr Sten, traveled daily. Sanjorge Jr Sten is the CEO of Gastech, and was likely chauffeured instead of driving on his own. 
+
+His travel routes on the 3 days, 17 - 19 Jan, are plotted as below. We can deduce that he stays at Chostus Hotel as he sets off from there in the morning, and retires back to there after work in the evenings.
+
+
+### Unusually high movement activity for truck on 16 Jan 2014.
+
+We also notice that there is a high count of travels on weekdays with LastName = NA. Checking on the _gpsname_ data, we find that there is gps tracking information for vehicle IDs 101, 104, 105, 106 and 107, which do not exist in the _car_assigned_ dataset, this is why LastName was NA. 
+
+Tracking of the route for vehicle ID 105 and 107 are as below.
+
+![Route of Vehicle ID 105](Images/105Route.jpg)
+
+![Route of Vehicle ID 107](Images/107Route.jpg)
+
+The route shows that these vehicles comes out from GasTech, goes round nearby areas, and would then go back to GasTech. 105 would go to Carlyle Chemical Inc., Nationwide Refinery, and Guy's Gyros. 107 would also travel to Maximum Iron and Steel often. Since both vehicles only move on weekdays, they are likely the company trucks, which are not assigned to a specific employee. The personnel who can use these vehicles are as tabulated below:
+
+
+```{r car_assigned missing values show truck drivers, echo=FALSE}
+
+car_assigned %>% 
+  filter(is.na(CarID))
+
+```
+We also notice that there was unusually high movement for the trucks on 16 Jan - 26116 gps points/day, compared to the usual 3000 - 6000 points/day on the other days within these 2 weeks. Further investigation will be covered in Question 5.
 
 2. 1 visit to Daily Dealz on 13 Jan 2014, at 6am in the morning.
 
 
-3. Sanjorge Jr. only had 3 day of GPS records from 17th to 19th Jan, while everyone else travelled almost daily.
+
 
 4. Stolen credit card?
 
