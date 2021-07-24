@@ -123,7 +123,7 @@ The following information is available.
 2. GPS Tracking Info of Company Cars : Date, Time, Car ID, Latitude, Longitude [_gps.csv_]
 3. Credit Card Transactions: Location, Date, Time, Price, Credit Card No. [_cc_data.csv_]
 4. Loyalty Card: Location, Date, Price, Loyalty Card No. [_loyalty_data.csv_]
-5. Employee Information: LastName, FirstName, Gender, CurrentEmployment Title [EmployeeRecords.csv]
+5. Employee Information: LastName, FirstName, Gender, CurrentEmployment Title [_EmployeeRecords.csv_]
 
 
 # Data Wrangling and Preparation
@@ -229,7 +229,7 @@ loyaltycard <- loyaltycard %>%
 
 ```
 
-Next, we include into the _gpstracking_ dataset, the first and last names of the personnel the car is assigned to. We essentially want to do a left join for the _gpstracking_ dataset, and the _car_assigned_ dataset, by the car ID. We can do this with the left_join() function. 
+Next, we include into the _gpstracking_ dataset, the first and last names of the personnel the car is assigned to. We essentially want to do a left join for the _gpstracking_ dataset, and the _car_assigned_ dataset, by the car ID. We can do this with the left_join() function, so that we keep all rows in the _gpstracking_ dataset.
 
 ```{r Joining gpstracking and car_assigned}
 
@@ -290,7 +290,7 @@ gps_sf <- st_as_sf(gpstracking,
 
 Example:
 
-(Here, we are creating the movement path from GPS points for each car. Hence, we need to group the data by the car ID, the identifier. As R requires a command following the group_by() function, an input will be required for the code to run, so we include a dummy summarize() code to overcome this issue.)
+_(Here, we are creating the movement path from GPS points for each car. Hence, we need to group the data by the car ID, the identifier. As R requires a command following the group_by() function, an input will be required for the code to run, so we include a dummy summarize() code to overcome this issue.)_
 
 ```{r Creating Movement Path, eval=FALSE, include=TRUE}
 
@@ -351,7 +351,9 @@ tm_all_stops
 
 ```
 
-With all of the above codes, the following function *print_routes_ID_date(emp_id, start_dt,end_dt) is created to generate the routes of a specific vehicle, during a specific time period. This way, we are able to print the routes for a specific vehicle ID, for a selected time period from *start_dt* to *end_dt*. 
+We can observe that there is clustering effect of points, indicating that our rounding of the coordinate points is sufficient to remove variation noise, yet maintain the distinction between different spatial points, as there continues to be points scattered around the map.
+
+With all of the above codes, the following function *print_routes_ID_date(emp_id, start_dt,end_dt)* is created to generate the routes of a specific vehicle, during a specific time period. This way, we are able to print the routes for a specific vehicle ID, for a selected time period from *start_dt* to *end_dt*. 
 
 ```{r function for printing vehicle routes by ID and datetime}
 
@@ -414,11 +416,11 @@ print_routes_ID_date <- function(emp_id,start_dt,end_dt){
 
 ```
 
-Example of printing the route for ID #15, on 7th Jan.
+Example of printing the route for car ID #, on a specific date time period.
 
 ```{r trying out the print_route function, echo=TRUE}
 
-print_routes_ID_date(7,'2014-01-14 07:21:00','2014-01-14 13:32:00')
+print_routes_ID_date(7,'2014-01-10 07:00:00','2014-01-10 08:00:00')
 
 ```
 
@@ -458,7 +460,7 @@ girafe(
 
 
 ```
-From the bar plot above, by credit card transactions, **Katerina's Cafe, Hippokampos, Guy's Gyros and Brew've Been Served** are the most popular locations. We shall see the outcome when the loyalty card transactions are analyzed in the same manner. From the bar plot below, the same results are derived for the Top 4 most popular locations.
+From the bar plot above, by credit card transactions, **Katerina's Cafe, Hippokampos, Guy's Gyros and Brew've Been Served** are the most popular locations with the highest number of transactions over two weeks. We shall see the outcome when the loyalty card transactions are analyzed in the same manner. From the bar plot below, the same results are derived for the Top 4 most popular locations.
 
 ```{r location popularity by loyaltycard txns, echo = FALSE}
 
@@ -493,7 +495,7 @@ girafe(
 
 However, the bar plots only tell us the total number of visits over the 2 weeks. We do not know which days have higher visits, or the profile of the visits over the day. To view this, we can use violin plots. The thickness of the plots will also reflect the frequency of the visit at that point in time. We will also be able to see which days did the visits take place. 
 
-We shall use the violin plots in the _plotly_ package as they are interactive, we can hover over the plots, especially where they are thicker to see what time periods are those. 
+We shall use the violin plots in the _plotly_ package as they are interactive, we can hover over the plots, especially where they are thicker to see what time periods are those. There are also boxplots to tell us what the distribution and spread is like. 
 
 ```{r for time of the day, echo=FALSE, fig.height=5, layout="1-body-outset"}
 
@@ -538,19 +540,17 @@ fig <- fig %>%
 fig
 
 ```
-From the violin plot above, we can see that the top 3 frequented locations identified above (Katerina's Cafe, Hippokampos, Guy's Gyros, Brew've been Served) have a pretty consistent visit rate daily throughout the 2 weeks from 6th to 20th Jan. The thickness of the violin plot is consistent. This means that they are popular throughout the 2 weeks.
+From the violin plot above, we can see that the top 3 frequented locations identified above (Katerina's Cafe, Hippokampos, Guy's Gyros) have a pretty consistent visit rate daily throughout the 2 weeks from 6th to 20th Jan. The thickness of the violin plot is consistent. This means that they are popular throughout the 2 weeks. The 4th frequented location _Brew've been Served_ has two clear bulges, indicating there is a lull period between the busy periods. 
 
 However, it is observed that other locations can have higher visiting rates at specific periods than the identified Top 3. For example, the visiting rates for Desaflo Golf Course was much higher specifically on 19th Jan, same for Kronos Pipe and Irrigation on 7th Jan. Hallowed Grounds also had peak visiting rates on 8th and 15th Jan.
 
 The violin plot showed a good overview that the visiting days vary across the locations. Now we shall dissect this further into day and time.
 
-We shall use the geom_tile plot from ggplot to visualize this, wrapped with _ggplotly()_ to provide us with interactivity as we would be able to hover over each square and see the corresponding location and date/time. One tile plot would be for "Visits at Each Location for Each Day" and "Visits at Each Location for Time of Day".
+We shall use the geom_tile plot from ggplot to visualize this, wrapped with _ggplotly()_ to provide us with interactivity as we would be able to hover over each square and see the corresponding location and date/time. One tile plot would be for "Visits at Each Location for Each Day" and the other for "Visits at Each Location for Time of Day".
 
 We would first prepare the dataset for this plot by extracting the date and time data into different columns, then do a count for them respectively. As the timestamp has been formatted into POSIXct format earlier, R already stores it in dttm (date-time) format. We can just use the _as_date_ and _as_hms_ functions from the _lubridate_ package to extract them out. We should retain them in date and time format for easier manipulation later.
 
 ```{r adding date and time columns to the creditcardB dataset, echo = TRUE, results = 'hide'}
-
-glimpse(creditcard)
 
 creditcard$date <- as_date(creditcard$TimeStampFormatted)
 
@@ -875,15 +875,17 @@ hippostops <- gpstracking %>%
 ```
 
 
-### Anomaly: Awfully Infrequent Visits at Refuel Stations
+### Anomaly: Unusually Infrequent Visits at Refuel Stations and Supermarkets 
 
+Credit card and loyalty card transactions show that there are only a handful of transactions each day, or sometimes no business at all, making it seem like the stores and business places are empty. 
 
+After visualizing the routes of individuals, we notice that people make stops at the place very regularly but the transaction numbers do not reflect that.
 
+For example, Elsa Orilla would pop by Coffee Shack on her way to GasTech every week day, and stay there for at least half hour each time. She visited on 10 Jan as well, but there were no transactions made via credit card there on that day.
 
-### Anomaly: Unusually Infrequent Visits at Supermarkets
+![](images/ElsaCoffeeShack.jpg)
 
-
-
+This shows that looking at transaction data via credit card/loyalty card alone is insufficient to show whether a location is popular or not. There could be transactions made by cash as well, though we are not sure why would the people not make use of discounts from loyalty cards. This would apply to the unusually low number of transactions at refuel stations and supermarkets as well.
 
 
 ```{r time periods of travel of each personnel, echo=FALSE}
@@ -1087,10 +1089,6 @@ ggplotly(indivPF)
 
 ```{r Look at CC and Loyalty Card Matched}
 
-#Prep Data first by joining loyalty card number into credit card dataset
-
-credit_loyalty <- full_join(creditcard, loyaltycard, by = c("price" = "price", "date" = "TimeStampFormatted", "location" = "location"))
-
 #To see if credit card records and loyalty card pairs are unique
 
 creditloyaltyuniq <- 
@@ -1191,9 +1189,14 @@ There are others who also attempt this by finding out individual homes and who h
 
 ### Potential Unofficial Relationship: Brand Tempestad and Elsa Orilla
 
-Analyzing the time periods of travel of individuals, I noticed that Brand Tempestad and Elsa Orilla both left GasTech office at 11 plus in the morning on 8th Jan. A check on their routes told me that both stopped at Chostus Hotel. Thereafter, both left the hotel at around 1 plus in the afternoon. This similar behavior was observed on 14th Jan. If they were an open couple, they could have gone to the hotel in one car, and not in their own cars, leaving at slightly different timings. Therefore, I have evidence to suspect that Brand Tempestad and Elsa Orilla are involved in an underground intimate relationship.
+Analyzing the time periods of travel of individuals, I noticed that Brand Tempestad and Elsa Orilla both left GasTech office at 11 plus in the morning on 8th Jan. A check on their routes told me that both stopped at Chostus Hotel. Thereafter, both left the hotel at around 1 plus in the afternoon. This similar behavior was observed on 14th Jan. If they were an open couple, they could have gone to the hotel in one car, and not in their own cars, leaving at slightly different timings. They also need not meet for this rendezvous halfway during office hours. Therefore, I have evidence to suspect that Brand Tempestad and Elsa Orilla are involved in an underground intimate relationship.
 
-Their movements from morning, till the time they returned to GasTech after their stop at Chostus Hotel, for both 8th and 14th Jan are as follows. These timings have been extracted from the plots of _Travel Periods of Individuals_, and their stops deduced from the route and stops generated by our coded function ____(). We can see from the images below that their travel behavior is similar.
+Their movements from morning, till the time they returned to GasTech after their stop at Chostus Hotel, for both 8th and 14th Jan are as follows. These timings have been extracted from the plots of _Travel Periods of Individuals_, and their stops deduced from the route and stops generated by our coded function *print_routes_ID_date()*. We can see from the images below that their travel behavior is similar.
+
+Name | Movements
+-----| ---------
+Brand Tempestad <br> Car ID: 33 | **08 Jan** <br> 0712 hrs: Set off from home <br> 0754 hrs: Reached GasTech <br> 1102 hrs: Left GasTech <br> 1109 hrs: Reached Chostus Hotel <br> 1321 hrs: Left Chostus Hotel <br> 1338 hrs: Returned to GasTech <br> <br> **14 Jan** <br> 0724 hrs: Set off from home <br> 0748 hrs: Reached GasTech <br> 1101 hrs: Left GasTech <br> 1108 hrs: Reached Chostus Hotel <br> 1332 hrs: Left Chostus Hotel <br> 1339 hrs: Returned to GasTech
+Elsa Orilla <br> Car ID: 7 | **08 Jan** <br> 0720 hrs: Set off from home <br> 0724 hrs: Stopped near Coffee Shack <br> 0753 hrs: Left Coffee Shack <br> 0806 hrs: Reached GasTech <br> 1110 hrs: Left GasTech <br> 1117 hrs: Reached Chostus Hotel <br> 1301 hrs: Left Chostus Hotel <br> 1308 hrs: Returned to GasTech <br> <br> **14 Jan** <br> 0721 hrs: Set off from home <br> 0724 hrs: Reached Coffee Shack <br> 0750 hrs: Left Coffee Shack <br> 0803 hrs: Reached GasTech <br> 1113 hrs: Left GasTech <br> 1120 hrs: Reached Chostus Hotel <br> 1320 hrs: Left Chostus Hotel <br> 1327 hrs: Returned to GasTech
 
 ![](images/BrandTempestadCouple.jpg)
 
