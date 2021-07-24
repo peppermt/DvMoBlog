@@ -43,9 +43,9 @@ This would be done as a sub-component which would eventually feed into an intera
 
 ## Crime Analysis - Overall
 
-Crime analysis is a law enforcement function which involves systematic analysis for identifying and analyzing patterns and trends in crime and disorder [*Wikipedia*]. Too little data would inevitably limit the efficiency of the investigation, but overwhelming volume of information could pose a huge challenge as well. Coupled with the need for rapid analysis, too much information to absorb, categorize, remember and draw meaning from could compromise the overall investigation [*Crime-Analysis ScienceDirect*]. Visual analytics techniques could be employed to gain useful insight from massive raw data.
+Crime analysis is a law enforcement function which involves systematic analysis for identifying and analyzing patterns and trends in crime and disorder [*Wikipedia*]. Too little data would inevitably limit the efficiency of the investigation, but overwhelming volume of information could pose a huge challenge as well. Coupled with the need for rapid analysis, too much information to absorb, categorize, remember and draw meaning from could compromise the overall investigation [*Data Mining and Predictive Analysis, Colleen McCue, 2007*]. Visual analytics techniques could be employed to gain useful insight from massive raw data.
 
-For efficiency in data processing, information must first be consistent as subtle differences can greatly increase variability and reduce the reliability and value of a dataset [*Crime-Analysis ScienceDirect*]. Next, there cannot be information overload within a diagram. Good practices such as appropriate brushing and linking, selecting and marking, aggregation, elimination, virtual navigation techniques such as zooming, focus + context, and details-on-demand techniques have been studied and used to overcome an over-cluttered screen.[*Ku et. al, 2016*]. Uninteresting and expected patterns can also be unmarked to improve efficiency and reduce false positives. [*Arxiv, Visual of Anomalous User Behavior* ]
+For efficiency in data processing, information must first be consistent as subtle differences can greatly increase variability and reduce the reliability and value of a dataset [*Colleen McCue, 2007*]. Next, there cannot be information overload within a diagram. Good practices such as appropriate brushing and linking, selecting and marking, aggregation, elimination, virtual navigation techniques such as zooming, focus + context, and details-on-demand techniques have been studied and used to overcome an over-cluttered screen.[*Visual Analytics for Crime Analysis and Decision Support, Ku et. al, 2016*]. Uninteresting and expected patterns can also be unmarked to improve efficiency and reduce false positives. [*Arxiv, Visual of Anomalous User Behavior* ]
 
 ## Approaches to Analyze Anomalous User Behaviors
 
@@ -66,9 +66,9 @@ Analysis of anomalous transactions can take the following approaches:
 
 ## Visualizing Movement / Geospatial Map Types
 
-According to Robert Krueger, movement data is more complex to handle than simple point-based data as it contains complex hierarchical structures of overlapping trajectories with diverse shapes and directions. 
+According to Robert Krueger's dissertation on Visual Analytics of Human Mobility Behavior, movement data is more complex to handle than simple point-based data as it contains complex hierarchical structures of overlapping trajectories with diverse shapes and directions. 
 
-1. Graphs (*R. Krueger*)
+1. Graphs (*R. Krueger, 2017*)
 
 Movements can be spatially aggregated. A full spatial and temporal aggregation of the trajectories can result in a static graph G = (V,E) consisting of nodes V and edges E. Each edge e = (u,v) can encode directions and contain a weight that holds the travel volumes between the nodes. Analysis is flexible with this graph network and techniques such as clustering, segmentation, aggregation can be performed.  
 
@@ -235,7 +235,7 @@ Next, we shall prepare the geospatial map for viewing. We would use the _Raster_
 The file to be imported is already georeferenced using qGIS, into .tif format.
 Note that the raster layer is a three bands false colour image, we would use tm_rgb() instead of tm_raster() to be able to display all three bands. If not, the layer would come out in monochrome.
 
-```{r Geomap}
+```{r Geomap, echo=TRUE}
 
 #Importing the Raster file
 
@@ -298,7 +298,7 @@ Considering the sizes of typical carparks, the accuracy of 1.11m would be too pr
 
 A map with all stops identified from the entire _gpstracking_ dataset is as shown.
 
-```{r interactive map viewing of the points}
+```{r interactive map viewing of the points, echo=TRUE}
 
 #Round lat long points to 4 decimal points
 
@@ -340,7 +340,7 @@ We can observe that there is clustering effect of points, indicating that our ro
 
 With all of the above codes, the following function *print_routes_ID_date(emp_id, start_dt,end_dt)* is created to generate the routes of a specific vehicle, during a specific time period. This way, we are able to print the routes for a specific vehicle ID, for a selected time period from *start_dt* to *end_dt*. 
 
-```{r function for printing vehicle routes by ID and datetime}
+```{r function for printing vehicle routes by ID and datetime, echo=TRUE}
 
 print_routes_ID_date <- function(emp_id,start_dt,end_dt){
   
@@ -389,7 +389,7 @@ print_routes_ID_date <- function(emp_id,start_dt,end_dt){
   
   mapviz <- tm_all_stops +
     tm_shape(gps_path_selected) +
-    tm_lines() +
+    tm_lines(lwd = 1) +
     tm_shape(stops_sf) +
     tm_dots(size = 0.1,
             alpha = 0.3,
@@ -405,7 +405,7 @@ Example of printing the route for car ID #, on a specific date time period.
 
 ```{r trying out the print_route function, echo=TRUE}
 
-print_routes_ID_date(31,'2014-01-19 15:50:00','2014-01-19 18:56:00')
+print_routes_ID_date(101,'2014-01-13 00:00:00','2014-01-13 23:59:00')
 
 ```
 
@@ -675,7 +675,7 @@ We note that the above popular locations are all identified on the map of Abila,
 figI <- cardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>% 
  ggplot(aes(date, location)) +
   geom_tile(aes(fill = as.factor(n))) +
-      labs(title = "Visits at each Fuel Station for Each Day (Credit Card)", x = "Date") +
+      labs(title = "Visits at each Fuel Station for Each Day (Credit Card)", x = "Date", fill = "No. of Visits") +
   scale_x_datetime(breaks = breaks_pretty(14)) +
     theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
@@ -691,7 +691,7 @@ ggplotly(figI)
 figK <- loyalcardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>%
  ggplot(aes(TimeStampFormatted, location)) +
   geom_tile(aes(fill = as.factor(n))) +
-    labs(title = "Visits at each Fuel Station for Each Day (by Loyalty Card)", x = "Date") +
+    labs(title = "Visits at each Fuel Station for Each Day (by Loyalty Card)", x = "Date", fill = "No. of Visits") +
   scale_x_datetime(breaks = breaks_pretty(14)) +
     theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
@@ -710,7 +710,7 @@ U Pump is a refuel station, yet it is only visited twice from the credit card tr
 figC <- cardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>% 
  ggplot(aes(date, location)) +
   geom_tile(aes(fill = as.factor(n))) +
-      labs(title = "Visits at each Supermarket for Each Day (Credit Card)", x = "Date") +
+      labs(title = "Visits at each Supermarket for Each Day (Credit Card)", x = "Date", fill = "No. of Visits") +
   scale_x_datetime(breaks = breaks_pretty(14)) +
     theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
@@ -725,7 +725,7 @@ ggplotly(figC)
 figD <- loyalcardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>%
  ggplot(aes(TimeStampFormatted, location)) +
   geom_tile(aes(fill = as.factor(n))) +
-    labs(title = "Visits at each Supermarket for Each Day (by Loyalty Card)", x = "Date") +
+    labs(title = "Visits at each Supermarket for Each Day (by Loyalty Card)", x = "Date", fill = "No. of Visits") +
     theme(legend.key.height = unit(1, "cm")) +
     scale_x_datetime(breaks = breaks_pretty(14)) +
     theme(axis.text.x = element_text(angle = 45))
@@ -872,10 +872,11 @@ For example, Elsa Orilla would pop by Coffee Shack on her way to GasTech every w
 
 This shows that looking at transaction data via credit card/loyalty card alone is insufficient to show whether a location is popular or not. There could be transactions made by cash as well, though we are not sure why would the people not make use of discounts from loyalty cards. This would apply to the unusually low number of transactions at refuel stations and supermarkets as well, resolving the anomaly in Q1.
 
+(*IF SEE ANY, IF NOT DELETE THIS* We see that there are frequent visits to the supermarkets and pump refuel stations. This means that there were transactions and business, but the transactions were not paid in credit card and loyalty cards were not used either.)
 
+### Plot Travel Time Perioids on Each Day for Each Personnel
 
-
-Next, we will use the function below to do a plot of travel time periods on each day, for each personnel.
+Next, we will use the function below to do a plot of travel time periods on each day, for each personnel. This is to aid further investigation.
 
 
 ```{r each personnel travel time period on each day, echo=FALSE, fig.height=10, fig.width=12}
@@ -1018,13 +1019,6 @@ ggplotly(indivPF)
 ```
 
 
-
-*We see that there are frequent visits to the supermarkets and pump refuel stations. This means that there were transactions and business, but the transactions were not paid in credit card and loyalty cards were not used either.
-
-
-
-
-
 ## Question 3
 
 **Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data?**
@@ -1037,11 +1031,14 @@ On payment, it seems like he did not pay his bills at Hallowed Grounds, Katerina
 
 ```{r Chostus Hotel Transactions, echo=FALSE}
 
-rmarkdown::paged_table(creditcard %>% filter(location == "Chostus Hotel"))
+pgtable <- creditcard %>% filter(location == "Chostus Hotel")
+
+rmarkdown::paged_table(pgtable)
 
 ```
+### To Match Credit Card and Loyalty Card
 
-```{r Look at CC and Loyalty Card Matched}
+```{r Look at CC and Loyalty Card Matched, echo=FALSE}
 
 #To see if credit card records and loyalty card pairs are unique
 
@@ -1063,68 +1060,42 @@ figD <- creditloyaltyuniq %>%
 
 ggplotly(figD)
 
-#figE <- sankeyNetwork(Links = 
-  
-#)
-
-```
-This is the anomaly:
-
-One loyalty card associated with multiple credit cards:
-
-L9406 associated with 4948 (22) and 5921 (1).
-L8566 associated with 4795 (25) and 8332 (1).
-L6119 associated with 7889 (20) and 5368 (1).
-L3295 associated with 4948 (1) and 5921 (12).
-L3288 associated with 1286 (15) and 9241 (13).
-L2247 associated with 5368 (24) and 7889 (1).
-L2070 associated with 4795 (1) and 8332 (27).
-
-One credit card associated with multiple loyalty cards:
-
-1286 associated with L3288 (15) and L3572 (13)
-4795 associated with L2070 (1) and L8566 (25)
-4948 associated with L3295 (1) and L9406 (22)
-5368 associated with L2247 (24) and L6119 (1)
-5921 associated with L3295 (12) and L9406 (1) [Same pattern as 4948! Opposite!]
-7889 associated with L2247 (1) and L6119 (20) [Same pattern with 5368! Opposite!]
-8332 associated with L2070 (27) and L8566 (1) [Same pattern as 4795!]
-
-
-
-```{r Sankey Plotly R}
-fig <- plot_ly(
-    type = "sankey",
-    orientation = "h",
-
-    node = list(
-      label = c("A1", "A2", "B1", "B2", "C1", "C2"),
-      color = c("blue", "blue", "blue", "blue", "blue", "blue"),
-      pad = 15,
-      thickness = 20,
-      line = list(
-        color = "black",
-        width = 0.5
-      )
-    ),
-
-    link = list(
-      source = c(0,1,0,2,3,3),
-      target = c(2,3,3,4,4,5),
-      value =  c(8,4,2,8,4,2)
-    )
-  )
-fig <- fig %>% layout(
-    title = "Basic Sankey Diagram",
-    font = list(
-      size = 10
-    )
-)
-
-
 
 ```
 
+From the above plot of credit card and loyalty card numbers, we note that there are transactions where:
+
+1) One loyalty card have been associated with multiple credit cards:
+
+* L9406 associated with 4948 (22) and 5921 (1).
+* L8566 associated with 4795 (25) and 8332 (1).
+* L6119 associated with 7889 (20) and 5368 (1).
+* L3295 associated with 4948 (1) and 5921 (12).
+* L3288 associated with 1286 (15) and 9241 (13).
+* L2247 associated with 5368 (24) and 7889 (1).
+* L2070 associated with 4795 (1) and 8332 (27).
+
+_() indicates number of transactions_
+
+2) One credit card associated with multiple loyalty cards:
+
+* 1286 associated with L3288 (15) and L3572 (13)
+* 4795 associated with L2070 (1) and L8566 (25)
+* 4948 associated with L3295 (1) and L9406 (22)
+* 5368 associated with L2247 (24) and L6119 (1)
+* 5921 associated with L3295 (12) and L9406 (1) [ _Opposite pattern with 4948_ ]
+* 7889 associated with L2247 (1) and L6119 (20) [ _Opposite pattern with 5368_ ]
+* 8332 associated with L2070 (27) and L8566 (1) [ _Opposite pattern with 4795_ ]
+
+The following conclusions can be drawn:
+
+* L3288 is associated with both 1286 and 9241 at almost equal transactions. This can show that L3288 belongs to either owners of 1286 or 9241, and that they are often together when these transactions are made. They might be a couple. 13 to 15 transactions within a 2-week period is almost daily transaction.
+
+* Owner of 4948 was with owner of 5921 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
+
+* Owner of 5368 was with owner of 7889 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
+
+* Owner of 4795 was with owner of 8332 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
 
 
 ## Question 4
@@ -1198,7 +1169,9 @@ On payment, it seems like he did not pay his bills at Hallowed Grounds, Katerina
 
 ```{r Chostus Hotel Transactions 2, echo=FALSE}
 
-rmarkdown::paged_table(creditcard %>% filter(location == "Chostus Hotel"))
+pgtblA <- creditcard %>% filter(location == "Chostus Hotel")
+
+rmarkdown::paged_table(pgtblA)
 
 ```
 ![](images/CEOmovement.jpg)
@@ -1207,6 +1180,9 @@ rmarkdown::paged_table(creditcard %>% filter(location == "Chostus Hotel"))
 
 (Just plot and compile the tracking routes for all 5 from second week onwards - ie 25 plots).
 We also notice that there is a high count of travels on weekdays with LastName = NA. Checking on the _gpsname_ data, we find that there is gps tracking information for vehicle IDs 101, 104, 105, 106 and 107, which do not exist in the _car_assigned_ dataset, this is why LastName was NA. 
+
+
+
 
 Tracking of the route for vehicle ID 105 and 107 are as below.
 
@@ -1226,19 +1202,6 @@ car_assigned %>%
 We also notice that there was unusually high movement for the trucks on 16 Jan - 26116 gps points/day, compared to the usual 3000 - 6000 points/day on the other days within these 2 weeks. Further investigation will be covered in Question 5.
 
 2. 1 visit to Daily Dealz on 13 Jan 2014, at 6am in the morning.
-
-
-
-
-4. Stolen credit card?
-
-5. L3288 associated with 1286 (15) and 9241 (13).1286 associated with L3288 (15) and L3572 (13)
-
-6. 5921 associated with L3295 (12) and L9406 (1) [Same pattern as 4948! Opposite!]. 4948 associated with L3295 (1) and L9406 (22)
-
-7. 7889 associated with L2247 (1) and L6119 (20) [Same pattern with 5368! Opposite!] 5368 associated with L2247 (24) and L6119 (1)
-
-8. 8332 associated with L2070 (27) and L8566 (1) [Same pattern as 4795!] 4795 associated with L2070 (1) and L8566 (25)
 
 9. Guy's Gyros is unusually crowded on 19 Jan (Sun) compared to the previous Sunday and weekend crowd.
 
