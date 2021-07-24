@@ -389,7 +389,7 @@ print_routes_ID_date <- function(emp_id,start_dt,end_dt){
   
   mapviz <- tm_all_stops +
     tm_shape(gps_path_selected) +
-    tm_lines(lwd = 1) +
+    tm_lines(lwd = 3) +
     tm_shape(stops_sf) +
     tm_dots(size = 0.1,
             alpha = 0.3,
@@ -405,7 +405,7 @@ Example of printing the route for car ID #, on a specific date time period.
 
 ```{r trying out the print_route function, echo=TRUE}
 
-print_routes_ID_date(101,'2014-01-13 00:00:00','2014-01-13 23:59:00')
+print_routes_ID_date(101,'2014-01-18 00:00:00','2014-01-18 23:59:00')
 
 ```
 
@@ -1181,7 +1181,9 @@ rmarkdown::paged_table(pgtblA)
 (Just plot and compile the tracking routes for all 5 from second week onwards - ie 25 plots).
 We also notice that there is a high count of travels on weekdays with LastName = NA. Checking on the _gpsname_ data, we find that there is gps tracking information for vehicle IDs 101, 104, 105, 106 and 107, which do not exist in the _car_assigned_ dataset, this is why LastName was NA. 
 
+These are the routes taken by all trucks (vehicle IDs 101, 104, 105, 106 and 107) for Week 2 (13 - 18 Jan).
 
+![](Images/TruckRoutesWkTwo.jpg)
 
 
 Tracking of the route for vehicle ID 105 and 107 are as below.
