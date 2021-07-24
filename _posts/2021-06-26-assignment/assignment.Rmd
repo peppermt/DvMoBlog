@@ -882,6 +882,12 @@ Next, we will use the function below to do a plot of travel time periods on each
 
 gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
 
+#Adding date and time columns to the gpsname dataset
+
+gpsname$date <- as_date(gpsname$TimeStampFormatted)
+
+gpsname$time <- hms::as_hms(gpsname$TimeStampFormatted)
+
 #Add gender to gpsname!!Then distinguish by color in the plot
 
 #Do a left join to add gender to gpsname
@@ -925,7 +931,7 @@ indivA <- ggplot(gps_indivA, aes(time, date, fill=Gender, label = lat, label2 = 
                 facet_wrap(.~name, nrow = 18, ncol = 2) +
                 geom_point() +
                 scale_y_date(breaks = breaks_pretty(14)) +
-                labs(title = "Travel periods of Individuals (Group 1)", x = "Time") +
+                labs(title = "Travel Periods of Individuals (Group 1)", x = "Time") +
                 theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(indivA)
@@ -935,7 +941,7 @@ ggplotly(indivA)
 
 
 
-```{r plotting the individual charts for the other groups}
+```{r plotting the individual charts for the other groups, echo=FALSE}
 
 #Plotting the chart B
 gps_indivPB <- gpsnamegender %>% filter(name %in% sevtotwelve$name)  %>% 
@@ -946,7 +952,8 @@ indivPB <- ggplot(gps_indivPB, aes(label=lat, label2=long)) +
                 facet_wrap(.~name, nrow = 18, ncol = 2) +
                 geom_point(aes(time, date, fill=Gender)) +
                 scale_y_date(breaks = breaks_pretty(14)) +
-                labs(title = "Travel periods of Individuals (Group 2)", x = "Time")
+                labs(title = "Travel Periods of Individuals (Group 2)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(indivPB)
 
@@ -959,7 +966,8 @@ indivPC <- ggplot(gps_indivPC, aes(label=lat, label2=long)) +
                 facet_wrap(.~name, nrow = 18, ncol = 2) +
                 geom_point(aes(time, date, fill=Gender)) +
                 scale_y_date(breaks = breaks_pretty(14)) +
-                labs(title = "Travel periods of Individuals (Group 3)", x = "Time")
+                labs(title = "Travel Periods of Individuals (Group 3)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(indivPC)
 
@@ -972,7 +980,8 @@ indivPD <- ggplot(gps_indivPD, aes(label=lat, label2=long)) +
                 facet_wrap(.~name, nrow = 18, ncol = 2) +
                 geom_point(aes(time, date, fill=Gender)) +
                 scale_y_date(breaks = breaks_pretty(14)) +
-                labs(title = "Travel periods of Individuals (Group 4)", x = "Time")
+                labs(title = "Travel Periods of Individuals (Group 4)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(indivPD)
 
@@ -985,7 +994,8 @@ indivPE <- ggplot(gps_indivPE, aes(label=lat, label2=long)) +
                 facet_wrap(.~name, nrow = 18, ncol = 2) +
                 geom_point(aes(time, date, fill=Gender)) +
                 scale_y_date(breaks = breaks_pretty(14)) +
-                labs(title = "Travel periods of Individuals (Group 5)", x = "Time")
+                labs(title = "Travel Periods of Individuals (Group 5)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(indivPE)
 
@@ -998,7 +1008,8 @@ indivPF <- ggplot(gps_indivPF, aes(label=lat, label2=long)) +
                 facet_wrap(.~name, nrow = 18, ncol = 2) +
                 geom_point(aes(time, date, fill=Gender)) +
                 scale_y_date(breaks = breaks_pretty(14)) +
-                labs(title = "Travel periods of Individuals (Group 6)", x = "Time")
+                labs(title = "Travel Periods of Individuals (Group 6)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(indivPF)
 
@@ -1017,6 +1028,18 @@ ggplotly(indivPF)
 ## Question 3
 
 **Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data?**
+
+### From Movement of CEO Sten Sanjorge Jr.
+
+Details of movement of Sten Sanjorge Jr. are covered in Q5 section below. 
+
+On payment, it seems like he did not pay his bills at Hallowed Grounds, Katerina's Cafe and Brew've Been Served when he visited as there were no common credit card numbers found in the record for the time he visited. It could also be that someone else foot the bill for him. However, it is observed that there is a transaction of $600 at Chostus Hotel on 18th Jan at noon. Given that he is a long-term resident, it is likely that this payment should be made by him. As the other transactions at Chostus are in the \$100s, we can deduce that that is the average room rate, so \$600 should be payment for more than a night. From this, we can infer that credit card ending with 5010 belongs to Sten Sanjorge Jr.
+
+```{r Chostus Hotel Transactions, echo=FALSE}
+
+rmarkdown::paged_table(creditcard %>% filter(location == "Chostus Hotel"))
+
+```
 
 ```{r Look at CC and Loyalty Card Matched}
 
@@ -1141,11 +1164,7 @@ Elsa Orilla <br> Car ID: 7 | **08 Jan** <br> 0720 hrs: Set off from home <br> 07
 ### Sanjorge Jr. only had 3 day of GPS records from 17th to 19th Jan, while everyone else travelled almost daily.
 ```{r time periods of travel of each personnel, echo=FALSE}
 
-#Adding date and time columns to the gpsname dataset
 
-gpsname$date <- as_date(gpsname$TimeStampFormatted)
-
-gpsname$time <- hms::as_hms(gpsname$TimeStampFormatted)
 
 #Filter by CarID, date == "2014-01-06"
 
@@ -1171,11 +1190,22 @@ ggplotly(figC)
 
 From the above plot, we see that most employees, except for Sanjorge Jr Sten, traveled daily. Sanjorge Jr Sten is the CEO of Gastech, and was likely chauffeured instead of driving on his own. 
 
-His travel routes on the 3 days, 17 - 19 Jan, are plotted as below. We can deduce that he stays at Chostus Hotel as he sets off from there in the morning, and retires back to there after work in the evenings.
+His travel routes on the 3 days, 17 - 19 Jan, are plotted as below. We can deduce that he stays at Chostus Hotel as he sets off from there in the morning, and retires back to there after work in the evenings. It is possible that he was overseas and just returned on 17 Jan, thus explaining his lack of travels. 
 
+Some unknown activity was observed on 19 Jan, where he was at someone's residence along Rist Way from 1319 hrs - 1550 hrs. 
+
+On payment, it seems like he did not pay his bills at Hallowed Grounds, Katerina's Cafe and Brew've Been Served when he visited as there were no common credit card numbers found in the record for the time he visited. It could also be that someone else foot the bill for him. However, it is observed that there is a transaction of $600 at Chostus Hotel on 18th Jan at noon. Given that he is a long-term resident, it is likely that this payment should be made by him. As the other transactions at Chostus are in the \$100s, we can deduce that that is the average room rate, so \$600 should be payment for more than a night. From this, we can infer that credit card ending with 5010 belongs to Sten Sanjorge Jr.
+
+```{r Chostus Hotel Transactions 2, echo=FALSE}
+
+rmarkdown::paged_table(creditcard %>% filter(location == "Chostus Hotel"))
+
+```
+![](images/CEOmovement.jpg)
 
 ### Unusually high movement activity for truck on 16 Jan 2014.
 
+(Just plot and compile the tracking routes for all 5 from second week onwards - ie 25 plots).
 We also notice that there is a high count of travels on weekdays with LastName = NA. Checking on the _gpsname_ data, we find that there is gps tracking information for vehicle IDs 101, 104, 105, 106 and 107, which do not exist in the _car_assigned_ dataset, this is why LastName was NA. 
 
 Tracking of the route for vehicle ID 105 and 107 are as below.
