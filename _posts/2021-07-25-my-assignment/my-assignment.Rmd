@@ -408,3 +408,256 @@ Example of printing the route for car ID #31, on a specific date time period - 1
 print_routes_ID_date(31,'2014-01-18 00:00:00','2014-01-18 23:59:00')
 
 ```
+
+# 5 Questions
+
+## 5.1 Question 1
+
+**Using just the credit and loyalty card data, identify the most popular locations, and when they are popular. What anomalies do you see? What corrections would you recommend to correct these anomalies?**
+
+```{r location popularity by cc txns, echo = FALSE}
+
+#We see the frequency of visits by the number of transactions in each location
+
+#Via creditcard dataset
+
+#To count occurrence by location
+loccountA <- creditcard %>% group_by(location) %>% mutate(count_occur = n())
+
+p <- ggplot(loccountA, aes(x = reorder(location, -count_occur), tooltip = location, data_id = location)) +
+    geom_bar_interactive(fill="darkblue") +
+    scale_x_discrete(guide = guide_axis(angle = 90)) +
+    ylim(0,220) +
+    geom_text(stat = 'count',aes(label=after_stat(count)), 
+            position = position_dodge(width = 0.9), 
+            size=6, vjust = -1) +
+  ggtitle("Frequency of Credit Card Transactions in each Location") +
+  theme(axis.text.x = element_text(size = 18),
+        axis.text.y = element_text(size = 18),
+        plot.title = element_text(size = 24, face = "bold", hjust = 0.5),
+        axis.title.y = element_text(size = 20))
+
+girafe(
+  ggobj = p,
+  width_svg = 15,
+  height_svg = 15*0.618
+)
+
+
+```
+From the bar plot above, by credit card transactions, **Katerina's Cafe, Hippokampos, Guy's Gyros and Brew've Been Served** are the most popular locations with the highest number of transactions over two weeks. We shall see the outcome when the loyalty card transactions are analyzed in the same manner. From the bar plot below, the same results are derived for the Top 4 most popular locations.
+
+```{r location popularity by loyaltycard txns, echo = FALSE}
+
+#We see the frequency of visits by the number of transactions in each location
+
+#Via loyaltycard dataset
+
+#To get the count occurrence by location
+
+loccountB <- loyaltycard %>% group_by(location) %>% mutate(count_occur = n())
+
+p1 <- ggplot(loccountB, aes(x = reorder(location, -count_occur), tooltip = location, data_id = location)) +
+  geom_bar_interactive(fill = "darkblue") +
+    scale_x_discrete(guide = guide_axis(angle = 90)) +
+    ylim(0,220) +
+    geom_text(stat = 'count',aes(label=after_stat(count)), 
+            position = position_dodge(width = 0.9), 
+            size=6, vjust = -1) +
+  ggtitle("Frequency of Loyalty Card Transactions in each Location") +
+  theme(axis.text.x = element_text(size = 18),
+        axis.text.y = element_text(size = 18),
+        plot.title = element_text(size = 24, face = "bold", hjust = 0.5),
+        axis.title.y = element_text(size = 20))
+
+girafe(
+  ggobj = p1,
+  width_svg = 15,
+  height_svg = 15*0.618
+)
+
+```
+
+However, the bar plots only tell us the total number of visits over the 2 weeks. We do not know which days have higher visits, or the profile of the visits over the day. To view this, we can use violin plots. The thickness of the plots will also reflect the frequency of the visit at that point in time. We will also be able to see which days did the visits take place. 
+
+We shall use the violin plots in the _plotly_ package as they are interactive, we can hover over the plots, especially where they are thicker to see what time periods are those. There are also boxplots to tell us what the distribution and spread is like. 
+
+```{r for time of the day, echo=FALSE, fig.height=5, layout="1-body-outset"}
+
+#from creditcardB
+
+#ggplot(creditcardB, aes(TimeStampFormatted,location)) +
+  #geom_violin(scale = "area")
+  #scale_x_discrete(guide = guide_axis(angle = 90))
+
+fig <- creditcard %>%
+    plot_ly(
+    x = ~location,
+    y = ~TimeStampFormatted,
+    type = 'violin',
+    split = ~location,
+    box = list(
+      visible = T
+    ),
+    meanline = list(
+      visible = T
+        )
+  )
+
+fig <- fig %>% 
+  layout(title = 'Violin Plots of Spread of Visits Across the 2 Weeks for Each Location',
+    xaxis = list(
+      title = "Location", tickangle = 270
+    ),
+    yaxis = list(
+      title = "Timestamp",
+      zeroline = F,
+      range = c(as.numeric(as.POSIXct("1/4/2014", format="%m/%d/%Y"))*1000,
+                as.numeric(as.POSIXct("1/25/2014", format="%m/%d/%Y"))*1000
+      )
+    ),
+    showlegend = FALSE
+  )
+
+fig <- fig %>% 
+  add_segments(x = 0, xend = 10000, y = "1/13/2014", yend = "1/13/2014", line = list(dash = "dash"))
+
+fig
+
+```
+From the violin plot above, we can see that the top 3 frequented locations identified above (Katerina's Cafe, Hippokampos, Guy's Gyros) have a pretty consistent visit rate daily throughout the 2 weeks from 6th to 20th Jan. The thickness of the violin plot is consistent. This means that they are popular throughout the 2 weeks. The 4th frequented location _Brew've been Served_ has two clear bulges, indicating there is a lull period between the busy periods. 
+
+However, it is observed that other locations can have higher visiting rates at specific periods than the identified Top 3. For example, the visiting rates for Desaflo Golf Course was much higher specifically on 19th Jan, same for Kronos Pipe and Irrigation on 7th Jan. Hallowed Grounds also had peak visiting rates on 8th and 15th Jan.
+
+The violin plot showed a good overview that the visiting days vary across the locations. Now we shall dissect this further into day and time.
+
+We shall use the geom_tile plot from ggplot to visualize this, wrapped with _ggplotly()_ to provide us with interactivity as we would be able to hover over each square and see the corresponding location and date/time. One tile plot would be for "Visits at Each Location for Each Day" and the other for "Visits at Each Location for Time of Day".
+
+We would first prepare the dataset for this plot by extracting the date and time data into different columns, then do a count for them respectively. As the timestamp has been formatted into POSIXct format earlier, R already stores it in dttm (date-time) format. We can just use the _as_date_ and _as_hms_ functions from the _lubridate_ package to extract them out. We should retain them in date and time format for easier manipulation later.
+
+```{r adding date and time columns to the creditcardB dataset, echo = TRUE, results = 'hide'}
+
+creditcard$date <- as_date(creditcard$TimeStampFormatted)
+
+creditcard$time <- hms::as_hms(creditcard$TimeStampFormatted)
+
+```
+
+Next, we would count the number of visits to each location for each Day and time period. While the Date variable is more discrete and easier to count, more work needs to be done to count for the Time variable as it would not make sense to count how many visits are there when the Time value is detailed to the second. Hence, we will round the timestamp down to the nearest half hour for this count, via the round_date() function.
+
+
+```{r data prep to count visits by day and time}
+
+#Count by Day
+cardbyday <- creditcard %>% 
+  group_by(date) %>% 
+  add_count(date, location) %>% 
+  distinct(date, location, n)
+
+loyalcardbyday <- loyaltycard %>% 
+  group_by(TimeStampFormatted) %>% 
+  add_count(TimeStampFormatted, location) %>% 
+  distinct(TimeStampFormatted, location, n)
+
+#Count by Time
+#Round the time to the nearest half hour
+
+cardbytime <- creditcard %>% 
+  group_by(thirtymins = hms::as_hms(round_date(TimeStampFormatted, "30 mins"))) %>% 
+  add_count(thirtymins, location) %>% 
+  distinct(thirtymins, location, n)
+
+```
+
+With the data prepared, we shall do the tile plot via _geom_tile()_ from _ggplot_, then wrapped by ggplotly() for interactivity. 
+
+This would be for the "Visits at each Location for Each Day (Credit Card)".
+
+```{r trying out geom_tile, echo=FALSE, fig.height=8, fig.width=16, layout="1-body-outset"}
+
+#palette = "YlGnBu", "RdPu"
+
+x2 <- length(unique(cardbyday$n))
+cc_colours2 <- colorRampPalette(c('darkgreen', 'yellow', 'orange', 'red'))(x2)
+
+#Converting date back to POSIXct type
+cardbyday$date <- as.POSIXct(cardbyday$date, format = "%Y/%M/%D")
+
+
+figA <- cardbyday %>% 
+ ggplot(aes(date, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+  #scale_fill_distiller(palette = "YlGnBu", direction = -1) +
+  scale_fill_manual(values = cc_colours2,
+                    name = "Frequency") +
+  labs(title = "Visits at each Location for Each Day (Credit Card)", x = "Date") +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figA)
+
+
+```
+
+This is the same plot plotted via loyalty card data.
+
+```{r same plot by day via loyalty card, echo=FALSE, fig.height=8, fig.width=16}
+
+x3 <- length(unique(loyalcardbyday$n))
+cc_colours3 <- colorRampPalette(c('darkgreen', 'yellow', 'orange', 'red'))(x3)
+
+#Converting date back to POSIXct type
+loyalcardbyday$TimeStampFormatted <- as.POSIXct(loyalcardbyday$TimeStampFormatted, format = "%Y/%M/%D")
+
+
+figE <- loyalcardbyday %>% 
+ ggplot(aes(TimeStampFormatted, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+  #scale_fill_distiller(palette = "YlGnBu", direction = -1) +
+  scale_fill_manual(values = cc_colours3,
+                    name = "Frequency") +
+  labs(title = "Visits at each Location for Each Day (by Loyalty Card)", x = "Date") +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figE)
+
+```
+
+Next, this would be for "Visits at Each Location for Time of Day", which can only come from the credit card transactions dataset as transaction time information is not present in loyalty card dataset.
+
+```{r Visits at each Location by Time, echo=FALSE, fig.height=8, fig.width=16}
+
+#YlGnBu
+
+x4 <- length(unique(cardbytime$n))
+cc_colours4 <- colorRampPalette(c('darkgreen', 'yellow', 'orange', 'red'))(x4)
+
+#Converting date back to POSIXct type
+cardbytime$thirtymins <- as.POSIXct(cardbytime$thirtymins, format = "%H:%M:%S")
+
+figB <- cardbytime %>% 
+ ggplot(aes(thirtymins, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+  #scale_fill_distiller(palette = "YlGnBu", direction = -1) +
+  scale_fill_manual(values = cc_colours4,
+                    name = "Frequency") +
+    labs(title = "Visits at each Location for Time of Day", x = "Time") +
+    scale_x_datetime(breaks = date_breaks("1 hour"),
+                   labels = time_format("%H:%M")) +
+  theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(figB)
+
+```
+
+From the plots above, we could see that Katerina's Cafe, Hippokampos, Guy's Gyros and Brew've Been Served have the lightest bars across the 2 weeks. This shows that they are consistently popular. We also note that Guy's Gyros is more popular during weekdays than weekends, and Brew've Been Served only has visits on weekdays, indicating that it is probably not open on weekends.
+
+No. | Location | Periods Popular | Remarks
+----| ---------| ----------------| -------
+1 | Katerina's Cafe | All Days ; Lunchtime (1300 hrs - 1430 hrs), Dinnertime (1900 hrs - 2130 hrs) | NIL
+2 | Hippokampos | All Days ; Lunchtime (1230 hrs - 1430 hrs), Dinnertime (1930 hrs - 2230 hrs) | NIL
+3 | Guy's Gyros | More Popular During Weekdays ; Lunchtime (1300 hrs - 1430 hrs), Dinnertime (1900 hrs - 2130 hrs) | Unusually crowded on 19 Jan (Sun) compared to the previous Sunday and weekend crowd
+4 | Brew've Been Served | Weekday Mornings ; Morning Coffee (0730 hrs - 0830 hrs) | Huge Crowd at 0800 hrs ; Seems closed on weekends
