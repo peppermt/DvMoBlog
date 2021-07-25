@@ -807,3 +807,301 @@ rmarkdown::paged_table(txn_outliertab)
 
 ```
 We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. It is also strange that the purchaser behind the huge transaction of $4918.39 at Abila Airport did not use his/her loyalty card to get further discounts on such a big ticket purchase.
+
+## 5.2 Question 2
+
+**Add the vehicle data to your analysis of the credit and loyalty card data. How does your assessment of the anomalies in question 1 change based on this new data? What discrepancies between vehicle, credit, and loyalty card data do you find?**
+
+### 5.2.1 Anomaly: Hippokampos nowhere to be found on Abila Map
+
+We need to be able to find some points which distinguishes Hippokampos from the other locations. I noted from the _Visits at each Location for Time of Day_ plot that only Hippokampos had a transaction happening at around 2230 hrs. 
+
+![](Images/hippotxntime.jpg)
+Hence, we shall filter the gps data by this time period, to see where the possible stops are at.
+
+```{r scatter plot of hippokampos, include=FALSE}
+
+# Add time column to gpstracking to enable filtering by time periods and date
+
+gpstracking$time <- hms::as_hms(gpstracking$TimeStampFormatted)
+gpstracking$hour <- hour(gpstracking$TimeStampFormatted)
+gpstracking$date <- as_date(gpstracking$TimeStampFormatted)
+
+```
+
+```{r echo=FALSE}
+# Filter gpstracking by time period
+
+hippostops <- gpstracking %>% 
+  filter(hour >=22, hour <= 23) %>%
+  group_by(id) %>% 
+  mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
+  mutate(parked = ifelse(stop >60*3, TRUE,FALSE)) %>%
+  ungroup() %>%
+  filter(parked == TRUE) %>% mutate(count = n()) %>% 
+  dplyr::select(c(id, lat, long, TimeStampFormatted, hour))
+
+#Visualizing on map
+
+  #Converting stop points to sf
+  
+  hippostops_sf <- st_as_sf(hippostops,
+                         coords = c("long", "lat"),
+                         crs = 4326) %>% 
+    mutate(coordinates = geometry)
+  
+  #Viewing it on the map
+  
+  hippoviz <- tm_all_stops +
+    tm_shape(hippostops_sf) +
+    tm_dots(size = 0.1,
+            alpha = 0.3,
+            col = "green")
+  
+  hippoviz
+
+
+
+```
+
+The green dots show all stops made during the time period from 2200 hrs to 2300 hrs. All these are possible locations of Hippokampos. I note that some are linked to known and labeled locations such as Kronos Mart, some are near places of residences. The only two points which do not belong in these categories are as marked below - along Arkadiou Street, and at GasTech. The stop along Arkadiou Street is also deduced to not be likely, because there were no other stop points surrounding it. If it is a parking place for Hippokampos, there should be way more aggregate points. Therefore, it is drilled down that Hippokampos is likely to be located in GasTech, probably as a canteen of sorts. We can also observe this from the transactions at time of day plot, the peak transaction time is around 1330 hrs - lunchtime, and transactional periods are distinctly from 1230 - 1430 hrs, 1930 - 2230 hrs (lunch and dinnertime). No transactions outside of this period. **Hippokampos is located within GasTech**.
+
+![](Images/Hippoviz.jpg)
+
+
+### 5.2.2 Anomaly: Unusually Infrequent Visits at Refuel Stations and Supermarkets 
+
+Credit card and loyalty card transactions show that there are only a handful of transactions each day, or sometimes no business at all, making it seem like the stores and business places are empty. 
+
+After visualizing the routes of individuals, we notice that people make stops at the place very regularly but the transaction numbers do not reflect that.
+
+For example, Elsa Orilla would pop by Coffee Shack on her way to GasTech every week day, and stay there for at least half hour each time. She visited on 10 Jan as well, but there were no transactions made via credit card there on that day.
+
+![](images/ElsaCoffeeShack.jpg)
+
+This shows that looking at transaction data via credit card/loyalty card alone is insufficient to show whether a location is popular or not. There could be transactions made by cash as well, though we are not sure why would the people not make use of discounts from loyalty cards. This would apply to the unusually low number of transactions at refuel stations and supermarkets as well, resolving the anomaly in Q1 Sections 5.1.1.2 and 5.1.1.3.
+
+### 5.2.3 Plot Travel Time Perioids on Each Day for Each Personnel
+
+Next, we will use the function below to do a plot of travel time periods on each day, for each personnel. This is to aid further investigation. A sample of the plots for 6 personnel is as shown.
+
+```{r each personnel travel time period on each day, echo=FALSE, fig.height=10, fig.width=12}
+
+gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
+
+#Adding date and time columns to the gpsname dataset
+
+gpsname$date <- as_date(gpsname$TimeStampFormatted)
+
+gpsname$time <- hms::as_hms(gpsname$TimeStampFormatted)
+
+#Add gender to gpsname!!Then distinguish by color in the plot
+
+#Do a left join to add gender to gpsname
+
+gpsnamegender <- left_join(gpsname, emprecords, by = c("LastName" = "LastName", "FirstName" = "FirstName"))
+
+gpsnamegender <- gpsnamegender %>% dplyr::select(c("TimeStampFormatted","name","id","lat","long","time","hour","date","Gender","CurrentEmploymentTitle.x","CurrentEmploymentType.x","LastName","FirstName"))
+
+#Dot Plot of Day with Time for Each Individual
+
+namedistinct <- gpsname %>% 
+    distinct(name)
+
+#Slicing the namelist into individuals
+onetosix <- namedistinct %>% slice(1:6)
+sevtotwelve <- namedistinct %>% slice(7:12)
+thirteentoeighteen <- namedistinct %>% slice(13:18)
+nineteentotwofour <- namedistinct %>% slice(19:24)
+twofivetothirty <- namedistinct %>% slice(25:30)
+thirtyonetothirtysix <- namedistinct %>% slice(31:36)
+
+#Plotting the chart
+gps_indivA <- gpsnamegender %>% filter(name %in% onetosix$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivA <- ggplot(gps_indivA, aes(time, date, fill=Gender, label = lat, label2 = long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point() +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel Periods of Individuals (Group 1)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(indivA)
+
+```
+
+
+
+
+```{r plotting the individual charts for the other groups, eval=FALSE, fig.height=10, fig.width=12, include=FALSE}
+
+#Plotting the chart B
+gps_indivPB <- gpsnamegender %>% filter(name %in% sevtotwelve$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPB <- ggplot(gps_indivPB, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel Periods of Individuals (Group 2)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(indivPB)
+
+#Plotting the chart C
+gps_indivPC <- gpsnamegender %>% filter(name %in% thirteentoeighteen$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPC <- ggplot(gps_indivPC, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel Periods of Individuals (Group 3)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(indivPC)
+
+#Plotting the chart D
+gps_indivPD <- gpsnamegender %>% filter(name %in% nineteentotwofour$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPD <- ggplot(gps_indivPD, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel Periods of Individuals (Group 4)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(indivPD)
+
+#Plotting the chart E
+gps_indivPE <- gpsnamegender %>% filter(name %in% twofivetothirty$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPE <- ggplot(gps_indivPE, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel Periods of Individuals (Group 5)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(indivPE)
+
+#Plotting the chart F
+gps_indivPF <- gpsnamegender %>% filter(name %in% thirtyonetothirtysix$name)  %>% 
+                    group_by(name) %>% mutate(namecountperday = n()) %>% 
+                    distinct(name,date,time,namecountperday, Gender, lat, long)
+
+indivPF <- ggplot(gps_indivPF, aes(label=lat, label2=long)) +
+                facet_wrap(.~name, nrow = 18, ncol = 2) +
+                geom_point(aes(time, date, fill=Gender)) +
+                scale_y_date(breaks = breaks_pretty(14)) +
+                labs(title = "Travel Periods of Individuals (Group 6)", x = "Time") +
+                theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(indivPF)
+
+
+
+```
+
+From observation of the above _Travel Periods of Individuals_ plots, matched with their daily routes filtered by specific periods, I managed to nail down the coordinates of the following locations:
+
+No. | Location | Lat | Long | Remarks
+----| -------- | --- | ---- | -------
+1 | Residence of Axel Calzas (1 of 2 Possible Locations) | 36.0841 | 24.8591 | Position is at LHS of Carnero White House ; Stayed here over the weekend of 11-12 Jan
+2 | Residence of Axel Calzas (2 of 2 Possible Locations) | 36.0855 | 24.8605 | Position is at RHS of Carneo White House ; Stopped at this place on Friday night. Either one is his place of residence. If this is his official residence, then No. 1 might be the girlfriend's place.
+3 | Guy's Gyros | 36.0818 | 24.8509 | This is confirmed by comparing Axel Calzas' movements
+4 | Residence of Brand Tempestad | 36.06247 | 24.89882 | Brand leaves from this location on weekday mornings to set off for GasTech
+5 | GasTech | 36.04803 | 24.87957 | This is confirmed many times by comparison of multiple routes of persons
+6 | Chostus Hotel | 36.07074 | 24.8952 | Confirmed on map. Brand Tempestad left Chostus Hotel at 1321 hrs on 8th Jan
+7 | Residence of Elsa Orilla | 36.08449 | 24.86417 | Elsa leaves from this location on weekday mornings to set off for GasTech
+8 | Coffee Shack | 36.07335 | 26.86417 | Elsa pops by Coffee Shack every morning on way to GasTech, would stay there for half hour thereabouts
+9 | Hallowed Grounds | 36.06367 | 24.88593 | Sten Sanjorge Jr. visited on 17 Jan
+10 | Roberts and Sons | 36.06343 | 24.85097 | Sten Sanjorge Jr. visited on 17 Jan
+11 | Brew've Been Served | 36.0558 | 24.90249 | Sten Sanjorge Jr. visited on 19 Jan
+
+More coordinates can be deduced with further matches. Thereafter, further visualization and analysis can be done with these matches to aid in the investigation.
+
+## 5.3 Question 3
+
+**Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data?**
+
+### 5.3.1 From Movement of CEO Sten Sanjorge Jr.
+
+Details of movement of Sten Sanjorge Jr. are covered in Q5 section below. 
+
+On payment, it seems like he did not pay his bills at Hallowed Grounds, Katerina's Cafe and Brew've Been Served when he visited as there were no common credit card numbers found in the record for the time he visited. It could also be that someone else foot the bill for him. However, it is observed that there is a transaction of $600 at Chostus Hotel on 18th Jan at noon. Given that he is a long-term resident, it is likely that this payment should be made by him. As the other transactions at Chostus are in the \$100s, we can deduce that that is the average room rate, so \$600 should be payment for more than a night. From this, we can infer that credit card ending with 5010 belongs to Sten Sanjorge Jr.
+
+```{r Chostus Hotel Transactions, echo=FALSE}
+
+pgtable <- creditcard %>% filter(location == "Chostus Hotel")
+
+rmarkdown::paged_table(pgtable)
+
+```
+### 5.3.2 To Match Credit Card and Loyalty Card
+
+```{r Look at CC and Loyalty Card Matched, echo=FALSE, fig.height=10, fig.width=12}
+
+#To see if credit card records and loyalty card pairs are unique
+
+creditloyaltyuniq <- 
+  credit_loyalty %>% 
+  group_by(last4ccnum, loyaltynum) %>% 
+  summarize(Count = n())
+
+howmany <- loyaltycard %>% distinct(loyaltynum)
+
+figD <- creditloyaltyuniq %>% 
+  ggplot(aes(x = last4ccnum, y = loyaltynum)) +
+  geom_tile(aes(fill = Count)) +
+  scale_fill_distiller(palette = "YlGnBu", direction = -1) +
+  labs(title = "No. of Purchases on Each Credit Card and Loyalty Card Pair", x = "Credit Card No.", y = "Loyalty Card No.")
+
+ggplotly(figD)
+
+```
+
+From the above plot of credit card and loyalty card numbers, we note that there are transactions where:
+
+_( ) indicates number of transactions_
+
+1) One loyalty card have been associated with multiple credit cards:
+
+* L9406 associated with 4948 (22) and 5921 (1).
+* L8566 associated with 4795 (25) and 8332 (1).
+* L6119 associated with 7889 (20) and 5368 (1).
+* L3295 associated with 4948 (1) and 5921 (12).
+* L3288 associated with 1286 (15) and 9241 (13).
+* L2247 associated with 5368 (24) and 7889 (1).
+* L2070 associated with 4795 (1) and 8332 (27).
+
+
+2) One credit card associated with multiple loyalty cards:
+
+* 1286 associated with L3288 (15) and L3572 (13)
+* 4795 associated with L2070 (1) and L8566 (25)
+* 4948 associated with L3295 (1) and L9406 (22)
+* 5368 associated with L2247 (24) and L6119 (1)
+* 5921 associated with L3295 (12) and L9406 (1) [ _Opposite pattern with 4948_ ]
+* 7889 associated with L2247 (1) and L6119 (20) [ _Opposite pattern with 5368_ ]
+* 8332 associated with L2070 (27) and L8566 (1) [ _Opposite pattern with 4795_ ]
+
+The following conclusions can be drawn:
+
+* L3288 is associated with both 1286 and 9241 at almost equal transactions. This can show that L3288 belongs to either owners of 1286 or 9241, and that they are often together when these transactions are made. They might be a couple. 13 to 15 transactions within a 2-week period is almost daily transaction.
+
+* Owner of 4948 was with owner of 5921 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
+
+* Owner of 5368 was with owner of 7889 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
+
+* Owner of 4795 was with owner of 8332 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
+
+
