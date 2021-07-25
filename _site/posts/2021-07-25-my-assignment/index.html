@@ -112,12 +112,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["My Assignment"]},{"type":"character","attributes":{},"value":["Mini Challenge 2"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Rhoda Tong"]},{"type":"character","attributes":{},"value":["www.smu.edu.sg"]}]}]},{"type":"character","attributes":{},"value":["07-25-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","preview"]}},"value":[{"type":"character","attributes":{},"value":["My Assignment"]},{"type":"character","attributes":{},"value":["Mini Challenge 2"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Rhoda Tong"]},{"type":"character","attributes":{},"value":["www.smu.edu.sg"]}]}]},{"type":"character","attributes":{},"value":["07-25-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["Images/TruckRoutesWkTwo.jpg"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"NULL"}
+  {"type":"character","attributes":{},"value":["data/car-assignments.csv","data/cc_data.csv","data/EmployeeRecords.csv","data/gps.csv","data/loyalty_data.csv","data/MC2/~$2_data_readme.docx","data/MC2/AbilaGPS.twb","data/MC2/AnswerSheet/VAST Challenge 2021 MC2 Answer Sheet.htm","data/MC2/AnswerSheet/VAST Challenge 2021 MC2 Answer Sheet_files/colorschememapping.xml","data/MC2/AnswerSheet/VAST Challenge 2021 MC2 Answer Sheet_files/filelist.xml","data/MC2/AnswerSheet/VAST Challenge 2021 MC2 Answer Sheet_files/themedata.thmx","data/MC2/Geospatial/Abila.dbf","data/MC2/Geospatial/Abila.kml","data/MC2/Geospatial/Abila.prj","data/MC2/Geospatial/Abila.sbn","data/MC2/Geospatial/Abila.sbx","data/MC2/Geospatial/Abila.shp","data/MC2/Geospatial/Abila.shx","data/MC2/Geospatial/Kronos Island.kmz","data/MC2/Geospatial/Kronos_Island.dbf","data/MC2/Geospatial/Kronos_Island.prj","data/MC2/Geospatial/Kronos_Island.sbn","data/MC2/Geospatial/Kronos_Island.sbx","data/MC2/Geospatial/Kronos_Island.shp","data/MC2/Geospatial/Kronos_Island.shx","data/MC2/MC2-tourist.jpg","data/MC2/MC2-tourist_modified.tif","data/MC2/MC2-tourist_modified.tif.points","data/MC2/MC2_data_readme.docx","images/105Route.jpg","images/107Route.jpg","images/BrandTempestadCouple.jpg","images/CEOmovement.jpg","images/CoordinatedViewViz.png","images/DegreeAccuracy.jpg","images/ElsaCoffeeShack.jpg","images/ElsaCouple.jpg","images/hippotxntime.jpg","images/Hippoviz.jpg","images/JohnSnow.png","images/SpaceTimeCube.png","images/Top3Locations2.jpg","images/TruckRoutesWkTwo.jpg","my-assignment_files/anchor-4.2.2/anchor.min.js","my-assignment_files/bowser-1.9.3/bowser.min.js","my-assignment_files/distill-2.2.21/template.v2.js","my-assignment_files/header-attrs-2.9/header-attrs.js","my-assignment_files/jquery-1.11.3/jquery.min.js","my-assignment_files/popper-2.6.0/popper.min.js","my-assignment_files/tippy-6.2.7/tippy-bundle.umd.min.js","my-assignment_files/tippy-6.2.7/tippy-light-border.css","my-assignment_files/tippy-6.2.7/tippy.css","my-assignment_files/tippy-6.2.7/tippy.umd.min.js","my-assignment_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2098,8 +2098,18 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <div class="d-article">
-<p>Distill is a publication format for scientific and technical writing, native to the web.</p>
-<p>Learn more about using Distill at <a href="https://rstudio.github.io/distill" class="uri">https://rstudio.github.io/distill</a>.</p>
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#background">Background</a></li>
+</ul>
+</nav>
+</div>
+<h1 id="background">Background</h1>
+<p>Since 20 years ago, GASTech has been operating a natural gas production site in the island country of Kronos. The business has been profitable, and the company has also developed close relationships with the Kronos Government. In January 2014, following GASTech’s initial public offering listing, several GASTech employees has gone missing. An organization known as Protectors of Kronos (POK) is suspected in these cases of missing persons, as GASTech’s business moves had not been too environmentally friendly. A thorough investigation is to be carried out by the law enforcers of Kronos and Tethys to break this case.</p>
+<p>Information and data pertaining to the whereabouts of company cars, purchases made by employees in local stores have been provided to the law enforcers. We shall use visual analytics to sense-make this data to facilitate the investigation.</p>
+<p>This would be done as a sub-component which would eventually feed into an interactive Shiny app for the use of the law enforcers, together with other sub-components covered by my project group mates. The objective of this assignment is to explore what the insights are and how they can be brought out from the depths of this dataset to aid in the investigation.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
