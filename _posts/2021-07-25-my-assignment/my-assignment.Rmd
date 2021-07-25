@@ -668,3 +668,37 @@ No. | Location | Periods Popular | Remarks
 
 We note that the above popular locations are all identified on the map of Abila, and are located near Gastech, all except for Hippokampos, which is nowhere to be found on the map. This is an anomaly. To be able to solve the mystery of where Hippokampos is, we would have to delve into other data like vehicle tracking. We would need to match transaction timings with gps tracking data, the coordinates matching at that time would tell us the position of Hippokampos.
 
+## 5.1.1.2 Awfully infrequent visits at refuel stations U Pump and Frank's Fuel
+
+```{r Refuel stations transaction by day credit, echo=FALSE}
+
+figI <- cardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>% 
+ ggplot(aes(date, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+      labs(title = "Visits at each Fuel Station for Each Day (Credit Card)", x = "Date", fill = "Visits") +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figI)
+
+
+```
+
+
+```{r Refuel transactions by Day Loyalty, echo=FALSE}
+
+figK <- loyalcardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>%
+ ggplot(aes(TimeStampFormatted, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+    labs(title = "Visits at each Fuel Station for Each Day (by Loyalty Card)", x = "Date", fill = "Visits") +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figK)
+
+```
+
+U Pump is a refuel station, yet it is only visited twice from the credit card transactions, on two separate days - 6th and 13th Jan. The frequency of refuel is unusually infrequent. It could be due to employees not needing to pay for the fuel using their own credit cards. But strange thing is the loyalty card is also not used either. The same goes for Frank's Fuel, there were only transactions on 2 days - 8th and 18th Jan. This is just an abnormal situation, which we hope to seek further insights later. Or it could be that there were visits, but purchases were neither paid by credit card nor loyalty card was applied. This would be suspicious, as though the purchasers wanted to keep their tracks secret. We can similary look at gps tracking data to see if there were stops at the fuel stations. 
+
