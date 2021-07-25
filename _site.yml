@@ -1,7 +1,7 @@
 name: "DvMoBlog"
-title: "My DataViz Makeovers"
+title: "Visual Analytics"
 description: |
-  My DataViz Makeovers
+  My Visual Analytics Journey
 output_dir: "_site"
 navbar:
   right:
