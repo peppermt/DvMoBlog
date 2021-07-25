@@ -937,7 +937,7 @@ ggplotly(indivA)
 
 
 
-```{r plotting the individual charts for the other groups, echo=FALSE, fig.height=10, fig.width=12}
+```{r plotting the individual charts for the other groups, eval=FALSE, fig.height=10, fig.width=12, include=FALSE}
 
 #Plotting the chart B
 gps_indivPB <- gpsnamegender %>% filter(name %in% sevtotwelve$name)  %>% 
@@ -1013,6 +1013,7 @@ ggplotly(indivPF)
 
 ```
 
+FrFFF
 
 ## Question 3
 
