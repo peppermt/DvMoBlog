@@ -1013,7 +1013,7 @@ ggplotly(indivPF)
 
 ```
 
-FrFFF
+From observation of the 
 
 ## Question 3
 
