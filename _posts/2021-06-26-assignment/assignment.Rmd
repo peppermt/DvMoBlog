@@ -91,7 +91,7 @@ There can be perspective distortion and occlusion, but the spatio-temporal distr
 
 ![](images/SpaceTimeCube.png)
 
-## R Packages to Be Applied
+## 2.4 R Packages to Be Applied
 
 1. DT - To make data tables interactive
 2. plotly - For interactive charts
@@ -101,7 +101,7 @@ There can be perspective distortion and occlusion, but the spatio-temporal distr
 6. naniar - For data exploration ; Check for missing values
 
 
-# Data Available
+# 3 Data Available
 
 The following information is available.
 
@@ -112,7 +112,7 @@ The following information is available.
 5. Employee Information: LastName, FirstName, Gender, CurrentEmployment Title [_EmployeeRecords.csv_]
 
 
-# Data Wrangling and Preparation
+# 4 Data Wrangling and Preparation
 
 The type of data required would vary with the questions. This section would only cover the main data set up, EDA, quality of data, any general manipulations such as correcting the format of the data.
 
@@ -410,9 +410,9 @@ print_routes_ID_date(31,'2014-01-18 00:00:00','2014-01-18 23:59:00')
 
 ```
 
-# Questions
+# 5 Questions
 
-## Question 1
+## 5.1 Question 1
 
 **Using just the credit and loyalty card data, identify the most popular locations, and when they are popular. What anomalies do you see? What corrections would you recommend to correct these anomalies?**
 
@@ -663,13 +663,13 @@ No. | Location | Periods Popular | Remarks
 3 | Guy's Gyros | More Popular During Weekdays ; Lunchtime (1300 hrs - 1430 hrs), Dinnertime (1900 hrs - 2130 hrs) | Unusually crowded on 19 Jan (Sun) compared to the previous Sunday and weekend crowd
 4 | Brew've Been Served | Weekday Mornings ; Morning Coffee (0730 hrs - 0830 hrs) | Huge Crowd at 0800 hrs ; Seems closed on weekends
 
-# Anomalies Detected
+# 5.1.1 Anomalies Detected
 
-## Hippokampos is nowhere to be found on the map of Abila 
+## 5.1.1.1 Hippokampos is nowhere to be found on the map of Abila 
 
 We note that the above popular locations are all identified on the map of Abila, and are located near Gastech, all except for Hippokampos, which is nowhere to be found on the map. This is an anomaly. To be able to solve the mystery of where Hippokampos is, we would have to delve into other data like vehicle tracking. We would need to match transaction timings with gps tracking data, the coordinates matching at that time would tell us the position of Hippokampos.
 
-## Awfully infrequent visits at refuel stations U Pump and Frank's Fuel
+## 5.1.1.2 Awfully infrequent visits at refuel stations U Pump and Frank's Fuel
 
 ```{r Refuel stations transaction by day credit, echo=FALSE}
 
@@ -703,7 +703,7 @@ ggplotly(figK)
 
 U Pump is a refuel station, yet it is only visited twice from the credit card transactions, on two separate days - 6th and 13th Jan. The frequency of refuel is unusually infrequent. It could be due to employees not needing to pay for the fuel using their own credit cards. But strange thing is the loyalty card is also not used either. The same goes for Frank's Fuel, there were only transactions on 2 days - 8th and 18th Jan. This is just an abnormal situation, which we hope to seek further insights later. Or it could be that there were visits, but purchases were neither paid by credit card nor loyalty card was applied. This would be suspicious, as though the purchasers wanted to keep their tracks secret. We can similary look at gps tracking data to see if there were stops at the fuel stations. 
 
-## Unusually infrequent visits for supermarkets
+## 5.1.1.3 Unusually infrequent visits for supermarkets
 
 
 ```{r Supermarkets transaction by day credit, echo=FALSE}
@@ -753,7 +753,7 @@ Date | Credit Card Data | Loyalty Card Data
 
 This means that there are transactions paid by cash, not paid by credit card. There were also transactions made without using loyalty card. But business still seems abnormally bad. We would use gpstracking data to see if there were actually any visits to the supermarkets, just that transactions were paid in cash. 
 
-## High Transaction Amounts
+## 5.1.1.4 High Transaction Amounts
 
 ```{r boxplot of transaction amounts credit and loyalty, echo=FALSE}
 
@@ -809,11 +809,11 @@ rmarkdown::paged_table(txn_outliertab)
 ```
 We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. It is also strange that the purchaser behind the huge transaction of $4918.39 at Abila Airport did not use his/her loyalty card to get further discounts on such a big ticket purchase.
 
-## Question 2
+## 5.2 Question 2
 
 **Add the vehicle data to your analysis of the credit and loyalty card data. How does your assessment of the anomalies in question 1 change based on this new data? What discrepancies between vehicle, credit, and loyalty card data do you find?**
 
-### Anomaly: Hippokampos nowhere to be found on Abila Map
+### 5.2.1 Anomaly: Hippokampos nowhere to be found on Abila Map
 
 We need to be able to find some points which distinguishes Hippokampos from the other locations. I noted from the _Visits at each Location for Time of Day_ plot that only Hippokampos had a transaction happening at around 2230 hrs. 
 
@@ -870,7 +870,7 @@ The green dots show all stops made during the time period from 2200 hrs to 2300 
 ![](Images/Hippoviz.jpg)
 
 
-### Anomaly: Unusually Infrequent Visits at Refuel Stations and Supermarkets 
+### 5.2.2.Anomaly: Unusually Infrequent Visits at Refuel Stations and Supermarkets 
 
 Credit card and loyalty card transactions show that there are only a handful of transactions each day, or sometimes no business at all, making it seem like the stores and business places are empty. 
 
@@ -880,9 +880,9 @@ For example, Elsa Orilla would pop by Coffee Shack on her way to GasTech every w
 
 ![](images/ElsaCoffeeShack.jpg)
 
-This shows that looking at transaction data via credit card/loyalty card alone is insufficient to show whether a location is popular or not. There could be transactions made by cash as well, though we are not sure why would the people not make use of discounts from loyalty cards. This would apply to the unusually low number of transactions at refuel stations and supermarkets as well, resolving the anomaly in Q1.
+This shows that looking at transaction data via credit card/loyalty card alone is insufficient to show whether a location is popular or not. There could be transactions made by cash as well, though we are not sure why would the people not make use of discounts from loyalty cards. This would apply to the unusually low number of transactions at refuel stations and supermarkets as well, resolving the anomaly in Q1 Sections 5.1.1.2 and 5.1.1.3..
 
-### Plot Travel Time Perioids on Each Day for Each Personnel
+### 5.2.3 Plot Travel Time Perioids on Each Day for Each Personnel
 
 Next, we will use the function below to do a plot of travel time periods on each day, for each personnel. This is to aid further investigation. A sample of the plots for 6 personnel is as shown.
 
@@ -1030,11 +1030,11 @@ No. | Location | Lat | Long | Remarks
 
 More coordinates can be deduced with further matches. Thereafter, further visualization and analysis can be done with these matches to aid in the investigation.
 
-## Question 3
+## 5.3 Question 3
 
 **Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data?**
 
-### From Movement of CEO Sten Sanjorge Jr.
+### 5.3.1 From Movement of CEO Sten Sanjorge Jr.
 
 Details of movement of Sten Sanjorge Jr. are covered in Q5 section below. 
 
@@ -1106,17 +1106,17 @@ The following conclusions can be drawn:
 * Owner of 4795 was with owner of 8332 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
 
 
-## Question 4
+## 5.4 Question 4
 
 **Given the data sources provided, identify potential informal or unofficial relationships among GASTech personnel. Provide evidence for these relationships.**
 
-### How Others Have Attempted this Question (Lit Review)
+### 5.4.1 How Others Have Attempted this Question (Lit Review)
 
 I have found that some fellow analysts used matching of coordinate points with Chostus Hotel's to identify if the person has been there. However, this might not yield accurate results, because what we should look at is if there was a significant **stop** at Chostus Hotel, and not just passing by. True enough, I explored the _gpstracking_ data and found that there are indeed a number of coordinate points which would coincide with Chostus Hotel's, but most are just passes as there are subsequent changes in coordinate points in the next few seconds. As such, I only consider a visit at the Chostus Hotel only if there is a stay of more than 4 minutes.
 
 There are others who also attempt this by finding out individual homes and who have visited/stayed over at each other's homes. 
 
-### Potential Unofficial Relationship: Brand Tempestad and Elsa Orilla
+### 5.4.2 Potential Unofficial Relationship: Brand Tempestad and Elsa Orilla
 
 Analyzing the time periods of travel of individuals, I noticed that Brand Tempestad and Elsa Orilla both left GasTech office at 11 plus in the morning on 8th Jan. A check on their routes told me that both stopped at Chostus Hotel. Thereafter, both left the hotel at around 1 plus in the afternoon. This similar behavior was observed on 14th Jan. If they were an open couple, they could have gone to the hotel in one car, and not in their own cars, leaving at slightly different timings. They also need not meet for this rendezvous halfway during office hours. Therefore, I have evidence to suspect that Brand Tempestad and Elsa Orilla are involved in an underground intimate relationship.
 
@@ -1132,11 +1132,11 @@ Elsa Orilla <br> Car ID: 7 | **08 Jan** <br> 0720 hrs: Set off from home <br> 07
 ![](images/ElsaCouple.jpg)
 
 
-## Question 5
+## 5.5 Question 5
 
 **Do you see evidence of suspicious activity? Identify 1- 10 locations where you believe the suspicious activity is occurring, and why**
 
-### Sten Sanjorge Jr. only had 3 day of GPS records from 17th to 19th Jan, while everyone else travelled almost daily.
+### 5.5.1 Sten Sanjorge Jr. only had 3 day of GPS records from 17th to 19th Jan, while everyone else travelled almost daily.
 ```{r time periods of travel of each personnel, echo=FALSE, fig.height=10, fig.width=12}
 
 #Filter by CarID, date == "2014-01-06"
@@ -1176,7 +1176,7 @@ rmarkdown::paged_table(pgtblA)
 ```
 ![](images/CEOmovement.jpg)
 
-### Unusually high movement activity for truck on 16 Jan 2014.
+### 5.5.2 Unusually high movement activity for truck on 16 Jan 2014.
 
 We also notice that there is a high count of travels on weekdays with LastName = NA. Checking on the _gpsname_ data, we find that there is gps tracking information for vehicle IDs 101, 104, 105, 106 and 107, which do not exist in the _car_assigned_ dataset, this is why LastName was NA. 
 
@@ -1208,7 +1208,7 @@ Analysis of the truck routes show that specific trucks seem to have to cover a s
 
 For the unusually high movement for the trucks on 16 Jan - 26116 gps points/day, compared to the usual 3000 - 6000 points/day on the other days within these 2 weeks. No obvious deviations from the norm was observed.
 
-### Supermarket Transactions in Wee Hours, with High Transaction Amounts
+### 5.5.3 Supermarket Transactions in Wee Hours, with High Transaction Amounts
 
 ```{r Supermarket visits by time of day, echo=FALSE}
 
@@ -1235,7 +1235,7 @@ rmarkdown::paged_table(kronos)
 
 ```
 
-### Other Anomalies to be Investigated
+### 5.5.4 Other Anomalies to be Investigated
 
 * 1 visit to Daily Dealz on 13 Jan 2014, at 6am in the morning.
 
