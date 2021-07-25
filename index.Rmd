@@ -1,5 +1,5 @@
 ---
-title: "My DataViz Makeovers"
+title: "My Visual Analytics Journey"
 site: distill::distill_website
 listing: posts
 ---
