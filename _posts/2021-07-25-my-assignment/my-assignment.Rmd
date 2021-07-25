@@ -807,3 +807,64 @@ rmarkdown::paged_table(txn_outliertab)
 ```
 We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. It is also strange that the purchaser behind the huge transaction of $4918.39 at Abila Airport did not use his/her loyalty card to get further discounts on such a big ticket purchase.
 
+## 5.2 Question 2
+
+**Add the vehicle data to your analysis of the credit and loyalty card data. How does your assessment of the anomalies in question 1 change based on this new data? What discrepancies between vehicle, credit, and loyalty card data do you find?**
+
+### 5.2.1 Anomaly: Hippokampos nowhere to be found on Abila Map
+
+We need to be able to find some points which distinguishes Hippokampos from the other locations. I noted from the _Visits at each Location for Time of Day_ plot that only Hippokampos had a transaction happening at around 2230 hrs. 
+
+![](Images/hippotxntime.jpg)
+Hence, we shall filter the gps data by this time period, to see where the possible stops are at.
+
+```{r scatter plot of hippokampos, include=FALSE}
+
+# Add time column to gpstracking to enable filtering by time periods and date
+
+gpstracking$time <- hms::as_hms(gpstracking$TimeStampFormatted)
+gpstracking$hour <- hour(gpstracking$TimeStampFormatted)
+gpstracking$date <- as_date(gpstracking$TimeStampFormatted)
+
+```
+
+```{r echo=FALSE}
+# Filter gpstracking by time period
+
+hippostops <- gpstracking %>% 
+  filter(hour >=22, hour <= 23) %>%
+  group_by(id) %>% 
+  mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
+  mutate(parked = ifelse(stop >60*3, TRUE,FALSE)) %>%
+  ungroup() %>%
+  filter(parked == TRUE) %>% mutate(count = n()) %>% 
+  dplyr::select(c(id, lat, long, TimeStampFormatted, hour))
+
+#Visualizing on map
+
+  #Converting stop points to sf
+  
+  hippostops_sf <- st_as_sf(hippostops,
+                         coords = c("long", "lat"),
+                         crs = 4326) %>% 
+    mutate(coordinates = geometry)
+  
+  #Viewing it on the map
+  
+  hippoviz <- tm_all_stops +
+    tm_shape(hippostops_sf) +
+    tm_dots(size = 0.1,
+            alpha = 0.3,
+            col = "green")
+  
+  hippoviz
+
+
+
+```
+
+The green dots show all stops made during the time period from 2200 hrs to 2300 hrs. All these are possible locations of Hippokampos. I note that some are linked to known and labeled locations such as Kronos Mart, some are near places of residences. The only two points which do not belong in these categories are as marked below - along Arkadiou Street, and at GasTech. The stop along Arkadiou Street is also deduced to not be likely, because there were no other stop points surrounding it. If it is a parking place for Hippokampos, there should be way more aggregate points. Therefore, it is drilled down that Hippokampos is likely to be located in GasTech, probably as a canteen of sorts. We can also observe this from the transactions at time of day plot, the peak transaction time is around 1330 hrs - lunchtime, and transactional periods are distinctly from 1230 - 1430 hrs, 1930 - 2230 hrs (lunch and dinnertime). No transactions outside of this period. **Hippokampos is located within GasTech**.
+
+![](Images/Hippoviz.jpg)
+
+
