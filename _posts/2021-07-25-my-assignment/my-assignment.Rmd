@@ -90,3 +90,71 @@ Visualizations can include many types such as thematic maps, scatter plots, para
 There can be perspective distortion and occlusion, but the spatio-temporal distribution can be highlighted. [*R. Krueger*]. [Space-time cubes](https://gisgeography.com/space-time-cubes/) show change over time within geographic space. Each cube represents a slice of time, in which the topmost cube has the newest timestamp. Temporal changes in that geographic area can then be visualized. Map below shows a space-time cube web scene in [ArcGIS Online (AGOL)](https://gisgeography.com/space-time-cubes/).
 
 ![](images/SpaceTimeCube.png)
+
+## 2.4 R Packages to Be Applied
+
+1. DT - To make data tables interactive
+2. plotly - For interactive charts
+3. mapview, tmap, sf, raster - to handle geospatial data and movement visualization
+4. lubridate, clock - to handle time and date values
+5. scales - To handle label formatting in charts
+6. naniar - For data exploration ; Check for missing values
+
+
+# 3 Data Available
+
+The following information is available.
+
+1. Employee that the company car is assigned to : Last Name, First Name, CarID, Current Employment Type, Current Employment Title [_car-assignments.csv_]
+2. GPS Tracking Info of Company Cars : Date, Time, Car ID, Latitude, Longitude [_gps.csv_]
+3. Credit Card Transactions: Location, Date, Time, Price, Credit Card No. [_cc_data.csv_]
+4. Loyalty Card: Location, Date, Price, Loyalty Card No. [_loyalty_data.csv_]
+5. Employee Information: LastName, FirstName, Gender, CurrentEmployment Title [_EmployeeRecords.csv_]
+
+
+# 4 Data Wrangling and Preparation
+
+The type of data required would vary with the questions. This section would only cover the main data set up, EDA, quality of data, any general manipulations such as correcting the format of the data.
+
+Special data manipulation specific to the questions would be covered in their respective sections instead.
+
+We first load the datasets, via the read_csv() function.
+
+```{r Loading the Datasets, echo=TRUE}
+
+car_assigned <- read_csv("data/car-assignments.csv")
+gpstracking <- read_csv("data/gps.csv")
+loyaltycard <- read_csv("data/loyalty_data.csv")
+creditcard <- read_csv("data/cc_data.csv")
+emprecords <- read_csv("data/EmployeeRecords.csv")
+
+```
+
+To check for missing values, we use the _naniar_ package. The [naniar](https://naniar.njtierney.com/) package provides tidy ways to summarize, visualize and manipulate missing data.
+
+```{r check missing values, echo=TRUE}
+
+#For car_assigned
+miss_var_summary(car_assigned)
+#For creditcard
+miss_var_summary(creditcard)
+#For gpstracking
+miss_var_summary(gpstracking)
+#For loyaltycard
+miss_var_summary(loyaltycard)
+
+```
+
+Here, we observe that the only dataset with missing values is _car_assigned_. From the filter below, we see that the truck drivers are not assigned cars. For now, other than to acknowledge this fact, we are indifferent to the missing values as there seems to be no other dataset which contains _LastName_ and _FirstName_ to be able to use the information below. Later, we would see that there is location tracking information on vehicles not within the cars list. These vehicles can be associated with any of the truck drivers below. 
+
+For now, these rows can also be removed since we will be doing a join with the other datasets and would require a uniquely valid column without missing values. They will be removed via the _complete.cases()_ function.
+
+```{r car_assigned missing values, echo=TRUE}
+
+filtered_car <- car_assigned %>% 
+  filter(is.na(CarID))
+
+car_assigned_only <- car_assigned[complete.cases(car_assigned),]
+
+```
+Next, we shall ensure that the Timestamps are in the right and consistent format, using the _lubridate_ package. For the _loyaltycard_ dataset, the timestamp is only in _mdy_ format. We will observe that the timestamp will be converted to POSIXct (for creditcard and gpstracking dataset), and Date (for loyaltycard as there is only date data).

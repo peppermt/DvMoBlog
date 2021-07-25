@@ -1488,7 +1488,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#crime-analysis---overall">2.1 Crime Analysis - Overall</a></li>
 <li><a href="#approaches-to-analyze-anomalous-user-behaviors">2.2 Approaches to Analyze Anomalous User Behaviors</a></li>
 <li><a href="#visualizing-movement-geospatial-map-types">2.3 Visualizing Movement / Geospatial Map Types</a></li>
+<li><a href="#r-packages-to-be-applied">2.4 R Packages to Be Applied</a></li>
 </ul></li>
+<li><a href="#data-available">3 Data Available</a></li>
+<li><a href="#data-wrangling-and-preparation">4 Data Wrangling and Preparation</a></li>
 </ul>
 </nav>
 </div>
@@ -1536,7 +1539,103 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </ol>
 <p>There can be perspective distortion and occlusion, but the spatio-temporal distribution can be highlighted. [<em>R. Krueger</em>]. <a href="https://gisgeography.com/space-time-cubes/">Space-time cubes</a> show change over time within geographic space. Each cube represents a slice of time, in which the topmost cube has the newest timestamp. Temporal changes in that geographic area can then be visualized. Map below shows a space-time cube web scene in <a href="https://gisgeography.com/space-time-cubes/">ArcGIS Online (AGOL)</a>.</p>
 <p><img src="images/SpaceTimeCube.png" /></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h2 id="r-packages-to-be-applied">2.4 R Packages to Be Applied</h2>
+<ol type="1">
+<li>DT - To make data tables interactive</li>
+<li>plotly - For interactive charts</li>
+<li>mapview, tmap, sf, raster - to handle geospatial data and movement visualization</li>
+<li>lubridate, clock - to handle time and date values</li>
+<li>scales - To handle label formatting in charts</li>
+<li>naniar - For data exploration ; Check for missing values</li>
+</ol>
+<h1 id="data-available">3 Data Available</h1>
+<p>The following information is available.</p>
+<ol type="1">
+<li>Employee that the company car is assigned to : Last Name, First Name, CarID, Current Employment Type, Current Employment Title [<em>car-assignments.csv</em>]</li>
+<li>GPS Tracking Info of Company Cars : Date, Time, Car ID, Latitude, Longitude [<em>gps.csv</em>]</li>
+<li>Credit Card Transactions: Location, Date, Time, Price, Credit Card No. [<em>cc_data.csv</em>]</li>
+<li>Loyalty Card: Location, Date, Price, Loyalty Card No. [<em>loyalty_data.csv</em>]</li>
+<li>Employee Information: LastName, FirstName, Gender, CurrentEmployment Title [<em>EmployeeRecords.csv</em>]</li>
+</ol>
+<h1 id="data-wrangling-and-preparation">4 Data Wrangling and Preparation</h1>
+<p>The type of data required would vary with the questions. This section would only cover the main data set up, EDA, quality of data, any general manipulations such as correcting the format of the data.</p>
+<p>Special data manipulation specific to the questions would be covered in their respective sections instead.</p>
+<p>We first load the datasets, via the read_csv() function.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>car_assigned</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"data/car-assignments.csv"</span><span class='op'>)</span>
+<span class='va'>gpstracking</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"data/gps.csv"</span><span class='op'>)</span>
+<span class='va'>loyaltycard</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"data/loyalty_data.csv"</span><span class='op'>)</span>
+<span class='va'>creditcard</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"data/cc_data.csv"</span><span class='op'>)</span>
+<span class='va'>emprecords</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"data/EmployeeRecords.csv"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>To check for missing values, we use the <em>naniar</em> package. The <a href="https://naniar.njtierney.com/">naniar</a> package provides tidy ways to summarize, visualize and manipulate missing data.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#For car_assigned</span>
+<span class='fu'>miss_var_summary</span><span class='op'>(</span><span class='va'>car_assigned</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 3
+  variable               n_miss pct_miss
+  &lt;chr&gt;                   &lt;int&gt;    &lt;dbl&gt;
+1 CarID                       9     20.5
+2 LastName                    0      0  
+3 FirstName                   0      0  
+4 CurrentEmploymentType       0      0  
+5 CurrentEmploymentTitle      0      0  </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#For creditcard</span>
+<span class='fu'>miss_var_summary</span><span class='op'>(</span><span class='va'>creditcard</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 3
+  variable   n_miss pct_miss
+  &lt;chr&gt;       &lt;int&gt;    &lt;dbl&gt;
+1 timestamp       0        0
+2 location        0        0
+3 price           0        0
+4 last4ccnum      0        0</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#For gpstracking</span>
+<span class='fu'>miss_var_summary</span><span class='op'>(</span><span class='va'>gpstracking</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 3
+  variable  n_miss pct_miss
+  &lt;chr&gt;      &lt;int&gt;    &lt;dbl&gt;
+1 Timestamp      0        0
+2 id             0        0
+3 lat            0        0
+4 long           0        0</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#For loyaltycard</span>
+<span class='fu'>miss_var_summary</span><span class='op'>(</span><span class='va'>loyaltycard</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 3
+  variable   n_miss pct_miss
+  &lt;chr&gt;       &lt;int&gt;    &lt;dbl&gt;
+1 timestamp       0        0
+2 location        0        0
+3 price           0        0
+4 loyaltynum      0        0</code></pre>
+</div>
+<p>Here, we observe that the only dataset with missing values is <em>car_assigned</em>. From the filter below, we see that the truck drivers are not assigned cars. For now, other than to acknowledge this fact, we are indifferent to the missing values as there seems to be no other dataset which contains <em>LastName</em> and <em>FirstName</em> to be able to use the information below. Later, we would see that there is location tracking information on vehicles not within the cars list. These vehicles can be associated with any of the truck drivers below.</p>
+<p>For now, these rows can also be removed since we will be doing a join with the other datasets and would require a uniquely valid column without missing values. They will be removed via the <em>complete.cases()</em> function.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>filtered_car</span> <span class='op'>&lt;-</span> <span class='va'>car_assigned</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>CarID</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>car_assigned_only</span> <span class='op'>&lt;-</span> <span class='va'>car_assigned</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/stats/complete.cases.html'>complete.cases</a></span><span class='op'>(</span><span class='va'>car_assigned</span><span class='op'>)</span>,<span class='op'>]</span>
+</code></pre>
+</div>
+</div>
+<p>Next, we shall ensure that the Timestamps are in the right and consistent format, using the <em>lubridate</em> package. For the <em>loyaltycard</em> dataset, the timestamp is only in <em>mdy</em> format. We will observe that the timestamp will be converted to POSIXct (for creditcard and gpstracking dataset), and Date (for loyaltycard as there is only date data).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
