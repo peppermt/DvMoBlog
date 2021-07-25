@@ -1,0 +1,23 @@
+---
+title: "My Assignment"
+description: |
+  Mini Challenge 2
+author:
+  - name: Rhoda Tong
+    url: www.smu.edu.sg
+date: 07-25-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Distill is a publication format for scientific and technical writing, native to the web.
+
+Learn more about using Distill at <https://rstudio.github.io/distill>.
+
+
