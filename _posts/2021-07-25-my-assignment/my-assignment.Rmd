@@ -883,7 +883,7 @@ This shows that looking at transaction data via credit card/loyalty card alone i
 
 Next, we will use the function below to do a plot of travel time periods on each day, for each personnel. This is to aid further investigation. A sample of the plots for 6 personnel is as shown.
 
-```{r each personnel travel time period on each day, echo=FALSE, fig.height=10, fig.width=12}
+```{r each personnel travel time period on each day, eval=FALSE, include=TRUE, fig.height=10, fig.width=12}
 
 gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
 
@@ -928,7 +928,7 @@ ggplotly(indivA)
 
 ```
 
-
+![](Images/IndivPlot.png)
 
 
 ```{r plotting the individual charts for the other groups, eval=FALSE, fig.height=10, fig.width=12, include=FALSE}
