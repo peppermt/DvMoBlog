@@ -9,7 +9,6 @@ date: 07-25-2021
 output:
   distill::distill_article:
     self_contained: false
-draft: false
 toc: true
 preview: Images/TruckRoutesWkTwo.jpg
 ---
