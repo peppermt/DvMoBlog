@@ -1,16 +1,17 @@
 ---
 title: "Assignment"
 description: |
-  A short description of the post.
+  Use of R data visualization and analysis packages for VAST Challenge 2021 Mini-Challenge 2
 author:
   - name: Rhoda Tong
-    url: https://public.tableau.com/app/profile/mt.tong/viz/DataVizMakeover2_16240837165630/TradeDB
-date: 06-26-2021
+    url: 
+date: 07-25-2021
 output:
   distill::distill_article:
     self_contained: false
 draft: false
 toc: true
+preview: Images/TruckRoutesWkTwo.jpg
 ---
 
 
