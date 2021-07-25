@@ -4,7 +4,7 @@ description: |
   Use of R data visualization and analysis packages for VAST Challenge 2021 Mini-Challenge 2
 author:
   - name: Rhoda Tong
-    url: 
+    url: www.smu.edu.sg
 date: 07-25-2021
 output:
   distill::distill_article:
