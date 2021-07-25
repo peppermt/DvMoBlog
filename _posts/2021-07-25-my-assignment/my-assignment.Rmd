@@ -867,4 +867,20 @@ The green dots show all stops made during the time period from 2200 hrs to 2300 
 
 ![](Images/Hippoviz.jpg)
 
+### 5.2.2 Anomaly: Unusually Infrequent Visits at Refuel Stations and Supermarkets 
+
+Credit card and loyalty card transactions show that there are only a handful of transactions each day, or sometimes no business at all, making it seem like the stores and business places are empty. 
+
+After visualizing the routes of individuals, we notice that people make stops at the place very regularly but the transaction numbers do not reflect that.
+
+For example, Elsa Orilla would pop by Coffee Shack on her way to GasTech every week day, and stay there for at least half hour each time. She visited on 10 Jan as well, but there were no transactions made via credit card there on that day.
+
+![](images/ElsaCoffeeShack.jpg)
+
+This shows that looking at transaction data via credit card/loyalty card alone is insufficient to show whether a location is popular or not. There could be transactions made by cash as well, though we are not sure why would the people not make use of discounts from loyalty cards. This would apply to the unusually low number of transactions at refuel stations and supermarkets as well, resolving the anomaly in Q1 Sections 5.1.1.2 and 5.1.1.3.
+
+### 5.2.3 Plot Travel Time Periods on Each Day for Each Personnel
+
+Next, we will use the function below to do a plot of travel time periods on each day, for each personnel. This is to aid further investigation. A sample of the plots for 6 personnel is as shown.
+
 
