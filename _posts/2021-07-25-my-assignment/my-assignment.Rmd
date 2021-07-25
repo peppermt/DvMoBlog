@@ -661,3 +661,149 @@ No. | Location | Periods Popular | Remarks
 2 | Hippokampos | All Days ; Lunchtime (1230 hrs - 1430 hrs), Dinnertime (1930 hrs - 2230 hrs) | NIL
 3 | Guy's Gyros | More Popular During Weekdays ; Lunchtime (1300 hrs - 1430 hrs), Dinnertime (1900 hrs - 2130 hrs) | Unusually crowded on 19 Jan (Sun) compared to the previous Sunday and weekend crowd
 4 | Brew've Been Served | Weekday Mornings ; Morning Coffee (0730 hrs - 0830 hrs) | Huge Crowd at 0800 hrs ; Seems closed on weekends
+
+# 5.1.1 Anomalies Detected
+
+## 5.1.1.1 Hippokampos is nowhere to be found on the map of Abila 
+
+We note that the above popular locations are all identified on the map of Abila, and are located near Gastech, all except for Hippokampos, which is nowhere to be found on the map. This is an anomaly. To be able to solve the mystery of where Hippokampos is, we would have to delve into other data like vehicle tracking. We would need to match transaction timings with gps tracking data, the coordinates matching at that time would tell us the position of Hippokampos.
+
+## 5.1.1.2 Awfully infrequent visits at refuel stations U Pump and Frank's Fuel
+
+```{r Refuel stations transaction by day credit, echo=FALSE}
+
+figI <- cardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>% 
+ ggplot(aes(date, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+      labs(title = "Visits at each Fuel Station for Each Day (Credit Card)", x = "Date", fill = "Visits") +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figI)
+
+
+```
+
+
+```{r Refuel transactions by Day Loyalty, echo=FALSE}
+
+figK <- loyalcardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>%
+ ggplot(aes(TimeStampFormatted, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+    labs(title = "Visits at each Fuel Station for Each Day (by Loyalty Card)", x = "Date", fill = "Visits") +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figK)
+
+```
+
+U Pump is a refuel station, yet it is only visited twice from the credit card transactions, on two separate days - 6th and 13th Jan. The frequency of refuel is unusually infrequent. It could be due to employees not needing to pay for the fuel using their own credit cards. But strange thing is the loyalty card is also not used either. The same goes for Frank's Fuel, there were only transactions on 2 days - 8th and 18th Jan. This is just an abnormal situation, which we hope to seek further insights later. Or it could be that there were visits, but purchases were neither paid by credit card nor loyalty card was applied. This would be suspicious, as though the purchasers wanted to keep their tracks secret. We can similary look at gps tracking data to see if there were stops at the fuel stations. 
+
+## 5.1.1.3 Unusually infrequent visits for supermarkets
+
+
+```{r Supermarkets transaction by day credit, echo=FALSE}
+
+figC <- cardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>% 
+ ggplot(aes(date, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+      labs(title = "Visits at each Supermarket for Each Day (Credit Card)", x = "Date", fill = "Visits") +
+  scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45)) +
+  theme(legend.key.height = unit(1, "cm"))
+
+ggplotly(figC)
+
+
+```
+
+```{r Supermarket transactions by Day Loyalty, echo=FALSE}
+
+figD <- loyalcardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>%
+ ggplot(aes(TimeStampFormatted, location)) +
+  geom_tile(aes(fill = as.factor(n))) +
+    labs(title = "Visits at each Supermarket for Each Day (by Loyalty Card)", x = "Date", fill = "Visits") +
+    theme(legend.key.height = unit(1, "cm")) +
+    scale_x_datetime(breaks = breaks_pretty(14)) +
+    theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(figD)
+
+```
+
+Supermarkets should have daily transactions. However, according to credit card transaction data, Kronos Mart and General Grocer can have 3 - 5 days without any transactions within the 2 weeks. Maximum number of transactions only goes up to 3 for Kronos Mart, and 2 for General Grocer for one day each. Business seems awfully bad.
+
+When we compare this with loyalty card transaction data, there are still days without any transactions, but we see the following differences:
+
+Date | Credit Card Data | Loyalty Card Data
+-----| ---------------- | -----------------
+9 Jan | No transaction | 1 transaction
+10 Jan | 1 transaction | No transaction
+12 Jan | 1 transaction | 2 transactions
+13 Jan | 2 transactions | No transaction
+14 Jan | 1 transaction | No transaction
+15 Jan | No transaction | 1 transaction
+17 Jan | 1 transaction | No transaction
+18 Jan | No transaction | 3 transactions
+19 Jan | 3 transactions | No transaction
+
+This means that there are transactions paid by cash, not paid by credit card. There were also transactions made without using loyalty card. But business still seems abnormally bad. We would use gpstracking data to see if there were actually any visits to the supermarkets, just that transactions were paid in cash. 
+
+## 5.1.1.4 High Transaction Amounts
+
+```{r boxplot of transaction amounts credit and loyalty, echo=FALSE}
+
+#Prep Data first by joining loyalty card number into credit card dataset
+
+credit_loyalty <- full_join(creditcard, loyaltycard, by = c("price" = "price", "date" = "TimeStampFormatted", "location" = "location"))
+
+#Boxplot
+
+p2 <- credit_loyalty %>% ggplot(aes(x = location, y = price)) +
+  geom_boxplot(color="darkblue", fill="cyan") +
+  labs(title = "Transaction Amounts (Credit & Loyalty Card)", x = NULL, y = "Price") +
+  theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(p2)
+
+```
+
+Here, we see that the transaction with the highest amount of $10,000 is made at Frydos Autosupply n More. It is also very different from its normal range, an extreme outlier. We shall note this point.
+
+Extreme outliers are also detected at 
+
+* Nationwide Refinery: \$4742.67, \$4513.16, \$4429.76 and \$4367.43
+* Albert's Fine Clothing: \$1239.41
+* Chostus Hotel: \$600
+* General Grocer: \$477.60
+
+We shall also note the highest value purchases which are greater than $4000, with the exception of the highest transaction at _Stewart and Sons Fabrication_, as that is near to its normal range.
+
+* Abila Airport : \$4918.39
+* Abila Scrapyard : \$4277.40
+* Carlyle Chemical Inc : \$4983.52
+* Maximum Iron and Steel : \$4788.22
+
+Details of these transactions are tabulated as follows:
+
+```{r tabulate transaction amount outliers, echo=FALSE, layout = "1-body-outset"}
+
+#Creating outlier table
+
+Location <- c("Nationwide Refinery", "Nationwide Refinery", "Nationwide Refinery", "Albert s Fine Clothing", "Chostus Hotel", "General Grocer", "Abila Airport", "Abila Scrapyard", "Carlyle Chemical Inc ", "Maximum Iron and Steel")
+
+Price <- c(4742.67, 4513.16, 4429.76, 1239.41, 600, 477.6, 4918.39, 4277.4, 4983.52, 4788.22)
+
+txn_outlier <- cbind.data.frame(Location, Price)
+
+txn_outliertab <- left_join(txn_outlier,credit_loyalty, by = c("Location" = "location", "Price" = "price"))
+
+txn_outliertab <- txn_outliertab %>% dplyr::select(c("Location", "Price", "TimeStampFormatted", "last4ccnum","loyaltynum"))
+                                            
+rmarkdown::paged_table(txn_outliertab)    
+
+```
+We note that owner of credit card 4530 (and loyalty card L8477) and 2276 (and loyalty card L3317) own two of these high transaction amounts each. It is also strange that the purchaser behind the huge transaction of $4918.39 at Abila Airport did not use his/her loyalty card to get further discounts on such a big ticket purchase.
