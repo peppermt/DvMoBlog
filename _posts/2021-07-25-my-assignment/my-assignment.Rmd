@@ -158,3 +158,253 @@ car_assigned_only <- car_assigned[complete.cases(car_assigned),]
 
 ```
 Next, we shall ensure that the Timestamps are in the right and consistent format, using the _lubridate_ package. For the _loyaltycard_ dataset, the timestamp is only in _mdy_ format. We will observe that the timestamp will be converted to POSIXct (for creditcard and gpstracking dataset), and Date (for loyaltycard as there is only date data).
+
+```{r formatting timestamp, echo=TRUE}
+
+#For creditcard dataset
+creditcard$TimeStampFormatted <-mdy_hm(creditcard$timestamp)
+
+#Delete timestamp column
+creditcard <- creditcard %>% 
+  dplyr::select(-timestamp)
+
+#Reorder columns
+col_order <- c("TimeStampFormatted", "location","price","last4ccnum")
+creditcard <- creditcard[, col_order]
+
+#For gpstracking dataset
+gpstracking$TimeStampFormatted <-mdy_hms(gpstracking$Timestamp)
+gpstracking$hour <- hour(gpstracking$TimeStampFormatted)
+
+#Delete timestamp column
+gpstracking <- gpstracking %>% 
+  dplyr::select(-Timestamp)
+
+#Reorder columns
+col_order <- c("TimeStampFormatted", "id","lat","long","hour")
+gpstracking <- gpstracking[, col_order]
+
+#For loyaltycard dataset
+loyaltycard$TimeStampFormatted <- mdy(loyaltycard$timestamp)
+
+#Delete timestamp column
+loyaltycard <- loyaltycard %>% 
+  dplyr::select(-timestamp)
+
+#Reorder columns
+col_order <- c("TimeStampFormatted", "location","price","loyaltynum")
+loyaltycard <- loyaltycard[, col_order]
+
+```
+
+We also observe special unidentifiable characters in _Katerina's Cafe_ in the _creditcard_ and _loyaltycard_ dataset. Those shall be identified and replaced using the str_replace_all() function to prevent error in data processing.
+
+```{r special char in katerinas cafe, echo=TRUE}
+
+#creditcard
+
+creditcard <- creditcard %>% 
+  mutate(location = str_replace_all(location,pattern = "Katerin.+",replacement = "Katerinas Cafe"))%>%   mutate(location = str_replace_all(location,pattern = "[^[:alnum:]]",replacement = " "))
+
+#loyaltycard
+
+loyaltycard <- loyaltycard %>% 
+  mutate(location = str_replace_all(location,pattern = "Katerin.+",replacement = "Katerinas Cafe"))%>%   mutate(location = str_replace_all(location,pattern = "[^[:alnum:]]",replacement = " "))
+
+
+```
+
+Next, we include into the _gpstracking_ dataset, the first and last names of the personnel the car is assigned to. We essentially want to do a left join for the _gpstracking_ dataset, and the _car_assigned_ dataset, by the car ID. We can do this with the left_join() function, so that we keep all rows in the _gpstracking_ dataset.
+
+```{r Joining gpstracking and car_assigned}
+
+gpsname <- left_join(gpstracking, car_assigned_only, by = c("id" = "CarID"))
+
+#Join First Name and Last Name
+
+gpsname$name <- paste(gpsname$FirstName, gpsname$LastName)
+
+#Reorder cols
+col_order <- c("TimeStampFormatted", "id","lat","long","hour","name","LastName","FirstName","CurrentEmploymentType","CurrentEmploymentTitle")
+gpsname <- gpsname[, col_order]
+
+```
+
+Next, we shall prepare the geospatial map for viewing. We would use the _Raster_ package to import the raster file for the map of Abila.
+
+The file to be imported is already georeferenced using qGIS, into .tif format.
+Note that the raster layer is a three bands false colour image, we would use tm_rgb() instead of tm_raster() to be able to display all three bands. If not, the layer would come out in monochrome.
+
+```{r Geomap, echo=TRUE}
+
+#Importing the Raster file
+
+bgmap <- raster("data/MC2/MC2-tourist_modified.tif")
+
+#Plotting the Raster Layer and defining as base layer.
+
+tmap_mode("view")
+
+tmain <- tm_shape(bgmap) +
+  tm_rgb(bgmap, r = 1, g = 2, b = 3,
+            alpha = NA,
+         saturation = 1,
+         interpolate = TRUE,
+         max.value = 255)
+
+```
+
+Then, we shall map the aspatial data next. Essentially, the following general steps are required to be able to create layers to visualize on the map:
+
+1. Select the latitude and longitude coordinates that we want displayed. These coordinates are in the _.dbl_ format.
+
+2. Convert it to Simple Feature Data Frame via the _st_as_sf()_ function of the _sf_ package; Coordinates would be converted to geometry format. They would be input as longitude ('long' ; x-coordinates) and latitude ('lat' ; y-coordinates), in the EPSG: 4326 format, which is the wgs84 Geographic Coordinate System.
+
+Example:
+
+```{r Conversion into Simple Feature Data Frame, eval=FALSE, include=TRUE}
+
+gps_sf <- st_as_sf(gpstracking,
+                   coords = c("long", "lat"),
+                   crs = 4326)
+```
+
+3. We can either use them as individual geometry points, or string them up to form a path
+
+4. To form a path, we use the _st_cast("LINESTRING")_ function
+
+Example:
+
+_(Here, we are creating the movement path from GPS points for each car. Hence, we need to group the data by the car ID, the identifier. As R requires a command following the group_by() function, an input will be required for the code to run, so we include a dummy summarize() code to overcome this issue.)_
+
+```{r Creating Movement Path, eval=FALSE, include=TRUE}
+
+gps_path <- gps_sf %>% 
+  group_by(id) %>% 
+  summarize(m = mean(TimeStampFormatted),
+            do_union = FALSE) %>% 
+  st_cast("LINESTRING")
+
+```
+
+We would like to find out where the vehicles have gone to.
+First, we have to identify the coordinate points where the vehicles have possibly made stops, and be able to visualize where these stops are on the map. We could decipher this information from the _gpstracking_ data, which tracks the coordinate points of vehicles as long as they are moving. This means that when there is a long gap in the timestamp at a particular coordinate point, it is likely that the vehicle has parked. Stops at traffic light junctions should take no longer than 2 minutes. As such, we shall assume for vehicles which are stationary for more than 4 minutes to be parked (i.e. search for timestamps with lag of more than 4 minutes). 
+
+In addition, we note that for position coordinates, the number of decimal places required for a particular accuracy at the equator is:
+
+![Source: http://wiki.gis.com/wiki/index.php/Decimal_degrees](images/DegreeAccuracy.jpg){width=35%}
+
+Considering the sizes of typical carparks, the accuracy of 1.11m would be too precise. A more likely range could be 11.1m. With this, we shall round all our coordinate points up to 4 decimal points for analysis.
+
+A map with all stops identified from the entire _gpstracking_ dataset is as shown.
+
+```{r interactive map viewing of the points, echo=TRUE}
+
+#Round lat long points to 4 decimal points
+
+gpstracking$lat <- round(gpstracking$lat, 4)
+gpstracking$long <- round(gpstracking$long, 4)
+
+#Identifying all stops for all Car IDs and Time
+
+tmap_mode("view")
+
+all_stops <- gpstracking %>%
+  group_by(id) %>%
+  mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
+  mutate(parked = ifelse(stop >60*4, TRUE,FALSE)) %>%
+  ungroup() %>%
+  filter(parked == TRUE) %>%
+  distinct(lat, long)
+
+#Converting it to sf
+
+all_stops_sf <- st_as_sf(all_stops,
+                         coords = c("long", "lat"),
+                         crs = 4326) %>% 
+  mutate(coordinates = geometry)
+
+#Viewing it on the map
+
+tm_all_stops <- tmain +
+  tm_shape(all_stops_sf) +
+  tm_dots(size = 0.1,
+          alpha = 0.3,
+          col = "red")
+
+tm_all_stops
+
+```
+
+We can observe that there is clustering effect of points, indicating that our rounding of the coordinate points is sufficient to remove variation noise, yet maintain the distinction between different spatial points, as there continues to be points scattered around the map.
+
+With all of the above codes, the following function *print_routes_ID_date(emp_id, start_dt,end_dt)* is created to generate the routes of a specific vehicle, during a specific time period. This way, we are able to print the routes for a specific vehicle ID, for a selected time period from *start_dt* to *end_dt*. 
+
+```{r function for printing vehicle routes by ID and datetime, echo=TRUE}
+
+print_routes_ID_date <- function(emp_id,start_dt,end_dt){
+  
+  #filter gps_path by ID and datetime
+  
+  #Start with gpstracking, filter
+  
+  id_time_select <- gpstracking %>% as_tbl_time(index=TimeStampFormatted) %>%
+  filter(id == emp_id) %>% 
+  filter_time(start_dt ~ end_dt)
+  
+  #Convert to selected sf
+  
+  gps_sf_selected <- st_as_sf(id_time_select,
+                         coords = c("long", "lat"),
+                         crs = 4326) %>% 
+    mutate(coordinates = geometry)
+  
+  #Create a LineString
+  
+    gps_path_selected <- gps_sf_selected %>% 
+  group_by(id) %>% 
+  summarize(m = mean(TimeStampFormatted),
+            do_union = FALSE) %>% 
+  st_cast("LINESTRING")
+  
+    #filter stop points by ID and datetime
+  
+  stops <- gpstracking %>% as_tbl_time(index=TimeStampFormatted) %>%
+  group_by(id) %>%
+  filter(id == emp_id) %>% 
+  filter_time(start_dt ~ end_dt) %>% 
+  mutate(stop = TimeStampFormatted - lag(TimeStampFormatted)) %>%
+  mutate(parked = ifelse(stop >60*4, TRUE,FALSE)) %>%
+  ungroup() %>%
+  filter(parked == TRUE) %>%
+  distinct(lat, long)
+    
+  #Converting stop points to sf
+  
+  stops_sf <- st_as_sf(stops,
+                         coords = c("long", "lat"),
+                         crs = 4326) 
+  
+  #Viewing it on the map
+  
+  mapviz <- tm_all_stops +
+    tm_shape(gps_path_selected) +
+    tm_lines(lwd = 3) +
+    tm_shape(stops_sf) +
+    tm_dots(size = 0.1,
+            alpha = 0.3,
+            col = "green")
+  
+  return(mapviz)
+  
+}
+
+```
+
+Example of printing the route for car ID #31, on a specific date time period - 18 Jan.
+
+```{r trying out the print_route function, echo=TRUE}
+
+print_routes_ID_date(31,'2014-01-18 00:00:00','2014-01-18 23:59:00')
+
+```
