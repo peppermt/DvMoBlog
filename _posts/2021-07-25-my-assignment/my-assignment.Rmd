@@ -1,7 +1,7 @@
 ---
 title: "My Assignment"
 description: |
-  Mini Challenge 2
+  Use of R data visualization and analysis packages for VAST Challenge 2021 (Mini-Challenge 2)
 author:
   - name: Rhoda Tong
     url: www.smu.edu.sg
@@ -46,7 +46,7 @@ This would be done as a sub-component which would eventually feed into an intera
 
 Crime analysis is a law enforcement function which involves systematic analysis for identifying and analyzing patterns and trends in crime and disorder [*Wikipedia*]. Too little data would inevitably limit the efficiency of the investigation, but overwhelming volume of information could pose a huge challenge as well. Coupled with the need for rapid analysis, too much information to absorb, categorize, remember and draw meaning from could compromise the overall investigation [*Data Mining and Predictive Analysis, Colleen McCue, 2007*]. Visual analytics techniques could be employed to gain useful insight from massive raw data.
 
-For efficiency in data processing, information must first be consistent as subtle differences can greatly increase variability and reduce the reliability and value of a dataset [*Colleen McCue, 2007*]. Next, there cannot be information overload within a diagram. Good practices such as appropriate brushing and linking, selecting and marking, aggregation, elimination, virtual navigation techniques such as zooming, focus + context, and details-on-demand techniques have been studied and used to overcome an over-cluttered screen.[*Visual Analytics for Crime Analysis and Decision Support, Ku et. al, 2016*]. Uninteresting and expected patterns can also be unmarked to improve efficiency and reduce false positives. [*Arxiv, Visual of Anomalous User Behavior* ]
+For efficiency in data processing, information must first be consistent as subtle differences can greatly increase variability and reduce the reliability and value of a dataset [*Colleen McCue, 2007*]. Next, there cannot be information overload within a diagram. Good practices such as appropriate brushing and linking, selecting and marking, aggregation, elimination, virtual navigation techniques such as zooming, focus and context, and details-on-demand techniques have been studied and used to overcome an over-cluttered screen.[*Visual Analytics for Crime Analysis and Decision Support, Ku et. al, 2016*]. Uninteresting and expected patterns can also be unmarked to improve efficiency and reduce false positives. [*Arxiv, Visual of Anomalous User Behavior* ]
 
 ## 2.2 Approaches to Analyze Anomalous User Behaviors
 
