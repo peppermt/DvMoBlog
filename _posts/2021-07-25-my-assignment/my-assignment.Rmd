@@ -1100,11 +1100,11 @@ The following conclusions can be drawn:
 
 * L3288 is associated with both 1286 and 9241 at almost equal transactions. This can show that L3288 belongs to either owners of 1286 or 9241, and that they are often together when these transactions are made. They might be a couple. 13 to 15 transactions within a 2-week period is almost daily transaction.
 
-* Owner of 4948 was with owner of 5921 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
+* Owner of 4948 was with owner of 5921 when they used each other's loyalty cards and paid with their own credit card on 2 occasions. They could be friends.
 
-* Owner of 5368 was with owner of 7889 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
+* Owner of 5368 was with owner of 7889 when they used each other's loyalty cards and paid with their own credit card on 2 occasions. They could be friends.
 
-* Owner of 4795 was with owner of 8332 when they used each other's loyalty cards paid with their own credit card on 2 occasions. They could be friends.
+* Owner of 4795 was with owner of 8332 when they used each other's loyalty cards and paid with their own credit card on 2 occasions. They could be friends.
 
 ## 5.4 Question 4
 
