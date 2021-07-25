@@ -9,7 +9,7 @@ date: 06-26-2021
 output:
   distill::distill_article:
     self_contained: false
-draft: true
+draft: false
 toc: true
 ---
 
@@ -150,7 +150,7 @@ For now, these rows can also be removed since we will be doing a join with the o
 
 ```{r car_assigned missing values, echo=TRUE}
 
-car_assigned %>% 
+filtered_car <- car_assigned %>% 
   filter(is.na(CarID))
 
 car_assigned_only <- car_assigned[complete.cases(car_assigned),]
@@ -675,7 +675,7 @@ We note that the above popular locations are all identified on the map of Abila,
 figI <- cardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>% 
  ggplot(aes(date, location)) +
   geom_tile(aes(fill = as.factor(n))) +
-      labs(title = "Visits at each Fuel Station for Each Day (Credit Card)", x = "Date", fill = "No. of Visits") +
+      labs(title = "Visits at each Fuel Station for Each Day (Credit Card)", x = "Date", fill = "Visits") +
   scale_x_datetime(breaks = breaks_pretty(14)) +
     theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
@@ -691,7 +691,7 @@ ggplotly(figI)
 figK <- loyalcardbyday %>% filter(location %in% c("U Pump", "Frank s Fuel")) %>%
  ggplot(aes(TimeStampFormatted, location)) +
   geom_tile(aes(fill = as.factor(n))) +
-    labs(title = "Visits at each Fuel Station for Each Day (by Loyalty Card)", x = "Date", fill = "No. of Visits") +
+    labs(title = "Visits at each Fuel Station for Each Day (by Loyalty Card)", x = "Date", fill = "Visits") +
   scale_x_datetime(breaks = breaks_pretty(14)) +
     theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
@@ -710,7 +710,7 @@ U Pump is a refuel station, yet it is only visited twice from the credit card tr
 figC <- cardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>% 
  ggplot(aes(date, location)) +
   geom_tile(aes(fill = as.factor(n))) +
-      labs(title = "Visits at each Supermarket for Each Day (Credit Card)", x = "Date", fill = "No. of Visits") +
+      labs(title = "Visits at each Supermarket for Each Day (Credit Card)", x = "Date", fill = "Visits") +
   scale_x_datetime(breaks = breaks_pretty(14)) +
     theme(axis.text.x = element_text(angle = 45)) +
   theme(legend.key.height = unit(1, "cm"))
@@ -725,7 +725,7 @@ ggplotly(figC)
 figD <- loyalcardbyday %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>%
  ggplot(aes(TimeStampFormatted, location)) +
   geom_tile(aes(fill = as.factor(n))) +
-    labs(title = "Visits at each Supermarket for Each Day (by Loyalty Card)", x = "Date", fill = "No. of Visits") +
+    labs(title = "Visits at each Supermarket for Each Day (by Loyalty Card)", x = "Date", fill = "Visits") +
     theme(legend.key.height = unit(1, "cm")) +
     scale_x_datetime(breaks = breaks_pretty(14)) +
     theme(axis.text.x = element_text(angle = 45))
@@ -881,11 +881,9 @@ For example, Elsa Orilla would pop by Coffee Shack on her way to GasTech every w
 
 This shows that looking at transaction data via credit card/loyalty card alone is insufficient to show whether a location is popular or not. There could be transactions made by cash as well, though we are not sure why would the people not make use of discounts from loyalty cards. This would apply to the unusually low number of transactions at refuel stations and supermarkets as well, resolving the anomaly in Q1.
 
-(*IF SEE ANY, IF NOT DELETE THIS* We see that there are frequent visits to the supermarkets and pump refuel stations. This means that there were transactions and business, but the transactions were not paid in credit card and loyalty cards were not used either.)
-
 ### Plot Travel Time Perioids on Each Day for Each Personnel
 
-Next, we will use the function below to do a plot of travel time periods on each day, for each personnel. This is to aid further investigation.
+Next, we will use the function below to do a plot of travel time periods on each day, for each personnel. This is to aid further investigation. A sample of the plots for 6 personnel is as shown.
 
 ```{r each personnel travel time period on each day, echo=FALSE, fig.height=10, fig.width=12}
 
@@ -1059,10 +1057,7 @@ creditloyaltyuniq <-
   group_by(last4ccnum, loyaltynum) %>% 
   summarize(Count = n())
 
-creditloyaltyuniq
-
 howmany <- loyaltycard %>% distinct(loyaltynum)
-howmany
 
 figD <- creditloyaltyuniq %>% 
   ggplot(aes(x = last4ccnum, y = loyaltynum)) +
@@ -1072,10 +1067,11 @@ figD <- creditloyaltyuniq %>%
 
 ggplotly(figD)
 
-
 ```
 
 From the above plot of credit card and loyalty card numbers, we note that there are transactions where:
+
+_( ) indicates number of transactions_
 
 1) One loyalty card have been associated with multiple credit cards:
 
@@ -1087,7 +1083,6 @@ From the above plot of credit card and loyalty card numbers, we note that there 
 * L2247 associated with 5368 (24) and 7889 (1).
 * L2070 associated with 4795 (1) and 8332 (27).
 
-_() indicates number of transactions_
 
 2) One credit card associated with multiple loyalty cards:
 
@@ -1114,7 +1109,7 @@ The following conclusions can be drawn:
 
 **Given the data sources provided, identify potential informal or unofficial relationships among GASTech personnel. Provide evidence for these relationships.**
 
-### How Others Have Attempted this Question
+### How Others Have Attempted this Question (Lit Review)
 
 I have found that some fellow analysts used matching of coordinate points with Chostus Hotel's to identify if the person has been there. However, this might not yield accurate results, because what we should look at is if there was a significant **stop** at Chostus Hotel, and not just passing by. True enough, I explored the _gpstracking_ data and found that there are indeed a number of coordinate points which would coincide with Chostus Hotel's, but most are just passes as there are subsequent changes in coordinate points in the next few seconds. As such, I only consider a visit at the Chostus Hotel only if there is a stay of more than 4 minutes.
 
@@ -1143,8 +1138,6 @@ Elsa Orilla <br> Car ID: 7 | **08 Jan** <br> 0720 hrs: Set off from home <br> 07
 ### Sten Sanjorge Jr. only had 3 day of GPS records from 17th to 19th Jan, while everyone else travelled almost daily.
 ```{r time periods of travel of each personnel, echo=FALSE, fig.height=10, fig.width=12}
 
-
-
 #Filter by CarID, date == "2014-01-06"
 
 target <- c(1,2,3,4,5)
@@ -1152,8 +1145,6 @@ target <- c(1,2,3,4,5)
 dgpsname <- gpsname %>% #%>% filter(id %in% target) %>% 
   group_by(LastName, date) %>% mutate(namecountperday = n()) %>% 
   distinct(date, LastName, namecountperday)
-
-dgpsname
 
 figC <- dgpsname %>% 
   ggplot(aes(date, LastName)) +
@@ -1223,7 +1214,7 @@ For the unusually high movement for the trucks on 16 Jan - 26116 gps points/day,
 figH <- cardbytime %>% filter(location %in% c("Kronos Mart", "General Grocer")) %>%
  ggplot(aes(thirtymins, location)) +
   geom_tile(aes(fill = as.factor(n))) +
-      labs(title = "Visits at each Location for Time of Day", x = "Time") +
+      labs(title = "Visits at each Location for Time of Day", x = "Time", fill = "Visits") +
     scale_x_datetime(breaks = date_breaks("1 hour"),
                    labels = time_format("%H:%M")) +
   theme(axis.text.x = element_text(angle = 45))
@@ -1234,7 +1225,7 @@ ggplotly(figH)
 
 The above plot also shows that there were 5 transactions made at Kronos Mart in the wee hours between 0300 - 0400 hrs. The 5 transactions are as shown in the table below. We also observe that the transaction amounts are unusually high, for a midnight purchase.
 
-```{r midnight transactions at Kronos Mart}
+```{r midnight transactions at Kronos Mart, echo=FALSE}
 
 kronos <- creditcard %>% filter(location == "Kronos Mart") %>% 
   arrange(time)  %>%  slice_min(time,n = 6)
